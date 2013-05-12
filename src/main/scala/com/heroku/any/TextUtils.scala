@@ -11,7 +11,7 @@ object TextUtils {
     if (s == null) s
     else {
       val split = s.split(Array('_', '-', ' ', ':'))
-      split.head + split.tail.map(capitalize).mkString
+      split.head.toLowerCase + split.tail.map(capitalize).mkString
     }
   }
 

@@ -14,56 +14,82 @@ class JavaObjectOrientedGenerator extends Generator {
     val srcRoot = new File(root, packagePath)
     srcRoot.mkdirs()
     schema.resources.foreach { resource: Resource =>
-      genResource(resource, srcRoot)
+      generateAction(resource, srcRoot)
+      generateModel(resource, srcRoot)
     }
   }
 
-  private implicit def dataTypesForJava(dataType: DataType):String = dataType.raw match {
-    case "string"   => "String"
-    case "number"   => "Number"
-    case "datetime" => "java.util.Date"
-    case "uuid"     => "java.util.UUID"
-    case other =>      other
+  private def generateAction(resource: Resource, srcRoot: File) {
+    val out = new PrintWriter(new FileOutputStream(s"$srcRoot/${resource.actionsClassName}.java"))
+    val writer = new JavaWriter(out)
+
+    // header
+    val cls = writer
+      .emitPackage(packageName)
+      .beginType(packageName + "." + resource.actionsClassName, "class", PUBLIC | FINAL)
+      .emitEmptyLine()
+      .emitField("Connection", "connection", PRIVATE | FINAL)
+      .emitEmptyLine()
+      .beginMethod(null, resource.modelClassName, PROTECTED, "Connection", "connection")
+      .emitStatement("this.connection = connection")
+      .endMethod()
+      .emitEmptyLine()
+
+    resource.actions.foreach { action =>
+      val param = TextUtils.camelCase(resource.modelClassName)
+      val returnType = if (action.returnable) resource.modelClassName else "void"
+      val returnKeyword = if (action.returnable) "return " else ""
+      cls
+        .emitJavadoc(s"${action.httpMethod} ${resource.modelClassName}")
+        .beginMethod(returnType, action.methodName, PUBLIC, resource.modelClassName, param)
+        .emitStatement(s"${returnKeyword}this.connection.execute($param)")
+        .endMethod()
+        .emitEmptyLine()
+    }
+
+    cls.endType()
+    out.flush()
+    out.close()
   }
 
-  private def genResource(resource: Resource, srcRoot: File) {
+  private def generateModel(resource: Resource, srcRoot: File) {
     val out = new PrintWriter(new FileOutputStream(s"$srcRoot/${resource.modelClassName}.java"))
     val writer = new JavaWriter(out)
 
     // header
-    val resourceClass = writer
+    val cls = writer
       .emitPackage(packageName)
       .beginType(packageName + "." + resource.modelClassName, "class", PUBLIC | FINAL)
 
     // fields
     resource.attributes.foreach { attribute: Attribute =>
-      resourceClass
+      cls
         .emitEmptyLine()
         .emitJavadoc(TextUtils.capitalize(attribute.description))
         .emitField(attribute.dataType, attribute.name, PRIVATE | FINAL)
     }
 
-    resourceClass.emitEmptyLine()
+    cls.emitEmptyLine()
 
     // empty constructor
-    resourceClass
+    cls
       .emitJavadoc(s"Construct empty ${resource.name}")
       .beginMethod(null, resource.modelClassName, PUBLIC)
       .endMethod()
       .emitEmptyLine()
 
     // fully-qualified constructor
-    resourceClass.beginMethod(null, resource.modelClassName, PUBLIC, resource.attributes.map { attribute: Attribute =>
+    cls.beginMethod(null, resource.modelClassName, PUBLIC, resource.attributes.map { attribute: Attribute =>
         Seq[String](attribute.dataType, attribute.fieldName)
     }.flatten.toSeq:_*)
     resource.attributes.foreach { attribute: Attribute =>
-      resourceClass.emitStatement(s"this.${attribute.fieldName} = ${attribute.fieldName}")
+      cls.emitStatement(s"this.${attribute.fieldName} = ${attribute.fieldName}")
     }
-    resourceClass.endMethod().emitEmptyLine()
+    cls.endMethod().emitEmptyLine()
 
     // getters and setters
     resource.attributes.foreach { attribute: Attribute =>
-      resourceClass
+      cls
         .emitJavadoc(s"Get ${attribute.description}")
         .beginMethod(attribute.dataType, s"get${TextUtils.capitalize(attribute.fieldName)}", PUBLIC)
         .emitStatement(s"return this.${attribute.fieldName}")
@@ -76,9 +102,16 @@ class JavaObjectOrientedGenerator extends Generator {
         .emitEmptyLine()
     }
 
-    resourceClass.endType()
-
+    cls.endType()
     out.flush()
     out.close()
+  }
+
+  private implicit def dataTypesForJava(dataType: DataType):String = dataType.raw match {
+    case "string"   => "String"
+    case "number"   => "Number"
+    case "datetime" => "java.util.Date"
+    case "uuid"     => "java.util.UUID"
+    case other =>      other
   }
 }

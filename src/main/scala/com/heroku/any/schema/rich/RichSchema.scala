@@ -22,8 +22,11 @@ case class Attribute(name: String,
 }
 
 case class Action(name: String,
-                  method: String,
+                  httpMethod: String,
                   path: String,
-                  status: String)
+                  status: String) {
+  def methodName = TextUtils.camelCase(name)
+  def returnable = httpMethod != "DELETE"
+}
 
 case class DataType(raw: String)
