@@ -15,7 +15,7 @@ class JavaObjectOrientedGenerator extends Generator {
     srcRoot.mkdirs()
     generateApi(schema, srcRoot)
     schema.resources.foreach { resource: Resource =>
-      generateAction(resource, srcRoot)
+      generateResourceActionsClass(resource, srcRoot)
       generateModel(resource, srcRoot)
     }
   }
@@ -57,7 +57,7 @@ class JavaObjectOrientedGenerator extends Generator {
     out.close()
   }
 
-  private def generateAction(resource: Resource, srcRoot: File) {
+  private def generateResourceActionsClass(resource: Resource, srcRoot: File) {
     val out = new PrintWriter(new FileOutputStream(s"$srcRoot/${resource.actionsClassName}.java"))
     val writer = new JavaWriter(out)
 
@@ -70,16 +70,67 @@ class JavaObjectOrientedGenerator extends Generator {
     generateConnectionConstructor(writer, resource.actionsClassName)
 
     resource.actions.foreach { action =>
-      val param = TextUtils.camelCase(resource.modelClassName)
+      val param = TextUtils.camelCase(resource.modelClassName) // TODO: handle listings
       val returnType = if (action.returnable) resource.modelClassName else "void"
       val returnKeyword = if (action.returnable) "return " else ""
       writer
         .emitJavadoc(s"${action.httpMethod} ${resource.modelClassName}")
         .beginMethod(returnType, action.methodName, PUBLIC, resource.modelClassName, param)
-        .emitStatement(s"${returnKeyword}connection.execute($param)")
+        .emitStatement(s"${returnKeyword}connection.execute(new ${action.actionClassName(resource)}($param))")
         .endMethod()
         .emitEmptyLine()
+
+      generateResourceActionClass(resource, action, srcRoot)
     }
+
+    writer.endType()
+    out.flush()
+    out.close()
+  }
+
+  private def generateResourceActionClass(resource: Resource, action: Action, srcRoot: File) {
+    val className = action.actionClassName(resource)
+    val resourceField = TextUtils.camelCase(resource.modelClassName)
+    val responseType = if (action.returnable) resource.modelClassName else "void"
+    val out = new PrintWriter(new FileOutputStream(s"$srcRoot/$className.java"))
+    val writer = new JavaWriter(out)
+
+    // header
+    writer
+      .emitPackage(packageName)
+      .beginType(packageName + "." + className, "class", PUBLIC | FINAL, null, s"Action<$responseType}>")
+      .emitEmptyLine()
+
+    writer
+      .emitField(className, resourceField, PRIVATE | FINAL)
+      .emitEmptyLine()
+      .beginMethod(null, className, PUBLIC, resource.modelClassName, resourceField)
+      .emitStatement(s"this.$resourceField = $resourceField")
+      .endMethod()
+      .emitEmptyLine()
+
+    writer
+      .beginMethod(resource.modelClassName, "getResource", PUBLIC)
+      .emitStatement(s"return $resourceField")
+      .endMethod()
+      .emitEmptyLine()
+
+    writer
+      .beginMethod("String", "getHttpMethod", PUBLIC)
+      .emitStatement("return \"" + action.httpMethod + "\"")
+      .endMethod()
+      .emitEmptyLine()
+
+    writer
+      .beginMethod("String", "getEndpoint", PUBLIC)
+      .emitStatement("return \"" + action.path + "\"")
+      .endMethod()
+      .emitEmptyLine()
+
+    writer
+      .beginMethod("int", "getExpectedStatus", PUBLIC)
+      .emitStatement(s"return ${action.status.filter(_.isDigit)}")
+      .endMethod()
 
     writer.endType()
     out.flush()

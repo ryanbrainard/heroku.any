@@ -27,6 +27,8 @@ case class Action(name: String,
                   status: String) {
   def methodName = TextUtils.camelCase(name)
   def returnable = httpMethod != "DELETE"
+  def actionClassName(resource: Resource) =
+    TextUtils.capitalize(TextUtils.camelCase(resource.name)) + TextUtils.capitalize(methodName) + "Action"
 }
 
 case class DataType(raw: String)
