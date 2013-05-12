@@ -13,11 +13,23 @@ class JavaObjectOrientedGenerator extends Generator {
   def generate(schema: Schema, root: File) {
     val srcRoot = new File(root, packagePath)
     srcRoot.mkdirs()
+    copyStaticFiles(root)
     generateApi(schema, srcRoot)
     schema.resources.foreach { resource: Resource =>
       generateResourceActionsClass(resource, srcRoot)
       generateModel(resource, srcRoot)
     }
+  }
+
+  private def copyStaticFiles(root: File) {
+    Seq("Action.java", "Connection.java").foreach { file =>
+      copyFile(new File(s"src/main/resources/$packagePath/$file"), new File(s"$root/$packagePath/$file"))
+    }
+  }
+
+  private def copyFile(src: File, dest: File) = {
+    import java.io.{FileInputStream,FileOutputStream}
+    new FileOutputStream(dest).getChannel.transferFrom(new FileInputStream(src).getChannel, 0, Long.MaxValue)
   }
 
   private def generateConnectionConstructor(writer: JavaWriter, className: String) = {
