@@ -1,70 +1,72 @@
 package com.heroku.any
 
-import com.heroku.any.schema._
+import com.heroku.any.schema.rich._
 import java.io.{FileOutputStream, PrintWriter}
 import com.squareup.java.JavaWriter
 import java.lang.reflect.Modifier._
-import com.heroku.any.schema.Resource
-import com.heroku.any.schema.Schema
 
 class JavaObjectOrientedGenerator extends Generator {
 
   def generate(schema: Schema) {
-    schema.resources.foreach { case (name: String, resource: Resource) =>
-      genResource(name, resource)
+    schema.resources.foreach { resource: Resource =>
+      genResource(resource)
     }
   }
 
-  private def genResource(resourceName: String, resourceDetail: Resource) {
-    val out = new PrintWriter(new FileOutputStream(s"target/generated/com/heroku/api/${resourceName}.java"))
+  private implicit def dataTypesForJava(dataType: DataType):String = dataType.raw match {
+    case "string"   => "String"
+    case "number"   => "Number"
+    case "datetime" => "java.util.Date"
+    case "uuid"     => "java.util.UUID"
+    case other =>      other
+  }
+
+  private def genResource(resource: Resource) {
+    val out = new PrintWriter(new FileOutputStream(s"target/generated/com/heroku/api/${resource.className}.java"))
     val writer = new JavaWriter(out)
 
     // header
     val resourceClass = writer
       .emitPackage("com.heroku")
-      .beginType(s"com.heroku.${resourceName.replace(" ", "")}", "class", PUBLIC | FINAL)
+      .beginType(s"com.heroku.${resource.className}", "class", PUBLIC | FINAL)
 
     // fields
-    resourceDetail.attributes.foreach { case (attributeName: String, attributeDetail: Attribute) =>
+    resource.attributes.foreach { attribute: Attribute =>
       resourceClass
         .emitEmptyLine()
-        .emitJavadoc(TextUtils.capitalize(attributeDetail.description))
-        .emitField(convertType(attributeDetail.`type`), attributeName, PRIVATE | FINAL)
+        .emitJavadoc(TextUtils.capitalize(attribute.description))
+        .emitField(attribute.dataType, attribute.name, PRIVATE | FINAL)
     }
 
     resourceClass.emitEmptyLine()
 
     // empty constructor
     resourceClass
-      .emitJavadoc(s"Construct empty $resourceName")
-      .beginMethod(null, resourceName, PUBLIC)
+      .emitJavadoc(s"Construct empty ${resource.name}")
+      .beginMethod(null, resource.className, PUBLIC)
       .endMethod()
       .emitEmptyLine()
 
     // fully-qualified constructor
-    resourceClass.beginMethod(null, resourceName, PUBLIC, resourceDetail.attributes.map {
-      case (attributeName: String, attributeDetail: Attribute) =>
-        Seq(convertType(attributeDetail.`type`), TextUtils.camelCase(attributeName))
+    resourceClass.beginMethod(null, resource.className, PUBLIC, resource.attributes.map { attribute: Attribute =>
+        Seq[String](attribute.dataType, attribute.fieldName)
     }.flatten.toSeq:_*)
-    resourceDetail.attributes.map { case (attributeName: String, attributeDetail: Attribute) =>
-      resourceClass.emitStatement(s"this.$attributeName = ${TextUtils.camelCase(attributeName)}")
-      Seq(convertType(attributeDetail.`type`), TextUtils.camelCase(attributeName))
+    resource.attributes.foreach { attribute: Attribute =>
+      resourceClass.emitStatement(s"this.${attribute.fieldName} = ${attribute.fieldName}")
     }
     resourceClass.endMethod().emitEmptyLine()
 
     // getters and setters
-    resourceDetail.attributes.foreach { case (attributeName: String, attributeDetail: Attribute) =>
-      val uType = convertType(attributeDetail.`type`)
-      val uField = TextUtils.capitalCamelCase(attributeName)
+    resource.attributes.foreach { attribute: Attribute =>
       resourceClass
-        .emitJavadoc(s"Get ${attributeDetail.description}")
-        .beginMethod(uType, s"get$uField", PUBLIC)
-        .emitStatement(s"return this.$attributeName")
+        .emitJavadoc(s"Get ${attribute.description}")
+        .beginMethod(attribute.dataType, s"get${TextUtils.capitalize(attribute.fieldName)}", PUBLIC)
+        .emitStatement(s"return this.${attribute.fieldName}")
         .endMethod()
         .emitEmptyLine()
-        .emitJavadoc(s"Set ${attributeDetail.description}")
-        .beginMethod(uType, s"set$uField", PROTECTED, uType, uField)
-        .emitStatement(s"this.$attributeName = $uField")
+        .emitJavadoc(s"Set ${attribute.description}")
+        .beginMethod(attribute.dataType, s"set${TextUtils.capitalize(attribute.fieldName)}", PROTECTED, attribute.dataType, attribute.fieldName)
+        .emitStatement(s"this.${attribute.fieldName} = ${attribute.fieldName}")
         .endMethod()
         .emitEmptyLine()
     }
@@ -73,13 +75,5 @@ class JavaObjectOrientedGenerator extends Generator {
 
     out.flush()
     out.close()
-  }
-
-  private def convertType(raw: String) = raw match {
-    case "string"   => "String"
-    case "number"   => "Number"
-    case "datetime" => "java.util.Date"
-    case "uuid"     => "java.util.UUID"
-    case other => other
   }
 }

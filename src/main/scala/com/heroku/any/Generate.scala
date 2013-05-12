@@ -8,6 +8,7 @@ import com.heroku.any.HerokuApiProtocol._
 import java.io.{FileOutputStream, PrintWriter, File}
 import com.squareup.java.JavaWriter
 import java.lang.reflect.Modifier._
+import com.heroku.any.schema.json.Schema
 
 object Generate {
 
@@ -18,9 +19,10 @@ object Generate {
         schemaFile     <- loadFile(schemaFilename).right
         schema         <- deserialize(schemaFile).right
       } yield {
+        val richSchema = schema.toRich(schemaFilename)
         // TODO: make this selectable and return errors
         for (gen <- (Seq(new JavaObjectOrientedGenerator()))) yield {
-          gen.generate(schema)
+          gen.generate(richSchema)
           s"OK: ${gen.getClass}"
         }
       }.mkString("\n")

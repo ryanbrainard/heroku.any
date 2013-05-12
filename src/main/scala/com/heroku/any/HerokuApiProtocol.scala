@@ -1,8 +1,8 @@
 package com.heroku.any
 
-import com.heroku.any.schema._
-import spray.json.DefaultJsonProtocol._
 import spray.json.RootJsonFormat
+import spray.json.DefaultJsonProtocol._
+import com.heroku.any.schema.json._
 
 object HerokuApiProtocol {
   implicit val AttributeFormat: RootJsonFormat[Attribute] = jsonFormat2(Attribute)
