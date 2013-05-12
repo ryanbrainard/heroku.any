@@ -13,36 +13,41 @@ class JavaObjectOrientedGenerator extends Generator {
   def generate(schema: Schema, root: File) {
     val srcRoot = new File(root, packagePath)
     srcRoot.mkdirs()
+    generateApi(schema, srcRoot)
     schema.resources.foreach { resource: Resource =>
       generateAction(resource, srcRoot)
       generateModel(resource, srcRoot)
     }
   }
 
-  private def generateAction(resource: Resource, srcRoot: File) {
-    val out = new PrintWriter(new FileOutputStream(s"$srcRoot/${resource.actionsClassName}.java"))
+  private def generateConnectionConstructor(writer: JavaWriter, className: String) = {
+    writer
+      .emitField("Connection", "connection", PRIVATE | FINAL)
+      .emitEmptyLine()
+      .beginMethod(null, className, PROTECTED, "Connection", "connection")
+      .emitStatement("this.connection = connection")
+      .endMethod()
+      .emitEmptyLine()
+  }
+
+  private def generateApi(schema: Schema, srcRoot: File) {
+    val apiClass = "HerokuApi"
+    val out = new PrintWriter(new FileOutputStream(s"$srcRoot/$apiClass.java"))
     val writer = new JavaWriter(out)
 
     // header
     val cls = writer
       .emitPackage(packageName)
-      .beginType(packageName + "." + resource.actionsClassName, "class", PUBLIC | FINAL)
-      .emitEmptyLine()
-      .emitField("Connection", "connection", PRIVATE | FINAL)
-      .emitEmptyLine()
-      .beginMethod(null, resource.modelClassName, PROTECTED, "Connection", "connection")
-      .emitStatement("this.connection = connection")
-      .endMethod()
+      .beginType(packageName + "." + apiClass, "class", PUBLIC | FINAL)
       .emitEmptyLine()
 
-    resource.actions.foreach { action =>
-      val param = TextUtils.camelCase(resource.modelClassName)
-      val returnType = if (action.returnable) resource.modelClassName else "void"
-      val returnKeyword = if (action.returnable) "return " else ""
+    generateConnectionConstructor(writer, apiClass)
+
+    schema.resources.foreach { resource =>
       cls
-        .emitJavadoc(s"${action.httpMethod} ${resource.modelClassName}")
-        .beginMethod(returnType, action.methodName, PUBLIC, resource.modelClassName, param)
-        .emitStatement(s"${returnKeyword}this.connection.execute($param)")
+        .emitJavadoc(s"Perform ${resource.name} Actions")
+        .beginMethod(resource.actionsClassName, TextUtils.camelCase(resource.actionsClassName), PUBLIC)
+        .emitStatement(s"return new ${resource.actionsClassName}(connection)")
         .endMethod()
         .emitEmptyLine()
     }
@@ -52,44 +57,73 @@ class JavaObjectOrientedGenerator extends Generator {
     out.close()
   }
 
+  private def generateAction(resource: Resource, srcRoot: File) {
+    val out = new PrintWriter(new FileOutputStream(s"$srcRoot/${resource.actionsClassName}.java"))
+    val writer = new JavaWriter(out)
+
+    // header
+    writer
+      .emitPackage(packageName)
+      .beginType(packageName + "." + resource.actionsClassName, "class", PUBLIC | FINAL)
+      .emitEmptyLine()
+
+    generateConnectionConstructor(writer, resource.actionsClassName)
+
+    resource.actions.foreach { action =>
+      val param = TextUtils.camelCase(resource.modelClassName)
+      val returnType = if (action.returnable) resource.modelClassName else "void"
+      val returnKeyword = if (action.returnable) "return " else ""
+      writer
+        .emitJavadoc(s"${action.httpMethod} ${resource.modelClassName}")
+        .beginMethod(returnType, action.methodName, PUBLIC, resource.modelClassName, param)
+        .emitStatement(s"${returnKeyword}connection.execute($param)")
+        .endMethod()
+        .emitEmptyLine()
+    }
+
+    writer.endType()
+    out.flush()
+    out.close()
+  }
+
   private def generateModel(resource: Resource, srcRoot: File) {
     val out = new PrintWriter(new FileOutputStream(s"$srcRoot/${resource.modelClassName}.java"))
     val writer = new JavaWriter(out)
 
     // header
-    val cls = writer
+    writer
       .emitPackage(packageName)
       .beginType(packageName + "." + resource.modelClassName, "class", PUBLIC | FINAL)
 
     // fields
     resource.attributes.foreach { attribute: Attribute =>
-      cls
+      writer
         .emitEmptyLine()
         .emitJavadoc(TextUtils.capitalize(attribute.description))
         .emitField(attribute.dataType, attribute.name, PRIVATE | FINAL)
     }
 
-    cls.emitEmptyLine()
+    writer.emitEmptyLine()
 
     // empty constructor
-    cls
+    writer
       .emitJavadoc(s"Construct empty ${resource.name}")
       .beginMethod(null, resource.modelClassName, PUBLIC)
       .endMethod()
       .emitEmptyLine()
 
     // fully-qualified constructor
-    cls.beginMethod(null, resource.modelClassName, PUBLIC, resource.attributes.map { attribute: Attribute =>
+    writer.beginMethod(null, resource.modelClassName, PUBLIC, resource.attributes.map { attribute: Attribute =>
         Seq[String](attribute.dataType, attribute.fieldName)
     }.flatten.toSeq:_*)
     resource.attributes.foreach { attribute: Attribute =>
-      cls.emitStatement(s"this.${attribute.fieldName} = ${attribute.fieldName}")
+      writer.emitStatement(s"this.${attribute.fieldName} = ${attribute.fieldName}")
     }
-    cls.endMethod().emitEmptyLine()
+    writer.endMethod().emitEmptyLine()
 
     // getters and setters
     resource.attributes.foreach { attribute: Attribute =>
-      cls
+      writer
         .emitJavadoc(s"Get ${attribute.description}")
         .beginMethod(attribute.dataType, s"get${TextUtils.capitalize(attribute.fieldName)}", PUBLIC)
         .emitStatement(s"return this.${attribute.fieldName}")
@@ -102,7 +136,7 @@ class JavaObjectOrientedGenerator extends Generator {
         .emitEmptyLine()
     }
 
-    cls.endType()
+    writer.endType()
     out.flush()
     out.close()
   }
