@@ -21,8 +21,10 @@ object Generate {
       } yield {
         val richSchema = schema.toRich(schemaFilename)
         // TODO: make this selectable and return errors
+        val root = new File("target/generated")
+        root.mkdirs()
         for (gen <- (Seq(new JavaObjectOrientedGenerator()))) yield {
-          gen.generate(richSchema)
+          gen.generate(richSchema, root)
           s"OK: ${gen.getClass}"
         }
       }.mkString("\n")

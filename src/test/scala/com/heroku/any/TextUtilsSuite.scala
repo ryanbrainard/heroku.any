@@ -18,10 +18,12 @@ class TextUtilsSuite extends FunSuite {
     assert(TextUtils.camelCase(null)                        === null)
   }
 
-  test("capitalCamelCasing") {
-    assert(TextUtils.capitalCamelCase("fried_chicken_and_waffles") === "FriedChickenAndWaffles")
-    assert(TextUtils.capitalCamelCase("fried")                     === "Fried")
-    assert(TextUtils.capitalCamelCase("")                          === "")
-    assert(TextUtils.capitalCamelCase(null)                        === null)
+  test("singularize") {
+    assert(TextUtils.singularize("waffles")  === "waffle")
+    assert(TextUtils.singularize("glasses")  === "glass")
+    assert(TextUtils.singularize("chickens") === "chicken")
+    assert(TextUtils.singularize("children") === "children") // todo: handle special cases
+    assert(TextUtils.singularize("")         === "")
+    assert(TextUtils.singularize(null)       === null)
   }
 }

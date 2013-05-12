@@ -1,15 +1,20 @@
 package com.heroku.any
 
 import com.heroku.any.schema.rich._
-import java.io.{FileOutputStream, PrintWriter}
+import java.io.{File, FileOutputStream, PrintWriter}
 import com.squareup.java.JavaWriter
 import java.lang.reflect.Modifier._
 
 class JavaObjectOrientedGenerator extends Generator {
 
-  def generate(schema: Schema) {
+  val packagePath = "/com/heroku/api"
+  val packageName = "com.heroku.api"
+
+  def generate(schema: Schema, root: File) {
+    val srcRoot = new File(root, packagePath)
+    srcRoot.mkdirs()
     schema.resources.foreach { resource: Resource =>
-      genResource(resource)
+      genResource(resource, srcRoot)
     }
   }
 
@@ -21,14 +26,14 @@ class JavaObjectOrientedGenerator extends Generator {
     case other =>      other
   }
 
-  private def genResource(resource: Resource) {
-    val out = new PrintWriter(new FileOutputStream(s"target/generated/com/heroku/api/${resource.className}.java"))
+  private def genResource(resource: Resource, srcRoot: File) {
+    val out = new PrintWriter(new FileOutputStream(s"$srcRoot/${resource.modelClassName}.java"))
     val writer = new JavaWriter(out)
 
     // header
     val resourceClass = writer
-      .emitPackage("com.heroku")
-      .beginType(s"com.heroku.${resource.className}", "class", PUBLIC | FINAL)
+      .emitPackage(packageName)
+      .beginType(packageName + "." + resource.modelClassName, "class", PUBLIC | FINAL)
 
     // fields
     resource.attributes.foreach { attribute: Attribute =>
@@ -43,12 +48,12 @@ class JavaObjectOrientedGenerator extends Generator {
     // empty constructor
     resourceClass
       .emitJavadoc(s"Construct empty ${resource.name}")
-      .beginMethod(null, resource.className, PUBLIC)
+      .beginMethod(null, resource.modelClassName, PUBLIC)
       .endMethod()
       .emitEmptyLine()
 
     // fully-qualified constructor
-    resourceClass.beginMethod(null, resource.className, PUBLIC, resource.attributes.map { attribute: Attribute =>
+    resourceClass.beginMethod(null, resource.modelClassName, PUBLIC, resource.attributes.map { attribute: Attribute =>
         Seq[String](attribute.dataType, attribute.fieldName)
     }.flatten.toSeq:_*)
     resource.attributes.foreach { attribute: Attribute =>
