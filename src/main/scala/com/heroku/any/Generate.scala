@@ -44,10 +44,10 @@ object Generate {
     val writer = new JavaWriter(out)
 
     val java = writer.emitPackage("com.heroku")
-      .beginType(s"com.heroku.${resourceName.replace(" ", "")}", "class", PRIVATE | FINAL)
+      .beginType(s"com.heroku.${resourceName.replace(" ", "")}", "class", PUBLIC | FINAL)
 
     resourceDetail.attributes.foreach { case (attributeName: String, attributeDetail: Attribute) =>
-      java.emitField(convertType(attributeDetail.`type`), attributeName, PUBLIC | FINAL)
+      java.emitField(convertType(attributeDetail.`type`), attributeName, PRIVATE | FINAL)
     }
 
     java.emitEmptyLine()
