@@ -39,17 +39,12 @@ object Generate {
     case other => other
   }
 
-  def prettyMethod(raw: String) = {
-    // TODO
-    raw
-  }
-
   def genResource(resourceName: String, resourceDetail: Resource) {
     val out = new PrintWriter(new FileOutputStream(s"target/generated/com/heroku/api/${resourceName}.java"))
     val writer = new JavaWriter(out)
 
     val java = writer.emitPackage("com.heroku")
-      .beginType(s"com.heroku.${resourceName.replace(" ", "")}", "class", PUBLIC | FINAL)
+      .beginType(s"com.heroku.${resourceName.replace(" ", "")}", "class", PRIVATE | FINAL)
 
     resourceDetail.attributes.foreach { case (attributeName: String, attributeDetail: Attribute) =>
       java.emitField(convertType(attributeDetail.`type`), attributeName, PUBLIC | FINAL)
@@ -58,7 +53,7 @@ object Generate {
     java.emitEmptyLine()
 
     resourceDetail.attributes.foreach { case (attributeName: String, attributeDetail: Attribute) =>
-      java.beginMethod(convertType(attributeDetail.`type`), s"get${prettyMethod(attributeName)}", PUBLIC)
+      java.beginMethod(convertType(attributeDetail.`type`), s"get${TextUtils.capitalCamelCase(attributeName)}", PUBLIC)
         .emitStatement(s"return $attributeName")
         .endMethod()
     }
