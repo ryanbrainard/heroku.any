@@ -11,7 +11,7 @@ class JavaObjectOrientedGenerator extends Generator {
   val packageName = "com.heroku.api"
 
   def generate(schema: Schema, root: File) {
-    val srcRoot = new File(root, packagePath)
+    val srcRoot = new File(root, s"/src/main/java/$packagePath")
     srcRoot.mkdirs()
     copyStaticFiles(root)
     generateApi(schema, srcRoot)
@@ -25,17 +25,17 @@ class JavaObjectOrientedGenerator extends Generator {
     copyDir(new File("src/main/resources/templates/java-api"), root)
   }
 
-  private def copyDir(src: File, dest: File) {
+  private def copyDir(src: File, dest: File, rel: String = "") {
     if (src.isDirectory) {
-      src.list().foreach(c => copyDir(new File(src, c), dest))
+      src.list().foreach { child =>
+        copyDir(new File(src, child), dest, s"$rel${File.separator}$child")
+      }
     } else {
-      copyFile(src, new File(dest, src.getPath))
+      copyFile(src, new File(dest, rel))
     }
   }
 
   private def copyFile(src: File, dest: File) {
-    println(src.getAbsolutePath)
-    println(dest.getAbsolutePath)
     dest.getParentFile.mkdirs()
     import java.io.{FileInputStream,FileOutputStream}
     new FileOutputStream(dest).getChannel.transferFrom(new FileInputStream(src).getChannel, 0, Long.MaxValue)
@@ -208,8 +208,9 @@ class JavaObjectOrientedGenerator extends Generator {
         .endMethod()
         .emitEmptyLine()
         .emitJavadoc(s"Set ${attribute.description}")
-        .beginMethod("void", s"set${TextUtils.capitalize(attribute.fieldName)}", PROTECTED, attribute.dataType, attribute.fieldName)
+        .beginMethod(resource.modelClassName, s"set${TextUtils.capitalize(attribute.fieldName)}", PROTECTED, attribute.dataType, attribute.fieldName)
         .emitStatement(s"this.${attribute.fieldName} = ${attribute.fieldName}")
+        .emitStatement("return this")
         .endMethod()
         .emitEmptyLine()
     }

@@ -8,16 +8,26 @@
     <artifactId>heroku-api-jersey</artifactId>
     <version>0.1-SNAPSHOT</version>
 
+    <properties>
+        <com.sun.jersey.version>1.17.1</com.sun.jersey.version> <!-- TODO: sync with project -->
+    </properties>
+
     <dependencies>
-        <!--<dependency>-->
-            <!--<artifactId>heroku-api</artifactId>-->
-            <!--<groupId>com.heroku.api</groupId>-->
-            <!--<version>${project.parent.version}</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>1.17.1</version> <!-- TODO: sync with project -->
+            <version>${com.sun.jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
+            <version>${com.sun.jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.9</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
