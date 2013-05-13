@@ -22,12 +22,21 @@ class JavaObjectOrientedGenerator extends Generator {
   }
 
   private def copyStaticFiles(root: File) {
-    Seq("Action.java", "Connection.java").foreach { file =>
-      copyFile(new File(s"src/main/resources/templates/java-api/src/main/java/$packagePath/$file"), new File(s"$root/$packagePath/$file"))
+    copyDir(new File("src/main/resources/templates/java-api"), root)
+  }
+
+  private def copyDir(src: File, dest: File) {
+    if (src.isDirectory) {
+      src.list().foreach(c => copyDir(new File(src, c), dest))
+    } else {
+      copyFile(src, new File(dest, src.getPath))
     }
   }
 
-  private def copyFile(src: File, dest: File) = {
+  private def copyFile(src: File, dest: File) {
+    println(src.getAbsolutePath)
+    println(dest.getAbsolutePath)
+    dest.getParentFile.mkdirs()
     import java.io.{FileInputStream,FileOutputStream}
     new FileOutputStream(dest).getChannel.transferFrom(new FileInputStream(src).getChannel, 0, Long.MaxValue)
   }
