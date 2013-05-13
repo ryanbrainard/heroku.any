@@ -23,7 +23,7 @@ class JavaObjectOrientedGenerator extends Generator {
 
   private def copyStaticFiles(root: File) {
     Seq("Action.java", "Connection.java").foreach { file =>
-      copyFile(new File(s"src/main/resources/$packagePath/$file"), new File(s"$root/$packagePath/$file"))
+      copyFile(new File(s"src/main/resources/templates/java-api/src/main/java/$packagePath/$file"), new File(s"$root/$packagePath/$file"))
     }
   }
 
@@ -121,26 +121,31 @@ class JavaObjectOrientedGenerator extends Generator {
       .emitEmptyLine()
 
     writer
-      .beginMethod(resource.modelClassName, "getResource", PUBLIC)
-      .emitStatement(s"return $resourceField")
-      .endMethod()
-      .emitEmptyLine()
-
-    writer
-      .beginMethod("String", "getHttpMethod", PUBLIC)
+      .beginMethod("String", "httpMethod", PUBLIC)
       .emitStatement("return \"" + action.httpMethod + "\"")
       .endMethod()
       .emitEmptyLine()
 
     writer
-      .beginMethod("String", "getEndpoint", PUBLIC)
+      .beginMethod("String", "path", PUBLIC)
       .emitStatement("return \"" + action.path + "\"")
       .endMethod()
       .emitEmptyLine()
 
     writer
-      .beginMethod("int", "getExpectedStatus", PUBLIC)
+      .beginMethod(resource.modelClassName, "requestEntity", PUBLIC)
+      .emitStatement(s"return $resourceField")
+      .endMethod()
+      .emitEmptyLine()
+
+    writer
+      .beginMethod("int", "expectedStatus", PUBLIC)
       .emitStatement(s"return ${action.status.filter(_.isDigit)}")
+      .endMethod()
+
+    writer
+      .beginMethod(s"Class<${resource.modelClassName}>", "responseClass", PUBLIC)
+      .emitStatement(s"return ${resource.modelClassName}.class")
       .endMethod()
 
     writer.endType()
