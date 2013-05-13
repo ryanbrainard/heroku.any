@@ -103,18 +103,17 @@ class JavaObjectOrientedGenerator extends Generator {
   private def generateResourceActionClass(resource: Resource, action: Action, srcRoot: File) {
     val className = action.actionClassName(resource)
     val resourceField = TextUtils.camelCase(resource.modelClassName)
-    val responseType = if (action.returnable) resource.modelClassName else "void"
     val out = new PrintWriter(new FileOutputStream(s"$srcRoot/$className.java"))
     val writer = new JavaWriter(out)
 
     // header
     writer
       .emitPackage(packageName)
-      .beginType(packageName + "." + className, "class", PUBLIC | FINAL, null, s"Action<$responseType}>")
+      .beginType(packageName + "." + className, "class", PUBLIC | FINAL, null, s"Action<${resource.modelClassName}>")
       .emitEmptyLine()
 
     writer
-      .emitField(className, resourceField, PRIVATE | FINAL)
+      .emitField(resource.modelClassName, resourceField, PRIVATE | FINAL)
       .emitEmptyLine()
       .beginMethod(null, className, PUBLIC, resource.modelClassName, resourceField)
       .emitStatement(s"this.$resourceField = $resourceField")
@@ -156,24 +155,26 @@ class JavaObjectOrientedGenerator extends Generator {
     // header
     writer
       .emitPackage(packageName)
-      .beginType(packageName + "." + resource.modelClassName, "class", PUBLIC | FINAL)
+      .beginType(packageName + "." + resource.modelClassName, "class", PUBLIC)
 
     // fields
     resource.attributes.foreach { attribute: Attribute =>
       writer
         .emitEmptyLine()
         .emitJavadoc(TextUtils.capitalize(attribute.description))
-        .emitField(attribute.dataType, attribute.name, PRIVATE | FINAL)
+        .emitField(attribute.dataType, attribute.fieldName, PRIVATE)
     }
 
     writer.emitEmptyLine()
 
-    // empty constructor
-    writer
-      .emitJavadoc(s"Construct empty ${resource.name}")
-      .beginMethod(null, resource.modelClassName, PUBLIC)
-      .endMethod()
-      .emitEmptyLine()
+    if (!resource.attributes.isEmpty) {
+      // empty constructor
+      writer
+        .emitJavadoc(s"Construct empty ${resource.name}")
+        .beginMethod(null, resource.modelClassName, PUBLIC)
+        .endMethod()
+        .emitEmptyLine()
+    }
 
     // fully-qualified constructor
     writer.beginMethod(null, resource.modelClassName, PUBLIC, resource.attributes.map { attribute: Attribute =>
@@ -193,7 +194,7 @@ class JavaObjectOrientedGenerator extends Generator {
         .endMethod()
         .emitEmptyLine()
         .emitJavadoc(s"Set ${attribute.description}")
-        .beginMethod(attribute.dataType, s"set${TextUtils.capitalize(attribute.fieldName)}", PROTECTED, attribute.dataType, attribute.fieldName)
+        .beginMethod("void", s"set${TextUtils.capitalize(attribute.fieldName)}", PROTECTED, attribute.dataType, attribute.fieldName)
         .emitStatement(s"this.${attribute.fieldName} = ${attribute.fieldName}")
         .endMethod()
         .emitEmptyLine()
