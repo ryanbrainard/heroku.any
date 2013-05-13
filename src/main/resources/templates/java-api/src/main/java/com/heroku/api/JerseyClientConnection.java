@@ -24,7 +24,7 @@ public class JerseyClientConnection implements Connection {
     public <R> R execute(Action<R> action) {
         return baseResource
                 .path(action.path())
-                .entity(action.requestEntity(), "application/json")
+                .entity(action.httpMethod().equals("GET") ? null : action.requestEntity(), "application/json")
                 .accept("application/vnd.heroku+json; version=3")
                 .method(action.httpMethod(), action.responseClass());
     }
