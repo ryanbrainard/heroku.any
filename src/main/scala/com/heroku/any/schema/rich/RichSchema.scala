@@ -10,8 +10,12 @@ case class Schema(filename: String,
         attribute.name.split(":")
       }
     }.collect { case Array(a,b) => (a,b) }.foldLeft(Map[String, Set[String]]()) { (agg,t) =>
-        agg + (t._1.capitalize -> agg.get(t._1).map(_ + t._2).getOrElse(Set(t._2)))
-      }.filter(r => resources.exists(_.name == r._1)).map { r =>
+        agg + (t._1 -> agg.get(t._1).map(_ + t._2).getOrElse(Set(t._2)))
+      }.filterNot { r =>
+      val e = resources.exists{resource => resource.modelClassName.equalsIgnoreCase(r._1)}
+      println(e + "\t" + r)
+      e
+    }.map { r =>
         Resource(r._1, Seq(), r._2.map(a => Attribute(a, "", DataType("string"))).toSeq, "", r._2.toSeq)
       }
   }
