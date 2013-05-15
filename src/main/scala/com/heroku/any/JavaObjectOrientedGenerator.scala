@@ -15,7 +15,7 @@ class JavaObjectOrientedGenerator extends Generator {
     srcRoot.mkdirs()
     copyStaticFiles(root)
     generateApi(schema, srcRoot)
-    schema.resources.foreach { resource: Resource =>
+    (schema.resources ++ schema.resourcesSecondClass).foreach { resource: Resource =>
       generateResourceActionsClass(resource, srcRoot)
       generateModel(resource, srcRoot)
     }
@@ -79,6 +79,8 @@ class JavaObjectOrientedGenerator extends Generator {
   }
 
   private def generateResourceActionsClass(resource: Resource, srcRoot: File) {
+    if (resource.actions.isEmpty) return
+
     val out = new PrintWriter(new FileOutputStream(s"$srcRoot/${resource.actionsClassName}.java"))
     val writer = new JavaWriter(out)
 
@@ -115,12 +117,8 @@ class JavaObjectOrientedGenerator extends Generator {
   private def generateResourceActionClass(resource: Resource, action: Action, srcRoot: File) {
     // TODO: DE-DUPE
     val requiredAttributes: Seq[Attribute] = resource.attributes.filter(a => action.requiredAttributes.contains(a.name))
-//    val typedFields = resource.attributes.filter(a => params.contains(a.name)).flatMap(a => Seq[String](a.dataType, a.name))
-//    val typedPar = resource.attributes.filter(a => params.contains(a.name)).flatMap(a => Seq[String](a.dataType, a.name))
-//    val fieldToParam = resource.attributes.filter(a => params.contains(a.name)).flatMap(a => Seq[String](a.name, TextUtils.camelCase(a.name)))
 
     val className = action.actionClassName(resource)
-    val resourceField = TextUtils.camelCase(resource.modelClassName)
     val out = new PrintWriter(new FileOutputStream(s"$srcRoot/$className.java"))
     val writer = new JavaWriter(out)
 

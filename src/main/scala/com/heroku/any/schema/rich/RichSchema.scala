@@ -3,18 +3,30 @@ package com.heroku.any.schema.rich
 import com.heroku.any.TextUtils
 
 case class Schema(filename: String,
-                  resources: Iterable[Resource])
+                  resources: Seq[Resource]) {
+  def resourcesSecondClass = {
+    resources.flatMap { resource =>
+      resource.attributes.filter(_.name.contains(":")).map { attribute =>
+        attribute.name.split(":")
+      }
+    }.collect { case Array(a,b) => (a,b) }.foldLeft(Map[String, Set[String]]()) { (agg,t) =>
+        agg + (t._1.capitalize -> agg.get(t._1).map(_ + t._2).getOrElse(Set(t._2)))
+      }.filter(r => resources.exists(_.name == r._1)).map { r =>
+        Resource(r._1, Seq(), r._2.map(a => Attribute(a, "", DataType("string"))).toSeq, "", r._2.toSeq)
+      }
+  }
+}
 
 case class Resource(name: String,
                     actions: Seq[Action],
                     attributes: Seq[Attribute],
                     description: String,
-                    serialization: Option[Seq[String]]) {
+                    serialization: Seq[String]) {
   def resourceClassName = TextUtils.capitalize(TextUtils.camelCase(name))
   def modelClassName = TextUtils.singularize(resourceClassName)
   def actionsClassName = resourceClassName + "Actions"
   def serializableAttributes = attributes.filter { a =>
-    !a.name.contains(":") && serialization.map(_.contains(a.name)).getOrElse(false)
+    !a.name.contains(":") && serialization.contains(a.name)
   }
 }
 

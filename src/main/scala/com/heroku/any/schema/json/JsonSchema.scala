@@ -15,7 +15,7 @@ case class Resource(actions: Map[String, Action],
       Richable.fromMap(actions),
       Richable.fromMap(attributes),
       description,
-      serialization
+      serialization.getOrElse(Seq.empty)
   )
 }
 
