@@ -4,20 +4,15 @@ import com.heroku.any.TextUtils
 
 case class Schema(filename: String,
                   resources: Seq[Resource]) {
-  def resourcesSecondClass = {
-    resources.flatMap { resource =>
-      resource.attributes.filter(_.name.contains(":")).map { attribute =>
-        attribute.name.split(":")
-      }
-    }.collect { case Array(a,b) => (a,b) }.foldLeft(Map[String, Set[String]]()) { (agg,t) =>
-        agg + (t._1 -> agg.get(t._1).map(_ + t._2).getOrElse(Set(t._2)))
-      }.filterNot { r =>
-      val e = resources.exists{resource => resource.modelClassName.equalsIgnoreCase(r._1)}
-      println(e + "\t" + r)
-      e
-    }.map { r =>
-        Resource(r._1, Seq(), r._2.map(a => Attribute(a, "", DataType("string"))).toSeq, "", r._2.toSeq)
-      }
+  def resourcesSecondClass = resources.flatMap { resource =>
+    resource.attributes.filter(_.name.contains(":")).map { attribute =>
+      val Array (obj,field) = attribute.name.split(":")
+      (obj,Attribute(field, field, attribute.dataType))
+    }
+  }.foldLeft(Map[String, Set[Attribute]]()) { (agg,a) =>
+      agg + (a._1.capitalize -> agg.get(a._1).map(_ + a._2).getOrElse(Set(a._2)))
+  }.filterNot(r => resources.exists(resource => resource.modelClassName == r._1)).map { r =>
+    Resource(r._1, Seq(), r._2.toSeq, "", r._2.map(_.name).toSeq)
   }
 }
 
