@@ -7,10 +7,10 @@ case class Schema(filename: String,
   def resourcesSecondClass = resources.flatMap { resource =>
     resource.attributes.filter(_.name.contains(":")).map { attribute =>
       val Array (obj,field) = attribute.name.split(":")
-      (obj,Attribute(field, field, attribute.dataType))
+      (obj.capitalize, Attribute(field, field, attribute.dataType))
     }
   }.foldLeft(Map[String, Set[Attribute]]()) { (agg,a) =>
-      agg + (a._1.capitalize -> agg.get(a._1).map(_ + a._2).getOrElse(Set(a._2)))
+    agg + (a._1 -> agg.get(a._1).map(_ + a._2).getOrElse(Set(a._2)))
   }.filterNot(r => resources.exists(resource => resource.modelClassName == r._1)).map { r =>
     Resource(r._1, Seq(), r._2.toSeq, "", r._2.map(_.name).toSeq)
   }
