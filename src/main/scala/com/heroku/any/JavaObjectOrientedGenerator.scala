@@ -67,7 +67,7 @@ class JavaObjectOrientedGenerator extends Generator {
     schema.resources.foreach { resource =>
       cls
         .emitJavadoc(s"Perform ${resource.name} Actions")
-        .beginMethod(resource.actionsClassName, TextUtils.camelCase(resource.actionsClassName), PUBLIC)
+        .beginMethod(resource.actionsClassName, TextUtils.camelCase(resource.resourceClassName), PUBLIC)
         .emitStatement(s"return new ${resource.actionsClassName}(connection)")
         .endMethod()
         .emitEmptyLine()

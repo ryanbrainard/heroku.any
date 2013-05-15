@@ -10,9 +10,9 @@ case class Resource(name: String,
                     attributes: Seq[Attribute],
                     description: String,
                     serialization: Option[Seq[String]]) {
-  private def capCamelName = TextUtils.capitalize(TextUtils.camelCase(name))
-  def modelClassName = TextUtils.singularize(capCamelName)
-  def actionsClassName = capCamelName + "Actions"
+  def resourceClassName = TextUtils.capitalize(TextUtils.camelCase(name))
+  def modelClassName = TextUtils.singularize(resourceClassName)
+  def actionsClassName = resourceClassName + "Actions"
 }
 
 case class Attribute(name: String,
