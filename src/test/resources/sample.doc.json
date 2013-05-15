@@ -190,6 +190,11 @@
                     "example":      "app123@heroku.com",
                     "type":         "string"
                 },
+                "tier": {
+                    "description":  "tier level of account",
+                    "example":      "basic",
+                    "type":         "string"
+                },
                 "buildpack_provided_description": {
                     "description":  "description from buildpack of app",
                     "example":      "Ruby/Rack",
@@ -289,7 +294,8 @@
                 "stack",
                 "updated_at",
                 "web_url",
-                "legacy_id"
+                "legacy_id",
+                "tier"
             ]
         },
 
