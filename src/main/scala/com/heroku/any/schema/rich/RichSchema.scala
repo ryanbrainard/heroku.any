@@ -25,8 +25,15 @@ case class Resource(name: String,
   def modelClassName = TextUtils.singularize(resourceClassName)
   def actionsClassName = resourceClassName + "Actions"
   def serializableAttributes = attributes.filter { a =>
-    !a.name.contains(":") && serialization.contains(a.name)
-  }
+    serialization.contains(a.name)
+  }.map { a =>
+    if (a.name.contains(":")) {
+      val Array (obj,field) = a.name.split(":")
+      Attribute(obj, obj, DataType(obj.capitalize))
+    } else {
+      a
+    }
+  }.toSet.toSeq
 }
 
 case class Attribute(name: String,
