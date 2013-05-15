@@ -185,6 +185,11 @@
                 }
             },
             "attributes": {
+                "legacy_id": {
+                    "description":  "legacy id of app",
+                    "example":      "app123@heroku.com",
+                    "type":         "string"
+                },
                 "buildpack_provided_description": {
                     "description":  "description from buildpack of app",
                     "example":      "Ruby/Rack",
@@ -283,7 +288,8 @@
                 "slug_size",
                 "stack",
                 "updated_at",
-                "web_url"
+                "web_url",
+                "legacy_id"
             ]
         },
 

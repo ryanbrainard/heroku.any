@@ -13,18 +13,24 @@ case class Resource(name: String,
   def resourceClassName = TextUtils.capitalize(TextUtils.camelCase(name))
   def modelClassName = TextUtils.singularize(resourceClassName)
   def actionsClassName = resourceClassName + "Actions"
+  def serializableAttributes = attributes.filter { a =>
+    !a.name.contains(":") && serialization.map(_.contains(a.name)).getOrElse(false)
+  }
 }
 
 case class Attribute(name: String,
                      description: String,
                      dataType: DataType) {
-  def fieldName = TextUtils.camelCase(name)
+  def fieldName = name
+  def paramName = TextUtils.camelCase(name)
 }
 
 case class Action(name: String,
                   httpMethod: String,
                   path: String,
-                  status: String) {
+                  status: String,
+                  requiredAttributes: Seq[String],
+                  optionalAttributes: Seq[String]) {
   def methodName = TextUtils.camelCase(name)
   def returnable = httpMethod != "DELETE"
   def actionClassName(resource: Resource) =

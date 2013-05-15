@@ -26,6 +26,16 @@ case class Attribute(description: String,
 
 case class Action(method: String,
                   path: String,
-                  status: String) extends Richable[com.heroku.any.schema.rich.Action] {
-  def toRich(name: String) = new com.heroku.any.schema.rich.Action(name, method, path, status)
+                  status: String,
+                  attributes: Option[Requiredness]) extends Richable[com.heroku.any.schema.rich.Action] {
+  def toRich(name: String) = new com.heroku.any.schema.rich.Action(
+    name,
+    method,
+    path,
+    status,
+    attributes.flatMap(_.required).getOrElse(Seq.empty),
+    attributes.flatMap(_.optional).getOrElse(Seq.empty))
 }
+
+case class Requiredness(required: Option[Seq[String]],
+                        optional: Option[Seq[String]])

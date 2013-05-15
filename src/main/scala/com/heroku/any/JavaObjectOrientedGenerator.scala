@@ -91,13 +91,16 @@ class JavaObjectOrientedGenerator extends Generator {
     generateConnectionConstructor(writer, resource.actionsClassName)
 
     resource.actions.foreach { action =>
-      val param = TextUtils.camelCase(resource.modelClassName) // TODO: handle listings
+      // TODO: DE-DUPE
+      val params: Seq[String] = action.requiredAttributes
+      val typedParams = resource.attributes.filter(a => params.contains(a.name)).flatMap(a => Seq[String](a.dataType, a.name))
+
       val returnType = if (action.returnable) resource.modelClassName else "void"
       val returnKeyword = if (action.returnable) "return " else ""
       writer
         .emitJavadoc(s"${action.httpMethod} ${resource.modelClassName}")
-        .beginMethod(returnType, action.methodName, PUBLIC, resource.modelClassName, param)
-        .emitStatement(s"${returnKeyword}connection.execute(new ${action.actionClassName(resource)}($param))")
+        .beginMethod(returnType, action.methodName, PUBLIC, typedParams.toSeq:_*)
+        .emitStatement(s"${returnKeyword}connection.execute(new ${action.actionClassName(resource)}(${params.mkString(", ")}))")
         .endMethod()
         .emitEmptyLine()
 
@@ -110,6 +113,12 @@ class JavaObjectOrientedGenerator extends Generator {
   }
 
   private def generateResourceActionClass(resource: Resource, action: Action, srcRoot: File) {
+    // TODO: DE-DUPE
+    val requiredAttributes: Seq[Attribute] = resource.attributes.filter(a => action.requiredAttributes.contains(a.name))
+//    val typedFields = resource.attributes.filter(a => params.contains(a.name)).flatMap(a => Seq[String](a.dataType, a.name))
+//    val typedPar = resource.attributes.filter(a => params.contains(a.name)).flatMap(a => Seq[String](a.dataType, a.name))
+//    val fieldToParam = resource.attributes.filter(a => params.contains(a.name)).flatMap(a => Seq[String](a.name, TextUtils.camelCase(a.name)))
+
     val className = action.actionClassName(resource)
     val resourceField = TextUtils.camelCase(resource.modelClassName)
     val out = new PrintWriter(new FileOutputStream(s"$srcRoot/$className.java"))
@@ -118,16 +127,19 @@ class JavaObjectOrientedGenerator extends Generator {
     // header
     writer
       .emitPackage(packageName)
+      .emitAnnotation(classOf[org.codehaus.jackson.map.annotate.JsonSerialize])
       .beginType(packageName + "." + className, "class", PUBLIC | FINAL, null, s"Action<${resource.modelClassName}>")
       .emitEmptyLine()
 
+    requiredAttributes.foreach(a => writer.emitField(a.dataType, a.fieldName, FINAL))
+
     writer
-      .emitField(resource.modelClassName, resourceField, PRIVATE | FINAL)
       .emitEmptyLine()
-      .beginMethod(null, className, PUBLIC, resource.modelClassName, resourceField)
-      .emitStatement(s"this.$resourceField = $resourceField")
-      .endMethod()
-      .emitEmptyLine()
+      .beginMethod(null, className, PUBLIC, requiredAttributes.flatMap(a => Seq[String](a.dataType, a.paramName)):_*)
+      requiredAttributes.foreach(a => writer.emitStatement(s"this.${a.fieldName} = ${a.paramName}"))
+      writer
+        .endMethod()
+        .emitEmptyLine()
 
     writer
       .beginMethod("String", "httpMethod", PUBLIC)
@@ -142,20 +154,24 @@ class JavaObjectOrientedGenerator extends Generator {
       .emitEmptyLine()
 
     writer
-      .beginMethod(resource.modelClassName, "requestEntity", PUBLIC)
-      .emitStatement(s"return $resourceField")
-      .endMethod()
-      .emitEmptyLine()
-
-    writer
       .beginMethod("int", "expectedStatus", PUBLIC)
       .emitStatement(s"return ${action.status.filter(_.isDigit)}")
       .endMethod()
+      .emitEmptyLine()
 
     writer
       .beginMethod(s"Class<${resource.modelClassName}>", "responseClass", PUBLIC)
       .emitStatement(s"return ${resource.modelClassName}.class")
       .endMethod()
+
+    requiredAttributes.foreach { a =>
+      writer
+        .emitEmptyLine()
+        .beginMethod(a.dataType, s"get${TextUtils.capitalize(a.paramName)}", PUBLIC)
+        .emitStatement(s"return this.${a.fieldName}")
+        .endMethod()
+
+    }
 
     writer.endType()
     out.flush()
@@ -172,7 +188,7 @@ class JavaObjectOrientedGenerator extends Generator {
       .beginType(packageName + "." + resource.modelClassName, "class", PUBLIC)
 
     // fields
-    resource.attributes.foreach { attribute: Attribute =>
+    resource.serializableAttributes.foreach { attribute: Attribute =>
       writer
         .emitEmptyLine()
         .emitJavadoc(TextUtils.capitalize(attribute.description))
@@ -181,7 +197,7 @@ class JavaObjectOrientedGenerator extends Generator {
 
     writer.emitEmptyLine()
 
-    if (!resource.attributes.isEmpty) {
+    if (!resource.serializableAttributes.isEmpty) {
       // empty constructor
       writer
         .emitJavadoc(s"Construct empty ${resource.name}")
@@ -191,16 +207,16 @@ class JavaObjectOrientedGenerator extends Generator {
     }
 
     // fully-qualified constructor
-    writer.beginMethod(null, resource.modelClassName, PUBLIC, resource.attributes.map { attribute: Attribute =>
+    writer.beginMethod(null, resource.modelClassName, PUBLIC, resource.serializableAttributes.map { attribute: Attribute =>
         Seq[String](attribute.dataType, attribute.fieldName)
     }.flatten.toSeq:_*)
-    resource.attributes.foreach { attribute: Attribute =>
+    resource.serializableAttributes.foreach { attribute: Attribute =>
       writer.emitStatement(s"this.${attribute.fieldName} = ${attribute.fieldName}")
     }
     writer.endMethod().emitEmptyLine()
 
     // getters and setters
-    resource.attributes.foreach { attribute: Attribute =>
+    resource.serializableAttributes.foreach { attribute: Attribute =>
       writer
         .emitJavadoc(s"Get ${attribute.description}")
         .beginMethod(attribute.dataType, s"get${TextUtils.capitalize(attribute.fieldName)}", PUBLIC)
