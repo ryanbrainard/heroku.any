@@ -4,13 +4,13 @@ package com.heroku.api;
 public final class DynosCreateAction
     implements Action<Dyno> {
 
-  private final String command;
   @org.codehaus.jackson.annotate.JsonIgnore
   private final String appIdOrName;
+  private final String command;
 
-  public DynosCreateAction(String command, String appIdOrName) {
-    this.command = command;
+  public DynosCreateAction(String appIdOrName, String command) {
     this.appIdOrName = appIdOrName;
+    this.command = command;
   }
 
   public String httpMethod() {
@@ -29,11 +29,11 @@ public final class DynosCreateAction
     return Dyno.class;
   }
 
-  public String getCommand() {
-    return this.command;
-  }
-
   public String getAppIdOrName() {
     return this.appIdOrName;
+  }
+
+  public String getCommand() {
+    return this.command;
   }
 }

@@ -4,13 +4,13 @@ package com.heroku.api;
 public final class DomainsCreateAction
     implements Action<Domain> {
 
-  private final String hostname;
   @org.codehaus.jackson.annotate.JsonIgnore
   private final String appIdOrName;
+  private final String hostname;
 
-  public DomainsCreateAction(String hostname, String appIdOrName) {
-    this.hostname = hostname;
+  public DomainsCreateAction(String appIdOrName, String hostname) {
     this.appIdOrName = appIdOrName;
+    this.hostname = hostname;
   }
 
   public String httpMethod() {
@@ -29,11 +29,11 @@ public final class DomainsCreateAction
     return Domain.class;
   }
 
-  public String getHostname() {
-    return this.hostname;
-  }
-
   public String getAppIdOrName() {
     return this.appIdOrName;
+  }
+
+  public String getHostname() {
+    return this.hostname;
   }
 }

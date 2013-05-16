@@ -4,16 +4,16 @@ package com.heroku.api;
 public final class FormationUpdateAction
     implements Action<Formation> {
 
-  private final Number quantity;
   @org.codehaus.jackson.annotate.JsonIgnore
   private final String appIdOrName;
   @org.codehaus.jackson.annotate.JsonIgnore
   private final String formationIdOrProcessType;
+  private final Number quantity;
 
-  public FormationUpdateAction(Number quantity, String appIdOrName, String formationIdOrProcessType) {
-    this.quantity = quantity;
+  public FormationUpdateAction(String appIdOrName, String formationIdOrProcessType, Number quantity) {
     this.appIdOrName = appIdOrName;
     this.formationIdOrProcessType = formationIdOrProcessType;
+    this.quantity = quantity;
   }
 
   public String httpMethod() {
@@ -32,15 +32,15 @@ public final class FormationUpdateAction
     return Formation.class;
   }
 
-  public Number getQuantity() {
-    return this.quantity;
-  }
-
   public String getAppIdOrName() {
     return this.appIdOrName;
   }
 
   public String getFormationIdOrProcessType() {
     return this.formationIdOrProcessType;
+  }
+
+  public Number getQuantity() {
+    return this.quantity;
   }
 }

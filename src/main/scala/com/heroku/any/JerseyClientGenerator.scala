@@ -45,7 +45,7 @@ class JerseyClientGenerator extends Generator {
   }
 
   private def generateResourceActionClass(resource: Resource, action: Action, srcRoot: File) {
-    val requiredAttributes: Seq[Attribute] = resource.attributes.filter(a => action.requiredAttributes.contains(a.name)) ++ action.pathAttributes
+    val requiredAttributes: Seq[Attribute] = action.pathAttributes.toSeq ++ resource.attributes.filter(a => action.requiredAttributes.contains(a.name))
     val className = action.actionClassName(resource)
     val out = new PrintWriter(new FileOutputStream(s"$srcRoot/$className.java"))
     val writer = new JavaWriter(out)
