@@ -44,16 +44,6 @@ class JerseyClientGenerator extends Generator {
     new FileOutputStream(dest).getChannel.transferFrom(new FileInputStream(src).getChannel, 0, Long.MaxValue)
   }
 
-  private def generateConnectionConstructor(writer: JavaWriter, className: String) = {
-    writer
-      .emitField("Connection", "connection", PRIVATE | FINAL)
-      .emitEmptyLine()
-      .beginMethod(null, className, PROTECTED, "Connection", "connection")
-      .emitStatement("this.connection = connection")
-      .endMethod()
-      .emitEmptyLine()
-  }
-
   private def generateResourceActionClass(resource: Resource, action: Action, srcRoot: File) {
     val requiredAttributes: Seq[Attribute] = resource.attributes.filter(a => action.requiredAttributes.contains(a.name)) ++ action.pathAttributes
     val className = action.actionClassName(resource)

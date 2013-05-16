@@ -21,11 +21,10 @@ class GoldFileSuite extends FunSuite {
       (e: String) => log ++= e + "\n"
     )
 
-    val diff = Process(s"diff -r $expectedOutputDir $actualOutputDir").run(logger)
+    val diff = Process(s"diff -r $expectedOutputDir $actualOutputDir").run(logger).exitValue()
+    val cleanUp = Process(s"rm -r $actualOutputDir").run(logger).exitValue()
 
-    val cleanUp = Process(s"rm -r $actualOutputDir").run(logger)
-
-    if (diff.exitValue() != 0 || cleanUp.exitValue() != 0) {
+    if (diff != 0 || cleanUp != 0) {
       fail("\n" + log.toString())
     }
   }
