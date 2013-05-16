@@ -5,10 +5,12 @@ import java.io.{File, FileOutputStream, PrintWriter}
 import com.squareup.java.JavaWriter
 import java.lang.reflect.Modifier._
 
-class JavaObjectOrientedGenerator extends Generator {
+class JerseyClientGenerator extends Generator {
 
   val packagePath = "/com/heroku/api"
   val packageName = "com.heroku.api"
+
+  val name = "jersey-client"
 
   def generate(schema: Schema, root: File) {
     val srcRoot = new File(root, s"/src/main/java/$packagePath")

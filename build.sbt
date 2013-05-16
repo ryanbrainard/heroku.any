@@ -1,6 +1,6 @@
 import com.typesafe.sbt.SbtStartScript
 
-seq(SbtStartScript.startScriptForClassesSettings: _*)
+seq(SbtStartScript.startScriptForJarSettings: _*)
 
 name := "heroku.any"
 
@@ -11,6 +11,7 @@ scalaVersion := "2.10.1"
 resolvers += "spray" at "http://repo.spray.io/"
 
 libraryDependencies ++= Seq(
+  "org.rogach" %% "scallop" % "0.9.1",
   "com.squareup" % "javawriter" % "1.0.5",
   "io.spray" %%  "spray-json" % "1.2.3",
   "com.sun.jersey" % "jersey-client" % "1.17.1",

@@ -2,50 +2,66 @@ package com.heroku.any
 
 import scala.io.Source
 import spray.json._
-import com.heroku.any.schema._
-import DefaultJsonProtocol._
-import com.heroku.any.HerokuApiProtocol._
-import java.io.{FileOutputStream, PrintWriter, File}
-import com.squareup.java.JavaWriter
-import java.lang.reflect.Modifier._
-import com.heroku.any.schema.json.Schema
+import java.io.File
+import org.rogach.scallop.ScallopConf
+import java.util.ServiceLoader
 
 object Generate {
 
   def main(args: Array[String]) {
     {
+      val config = new Config(args)
+
       for {
-        schemaFilename <- parseFilename(args).right
-        schemaFile     <- loadFile(schemaFilename).right
-        schema         <- deserialize(schemaFile).right
-      } yield {
-        val richSchema = schema.toRich(schemaFilename)
-        // TODO: make this selectable and return errors
-        val root = new File("target/generated")
-        root.mkdirs()
-        for (gen <- (Seq(new JavaObjectOrientedGenerator()))) yield {
-          gen.generate(richSchema, root)
-          s"OK: ${gen.getClass}"
-        }
-      }.mkString("\n")
+        schemaFile  <- loadFile(config.file()).right
+        schema      <- deserialize(schemaFile).right
+        stdout      <- generate(config, schema).right
+      } yield(stdout)
     }.fold(printError, println)
   }
 
-  def parseFilename(args: Array[String]) = {
-    if (args.length == 1) Right(args(0))
-    else Left("Must specify doc.json location as only parameter")
+  class Config(arguments: Seq[String]) extends ScallopConf(arguments) {
+    private implicit def fileConverter = org.rogach.scallop.stringConverter.map(new File(_))
+    version("Heroku.ANY 0.1 Super Alpha")
+    val file = opt[File](required = true, descr = "File (doc.json) describing the API")
+    val output = opt[File](descr = "Output directory of generated files", default = Some(new File("target/generated")))
+    val generator = opt[String](descr = s"Generators name. Available generators: ${generators.map(_.name).mkString(", ")}", default = Option(generators.map(_.name).head))
+    errorMessageHandler = { message: String =>
+      printError(message + "\n")
+      builder.printHelp()
+      sys.exit(1)
+    }
   }
 
-  def loadFile(filename: String) = {
-    val file = new File(filename)
+  val generators = {
+    import scala.collection.JavaConverters._
+    ServiceLoader.load(classOf[com.heroku.any.Generator]).iterator().asScala.toSeq
+  }
+
+  def loadFile(file: File) = {
     if (file.exists()) Right(file)
     else Left(s"File not found: $file")
   }
 
-  def deserialize(file: File) = try {
-    Right(Source.fromFile(file).mkString.asJson.asJsObject.convertTo[Schema])
-  } catch {
-    case e:DeserializationException => Left(s"Problem parsing schema:${e.getMessage}")
+  def deserialize(file: File) = {
+    import com.heroku.any.schema.json._
+    import com.heroku.any.HerokuApiProtocol._
+
+    try {
+      Right(Source.fromFile(file).mkString.asJson.asJsObject.convertTo[Schema].toRich(file.toString))
+    } catch {
+      case e: DeserializationException => Left(s"Problem parsing schema:${e.getMessage}")
+    }
+  }
+
+  def generate(config: Config, schema: com.heroku.any.schema.rich.Schema) = {
+    generators.find(_.name == config.generator()).map { generator =>
+      config.output().mkdirs()
+      generator.generate(schema, config.output())
+      Right(s"OK: ${generator.name}")
+    }.getOrElse {
+      Left(s"No generator named '${config.generator()}'")
+    }
   }
 
   def printError(msg: String) {
