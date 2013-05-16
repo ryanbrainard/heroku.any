@@ -66,7 +66,7 @@ class JavaObjectOrientedGenerator extends Generator {
       .emitEmptyLine()
 
     requiredAttributes.foreach { a =>
-      writer.emitAnnotation(classOf[org.codehaus.jackson.annotate.JsonIgnore])
+      if (action.pathAttributes.contains(a)) writer.emitAnnotation(classOf[org.codehaus.jackson.annotate.JsonIgnore])
       writer.emitField(a.dataType, a.fieldName, PRIVATE | FINAL)
     }
 
@@ -129,6 +129,7 @@ class JavaObjectOrientedGenerator extends Generator {
       writer
         .emitEmptyLine()
         .emitJavadoc(TextUtils.capitalize(attribute.description))
+        .emitAnnotation(classOf[org.codehaus.jackson.annotate.JsonProperty])
         .emitField(attribute.dataType, attribute.fieldName, PRIVATE)
     }
 
@@ -156,16 +157,16 @@ class JavaObjectOrientedGenerator extends Generator {
     resource.serializableAttributes.foreach { attribute: Attribute =>
       writer
         .emitJavadoc(s"Get ${attribute.description}")
-        .beginMethod(attribute.dataType, s"get${TextUtils.capitalize(attribute.fieldName)}", PUBLIC)
+        .beginMethod(attribute.dataType, s"get${TextUtils.capitalize(attribute.paramName)}", PUBLIC)
         .emitStatement(s"return this.${attribute.fieldName}")
         .endMethod()
         .emitEmptyLine()
-        .emitJavadoc(s"Set ${attribute.description}")
-        .beginMethod(resource.modelClassName, s"set${TextUtils.capitalize(attribute.fieldName)}", PROTECTED, attribute.dataType, attribute.fieldName)
-        .emitStatement(s"this.${attribute.fieldName} = ${attribute.fieldName}")
-        .emitStatement("return this")
-        .endMethod()
-        .emitEmptyLine()
+//        .emitJavadoc(s"Set ${attribute.description}")
+//        .beginMethod(resource.modelClassName, s"set${TextUtils.capitalize(attribute.paramName)}", PROTECTED, attribute.dataType, attribute.fieldName)
+//        .emitStatement(s"this.${attribute.fieldName} = ${attribute.fieldName}")
+//        .emitStatement("return this")
+//        .endMethod()
+//        .emitEmptyLine()
     }
 
     writer.endType()
