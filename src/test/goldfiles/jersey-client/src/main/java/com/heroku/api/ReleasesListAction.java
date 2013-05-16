@@ -5,7 +5,7 @@ public final class ReleasesListAction
     implements Action<Release> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
 
   public ReleasesListAction(String appIdOrName) {
     this.appIdOrName = appIdOrName;

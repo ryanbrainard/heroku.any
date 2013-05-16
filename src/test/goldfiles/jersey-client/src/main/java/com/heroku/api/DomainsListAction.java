@@ -5,7 +5,7 @@ public final class DomainsListAction
     implements Action<Domain> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
 
   public DomainsListAction(String appIdOrName) {
     this.appIdOrName = appIdOrName;

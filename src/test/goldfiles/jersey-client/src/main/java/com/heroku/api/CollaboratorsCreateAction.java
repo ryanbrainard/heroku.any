@@ -5,7 +5,8 @@ public final class CollaboratorsCreateAction
     implements Action<Collaborator> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
+  private User user;
 
   public CollaboratorsCreateAction(String appIdOrName) {
     this.appIdOrName = appIdOrName;
@@ -29,5 +30,17 @@ public final class CollaboratorsCreateAction
 
   public String getAppIdOrName() {
     return this.appIdOrName;
+  }
+
+  public User getUser() {
+    return this.user;
+  }
+
+  /**
+   * Set user
+   */
+  public CollaboratorsCreateAction setUser(User user) {
+    this.user = user;
+    return this;
   }
 }

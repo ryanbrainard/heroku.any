@@ -5,9 +5,9 @@ public final class CollaboratorsDeleteAction
     implements Action<Collaborator> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String collaboratorIdOrEmail;
+  private String collaboratorIdOrEmail;
 
   public CollaboratorsDeleteAction(String appIdOrName, String collaboratorIdOrEmail) {
     this.appIdOrName = appIdOrName;

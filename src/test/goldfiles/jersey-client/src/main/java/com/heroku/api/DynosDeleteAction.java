@@ -5,9 +5,9 @@ public final class DynosDeleteAction
     implements Action<Dyno> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String dynoIdOrName;
+  private String dynoIdOrName;
 
   public DynosDeleteAction(String appIdOrName, String dynoIdOrName) {
     this.appIdOrName = appIdOrName;

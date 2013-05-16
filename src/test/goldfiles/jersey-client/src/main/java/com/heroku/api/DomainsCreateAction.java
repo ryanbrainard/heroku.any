@@ -5,8 +5,8 @@ public final class DomainsCreateAction
     implements Action<Domain> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
-  private final String hostname;
+  private String appIdOrName;
+  private String hostname;
 
   public DomainsCreateAction(String appIdOrName, String hostname) {
     this.appIdOrName = appIdOrName;

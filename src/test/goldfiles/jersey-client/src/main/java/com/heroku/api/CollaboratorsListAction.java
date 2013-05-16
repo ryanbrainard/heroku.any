@@ -5,7 +5,7 @@ public final class CollaboratorsListAction
     implements Action<Collaborator> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
 
   public CollaboratorsListAction(String appIdOrName) {
     this.appIdOrName = appIdOrName;

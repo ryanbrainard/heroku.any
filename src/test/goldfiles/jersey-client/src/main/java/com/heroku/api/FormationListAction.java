@@ -5,7 +5,7 @@ public final class FormationListAction
     implements Action<Formation> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
 
   public FormationListAction(String appIdOrName) {
     this.appIdOrName = appIdOrName;

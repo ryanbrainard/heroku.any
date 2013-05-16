@@ -5,7 +5,7 @@ public final class LogSessionsCreateAction
     implements Action<LogSession> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
 
   public LogSessionsCreateAction(String appIdOrName) {
     this.appIdOrName = appIdOrName;

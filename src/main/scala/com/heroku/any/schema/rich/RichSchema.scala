@@ -27,12 +27,7 @@ case class Resource(name: String,
   def serializableAttributes = attributes.filter { a =>
     serialization.contains(a.name)
   }.map { a =>
-    if (a.name.contains(":")) {
-      val Array (obj,field) = a.name.split(":")
-      Attribute(obj, obj, DataType(obj.capitalize))
-    } else {
-      a
-    }
+    a.topLevel
   }.toSet.toSeq
 }
 
@@ -41,6 +36,12 @@ case class Attribute(name: String,
                      dataType: DataType) {
   def fieldName = name
   def paramName = TextUtils.camelCase(name)
+  def topLevel = if (name.contains(":")) {
+    val Array (obj,field) = name.split(":")
+    Attribute(obj, obj, DataType(obj.capitalize))
+  } else {
+    this
+  }
 }
 
 case class Action(name: String,
@@ -50,16 +51,12 @@ case class Action(name: String,
                   requiredAttributes: Seq[String],
                   optionalAttributes: Seq[String]) {
   def methodName = TextUtils.camelCase(name)
-  def returnable = httpMethod != "DELETE"
   def actionClassName(resource: Resource) =
     TextUtils.capitalize(TextUtils.camelCase(resource.name)) + TextUtils.capitalize(methodName) + "Action"
   private val pathVarPattern = """\{([a-z-]+)\}""".r
   def pathAttributes = {
     pathVarPattern.findAllIn(path).matchData.map { m =>
       Attribute(TextUtils.camelCase(m.group(1)), m.group(0), DataType("string"))
-//      val attribs = Seq(Attribute(TextUtils.camelCase(m.replaceAll("[{}]", "")), m, DataType("string")))
-//      if (m.contains("-id")) attribs :+ attribs(0).copy(dataType = DataType("uuid"))
-//      else attribs
     }
   }
 }

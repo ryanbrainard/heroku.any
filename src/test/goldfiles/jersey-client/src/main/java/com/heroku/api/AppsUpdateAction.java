@@ -5,7 +5,10 @@ public final class AppsUpdateAction
     implements Action<App> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
+  private String name;
+  private boolean maintenance;
+  private Owner owner;
 
   public AppsUpdateAction(String appIdOrName) {
     this.appIdOrName = appIdOrName;
@@ -29,5 +32,41 @@ public final class AppsUpdateAction
 
   public String getAppIdOrName() {
     return this.appIdOrName;
+  }
+
+  public String getName() {
+    return this.name;
+  }
+
+  public boolean getMaintenance() {
+    return this.maintenance;
+  }
+
+  public Owner getOwner() {
+    return this.owner;
+  }
+
+  /**
+   * Set unique name of app
+   */
+  public AppsUpdateAction setName(String name) {
+    this.name = name;
+    return this;
+  }
+
+  /**
+   * Set maintenance status of app
+   */
+  public AppsUpdateAction setMaintenance(boolean maintenance) {
+    this.maintenance = maintenance;
+    return this;
+  }
+
+  /**
+   * Set owner
+   */
+  public AppsUpdateAction setOwner(Owner owner) {
+    this.owner = owner;
+    return this;
   }
 }

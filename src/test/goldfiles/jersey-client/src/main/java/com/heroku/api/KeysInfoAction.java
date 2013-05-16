@@ -5,7 +5,7 @@ public final class KeysInfoAction
     implements Action<Key> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String keyIdOrFingerprint;
+  private String keyIdOrFingerprint;
 
   public KeysInfoAction(String keyIdOrFingerprint) {
     this.keyIdOrFingerprint = keyIdOrFingerprint;

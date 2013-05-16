@@ -5,7 +5,7 @@ public final class ConfigVarsUpdateAction
     implements Action<ConfigVar> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
 
   public ConfigVarsUpdateAction(String appIdOrName) {
     this.appIdOrName = appIdOrName;

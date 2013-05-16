@@ -5,8 +5,8 @@ public final class DynosCreateAction
     implements Action<Dyno> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
-  private final String command;
+  private String appIdOrName;
+  private String command;
 
   public DynosCreateAction(String appIdOrName, String command) {
     this.appIdOrName = appIdOrName;

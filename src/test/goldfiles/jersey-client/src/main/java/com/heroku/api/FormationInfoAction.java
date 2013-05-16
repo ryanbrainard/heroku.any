@@ -5,9 +5,9 @@ public final class FormationInfoAction
     implements Action<Formation> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String formationIdOrProcessType;
+  private String formationIdOrProcessType;
 
   public FormationInfoAction(String appIdOrName, String formationIdOrProcessType) {
     this.appIdOrName = appIdOrName;

@@ -4,7 +4,7 @@ package com.heroku.api;
 public final class KeysCreateAction
     implements Action<Key> {
 
-  private final String public_key;
+  private String public_key;
 
   public KeysCreateAction(String publicKey) {
     this.public_key = publicKey;

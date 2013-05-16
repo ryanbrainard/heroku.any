@@ -5,9 +5,9 @@ public final class ReleasesInfoAction
     implements Action<Release> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String releaseIdOrName;
+  private String releaseIdOrName;
 
   public ReleasesInfoAction(String appIdOrName, String releaseIdOrName) {
     this.appIdOrName = appIdOrName;

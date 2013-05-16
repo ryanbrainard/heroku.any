@@ -5,9 +5,9 @@ public final class DomainsDeleteAction
     implements Action<Domain> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String domainIdOrDomain;
+  private String domainIdOrDomain;
 
   public DomainsDeleteAction(String appIdOrName, String domainIdOrDomain) {
     this.appIdOrName = appIdOrName;

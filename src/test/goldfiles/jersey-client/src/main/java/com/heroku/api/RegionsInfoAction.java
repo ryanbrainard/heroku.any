@@ -5,7 +5,7 @@ public final class RegionsInfoAction
     implements Action<Region> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String regionIdOrName;
+  private String regionIdOrName;
 
   public RegionsInfoAction(String regionIdOrName) {
     this.regionIdOrName = regionIdOrName;

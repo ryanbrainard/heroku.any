@@ -5,7 +5,7 @@ public final class AppsDeleteAction
     implements Action<App> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
 
   public AppsDeleteAction(String appIdOrName) {
     this.appIdOrName = appIdOrName;

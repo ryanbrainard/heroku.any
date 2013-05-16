@@ -5,10 +5,10 @@ public final class FormationUpdateAction
     implements Action<Formation> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String appIdOrName;
+  private String appIdOrName;
   @org.codehaus.jackson.annotate.JsonIgnore
-  private final String formationIdOrProcessType;
-  private final Number quantity;
+  private String formationIdOrProcessType;
+  private Number quantity;
 
   public FormationUpdateAction(String appIdOrName, String formationIdOrProcessType, Number quantity) {
     this.appIdOrName = appIdOrName;
