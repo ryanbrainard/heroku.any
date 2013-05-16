@@ -25,7 +25,7 @@ class JerseyClientGenerator extends Generator {
   }
 
   private def copyStaticFiles(root: File) {
-    copyDir(new File("src/main/resources/templates/java-api"), root)
+    copyDir(new File(s"src/main/templates/$name"), root)
   }
 
   private def copyDir(src: File, dest: File, rel: String = "") {
