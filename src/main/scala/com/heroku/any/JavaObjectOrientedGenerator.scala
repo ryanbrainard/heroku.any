@@ -14,10 +14,11 @@ class JavaObjectOrientedGenerator extends Generator {
     val srcRoot = new File(root, s"/src/main/java/$packagePath")
     srcRoot.mkdirs()
     copyStaticFiles(root)
-    generateApi(schema, srcRoot)
     (schema.resources ++ schema.resourcesSecondClass).foreach { resource: Resource =>
-      generateResourceActionsClass(resource, srcRoot)
       generateModel(resource, srcRoot)
+      resource.actions.foreach { action =>
+        generateResourceActionClass(resource, action, srcRoot)
+      }
     }
   }
 
@@ -51,73 +52,8 @@ class JavaObjectOrientedGenerator extends Generator {
       .emitEmptyLine()
   }
 
-  private def generateApi(schema: Schema, srcRoot: File) {
-    val apiClass = "HerokuApi"
-    val out = new PrintWriter(new FileOutputStream(s"$srcRoot/$apiClass.java"))
-    val writer = new JavaWriter(out)
-
-    // header
-    val cls = writer
-      .emitPackage(packageName)
-      .beginType(packageName + "." + apiClass, "class", PUBLIC | FINAL)
-      .emitEmptyLine()
-
-    generateConnectionConstructor(writer, apiClass)
-
-    schema.resources.foreach { resource =>
-      cls
-        .emitJavadoc(s"Perform ${resource.name} Actions")
-        .beginMethod(resource.actionsClassName, TextUtils.camelCase(resource.resourceClassName), PUBLIC)
-        .emitStatement(s"return new ${resource.actionsClassName}(connection)")
-        .endMethod()
-        .emitEmptyLine()
-    }
-
-    cls.endType()
-    out.flush()
-    out.close()
-  }
-
-  private def generateResourceActionsClass(resource: Resource, srcRoot: File) {
-    if (resource.actions.isEmpty) return
-
-    val out = new PrintWriter(new FileOutputStream(s"$srcRoot/${resource.actionsClassName}.java"))
-    val writer = new JavaWriter(out)
-
-    // header
-    writer
-      .emitPackage(packageName)
-      .beginType(packageName + "." + resource.actionsClassName, "class", PUBLIC | FINAL)
-      .emitEmptyLine()
-
-    generateConnectionConstructor(writer, resource.actionsClassName)
-
-    resource.actions.foreach { action =>
-      // TODO: DE-DUPE
-      val params: Seq[String] = action.requiredAttributes
-      val typedParams = resource.attributes.filter(a => params.contains(a.name)).flatMap(a => Seq[String](a.dataType, a.name))
-
-      val returnType = if (action.returnable) resource.modelClassName else "void"
-      val returnKeyword = if (action.returnable) "return " else ""
-      writer
-        .emitJavadoc(s"${action.httpMethod} ${resource.modelClassName}")
-        .beginMethod(returnType, action.methodName, PUBLIC, typedParams.toSeq:_*)
-        .emitStatement(s"${returnKeyword}connection.execute(new ${action.actionClassName(resource)}(${params.mkString(", ")}))")
-        .endMethod()
-        .emitEmptyLine()
-
-      generateResourceActionClass(resource, action, srcRoot)
-    }
-
-    writer.endType()
-    out.flush()
-    out.close()
-  }
-
   private def generateResourceActionClass(resource: Resource, action: Action, srcRoot: File) {
-    // TODO: DE-DUPE
-    val requiredAttributes: Seq[Attribute] = resource.attributes.filter(a => action.requiredAttributes.contains(a.name))
-
+    val requiredAttributes: Seq[Attribute] = resource.attributes.filter(a => action.requiredAttributes.contains(a.name)) ++ action.pathAttributes
     val className = action.actionClassName(resource)
     val out = new PrintWriter(new FileOutputStream(s"$srcRoot/$className.java"))
     val writer = new JavaWriter(out)
@@ -129,7 +65,10 @@ class JavaObjectOrientedGenerator extends Generator {
       .beginType(packageName + "." + className, "class", PUBLIC | FINAL, null, s"Action<${resource.modelClassName}>")
       .emitEmptyLine()
 
-    requiredAttributes.foreach(a => writer.emitField(a.dataType, a.fieldName, FINAL))
+    requiredAttributes.foreach { a =>
+      writer.emitAnnotation(classOf[org.codehaus.jackson.annotate.JsonIgnore])
+      writer.emitField(a.dataType, a.fieldName, PRIVATE | FINAL)
+    }
 
     writer
       .emitEmptyLine()
@@ -147,7 +86,7 @@ class JavaObjectOrientedGenerator extends Generator {
 
     writer
       .beginMethod("String", "path", PUBLIC)
-      .emitStatement("return \"" + action.path + "\"")
+      .emitStatement("return \"" + action.path + "\"" + action.pathAttributes.map(a => ".replace(\"" + a.description + "\", " + a.name + ")").mkString)
       .endMethod()
       .emitEmptyLine()
 

@@ -12,6 +12,7 @@ class TextUtilsSuite extends FunSuite {
   }
 
   test("camelCasing") {
+    assert(TextUtils.camelCase("friedChickenAndWaffles")    === "friedChickenAndWaffles")
     assert(TextUtils.camelCase("Fried_chicken_and_waffles") === "friedChickenAndWaffles")
     assert(TextUtils.camelCase("fried_chicken_and_waffles") === "friedChickenAndWaffles")
     assert(TextUtils.camelCase("fried")                     === "fried")

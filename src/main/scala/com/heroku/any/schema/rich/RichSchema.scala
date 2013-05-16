@@ -53,6 +53,15 @@ case class Action(name: String,
   def returnable = httpMethod != "DELETE"
   def actionClassName(resource: Resource) =
     TextUtils.capitalize(TextUtils.camelCase(resource.name)) + TextUtils.capitalize(methodName) + "Action"
+  private val pathVarPattern = """\{([a-z-]+)\}""".r
+  def pathAttributes = {
+    pathVarPattern.findAllIn(path).matchData.map { m =>
+      Attribute(TextUtils.camelCase(m.group(1)), m.group(0), DataType("string"))
+//      val attribs = Seq(Attribute(TextUtils.camelCase(m.replaceAll("[{}]", "")), m, DataType("string")))
+//      if (m.contains("-id")) attribs :+ attribs(0).copy(dataType = DataType("uuid"))
+//      else attribs
+    }
+  }
 }
 
 case class DataType(raw: String)
