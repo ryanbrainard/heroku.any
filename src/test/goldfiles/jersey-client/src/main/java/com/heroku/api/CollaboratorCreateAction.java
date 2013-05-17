@@ -1,14 +1,14 @@
 package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
-public final class CollaboratorsCreateAction
+public final class CollaboratorCreateAction
     implements Action<Collaborator> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
   private String appIdOrName;
   private User user;
 
-  public CollaboratorsCreateAction(String appIdOrName) {
+  public CollaboratorCreateAction(String appIdOrName) {
     this.appIdOrName = appIdOrName;
   }
 
@@ -20,8 +20,12 @@ public final class CollaboratorsCreateAction
     return "/apps/{app-id-or-name}/collaborators".replace("{app-id-or-name}", appIdOrName);
   }
 
-  public int expectedStatus() {
-    return 201;
+  public Object requestEntity() {
+    return this;
+  }
+
+  public java.util.Collection<Integer> expectedStatuses() {
+    return java.util.Arrays.asList(201);
   }
 
   public Class<Collaborator> responseClass() {
@@ -39,7 +43,7 @@ public final class CollaboratorsCreateAction
   /**
    * Set user
    */
-  public CollaboratorsCreateAction setUser(User user) {
+  public CollaboratorCreateAction setUser(User user) {
     this.user = user;
     return this;
   }

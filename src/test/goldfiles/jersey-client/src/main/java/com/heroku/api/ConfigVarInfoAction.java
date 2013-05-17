@@ -1,30 +1,34 @@
 package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
-public final class ConfigVarsUpdateAction
-    implements Action<ConfigVar> {
+public final class ConfigVarInfoAction
+    implements Action<java.util.Map> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
   private String appIdOrName;
 
-  public ConfigVarsUpdateAction(String appIdOrName) {
+  public ConfigVarInfoAction(String appIdOrName) {
     this.appIdOrName = appIdOrName;
   }
 
   public String httpMethod() {
-    return "PATCH";
+    return "GET";
   }
 
   public String path() {
     return "/apps/{app-id-or-name}/config-vars".replace("{app-id-or-name}", appIdOrName);
   }
 
-  public int expectedStatus() {
-    return 200;
+  public Object requestEntity() {
+    return null;
   }
 
-  public Class<ConfigVar> responseClass() {
-    return ConfigVar.class;
+  public java.util.Collection<Integer> expectedStatuses() {
+    return java.util.Arrays.asList(200);
+  }
+
+  public Class<java.util.Map> responseClass() {
+    return java.util.Map.class;
   }
 
   public String getAppIdOrName() {

@@ -17,7 +17,7 @@ class JerseyClientGenerator extends Generator {
     srcRoot.mkdirs()
     copyStaticFiles(root)
     (schema.resources ++ schema.resourcesSecondClass).foreach { resource: Resource =>
-      generateModel(resource, srcRoot)
+      if (resource.isModel) generateModel(resource, srcRoot)
       resource.actions.foreach { action =>
         generateResourceActionClass(resource, action, srcRoot)
       }
@@ -45,9 +45,10 @@ class JerseyClientGenerator extends Generator {
   }
 
   private def generateResourceActionClass(resource: Resource, action: Action, srcRoot: File) {
-    val requiredAttributes = action.pathAttributes.toSeq ++ resource.attributes.filter(a => action.requiredAttributes.contains(a.name))
+    val requestAttributes =  action.requestEntity(resource) match { case AttributeRequestEntity(attribute: Attribute) => Seq(attribute); case _ => Seq() }
+    val requiredAttributes = action.pathAttributes.toSeq ++ resource.attributes.filter(a => action.requiredAttributes.contains(a.name)) ++ requestAttributes
     val optionalAttributes = resource.attributes.filter(a => action.optionalAttributes.contains(a.name))
-    val topLevelAttributes = (requiredAttributes ++ optionalAttributes).map(_.topLevel).toSet
+    val topLevelAttributes = (requiredAttributes ++ optionalAttributes).map(_.massaged).toSet
     val className = action.actionClassName(resource)
     val out = new PrintWriter(new FileOutputStream(s"$srcRoot/$className.java"))
     val writer = new JavaWriter(out)
@@ -56,7 +57,7 @@ class JerseyClientGenerator extends Generator {
     writer
       .emitPackage(packageName)
       .emitAnnotation(classOf[org.codehaus.jackson.map.annotate.JsonSerialize])
-      .beginType(packageName + "." + className, "class", PUBLIC | FINAL, null, s"Action<${resource.modelClassName}>")
+      .beginType(packageName + "." + className, "class", PUBLIC | FINAL, null, s"Action<${dataTypesForJava(resource.modelClassName)}>")
       .emitEmptyLine()
 
     topLevelAttributes.foreach { a =>
@@ -84,15 +85,27 @@ class JerseyClientGenerator extends Generator {
       .endMethod()
       .emitEmptyLine()
 
+    val requestEntity = action.requestEntity(resource) match {
+      case NullRequestEntity => "null"
+      case ActionRequestEntity => "this"
+      case AttributeRequestEntity(attribute: Attribute) => attribute.fieldName
+    }
+
     writer
-      .beginMethod("int", "expectedStatus", PUBLIC)
-      .emitStatement(s"return ${action.status.filter(_.isDigit)}")
+      .beginMethod("Object", "requestEntity", PUBLIC)
+      .emitStatement(s"return $requestEntity")
       .endMethod()
       .emitEmptyLine()
 
     writer
-      .beginMethod(s"Class<${resource.modelClassName}>", "responseClass", PUBLIC)
-      .emitStatement(s"return ${resource.modelClassName}.class")
+      .beginMethod("java.util.Collection<Integer>", "expectedStatuses", PUBLIC)
+      .emitStatement(s"return java.util.Arrays.asList(${action.statuses.mkString(",")})")
+      .endMethod()
+      .emitEmptyLine()
+
+    writer
+      .beginMethod(s"Class<${dataTypesForJava(resource.modelClassName)}>", "responseClass", PUBLIC)
+      .emitStatement(s"return ${dataTypesForJava(resource.modelClassName)}.class")
       .endMethod()
 
     topLevelAttributes.foreach { a =>
@@ -103,7 +116,7 @@ class JerseyClientGenerator extends Generator {
         .endMethod()
     }
 
-    optionalAttributes.map(_.topLevel).toSet.foreach { a: Attribute =>
+    optionalAttributes.map(_.massaged).toSet.foreach { a: Attribute =>
       writer
         .emitEmptyLine()
         .emitJavadoc(s"Set ${a.description}")
@@ -119,13 +132,13 @@ class JerseyClientGenerator extends Generator {
   }
 
   private def generateModel(resource: Resource, srcRoot: File) {
-    val out = new PrintWriter(new FileOutputStream(s"$srcRoot/${resource.modelClassName}.java"))
+    val out = new PrintWriter(new FileOutputStream(s"$srcRoot/${dataTypesForJava(resource.modelClassName)}.java"))
     val writer = new JavaWriter(out)
 
     // header
     writer
       .emitPackage(packageName)
-      .beginType(packageName + "." + resource.modelClassName, "class", PUBLIC)
+      .beginType(packageName + "." + dataTypesForJava(resource.modelClassName), "class", PUBLIC)
 
     // fields
     resource.serializableAttributes.foreach { attribute: Attribute =>
@@ -172,10 +185,11 @@ class JerseyClientGenerator extends Generator {
   }
 
   private implicit def dataTypesForJava(dataType: DataType):String = dataType.raw match {
-    case "string"   => "String"
-    case "number"   => "Number"
-    case "datetime" => "java.util.Date"
-    case "uuid"     => "java.util.UUID"
-    case other =>      other
+    case "string"      => "String"
+    case "number"      => "Number"
+    case "datetime"    => "java.util.Date"
+    case "uuid"        => "java.util.UUID"
+    case "dictionary"  => "java.util.Map"
+    case other         =>  other
   }
 }

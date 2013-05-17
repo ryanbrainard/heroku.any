@@ -1,13 +1,13 @@
 package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
-public final class LogSessionsCreateAction
+public final class LogSessionCreateAction
     implements Action<LogSession> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
   private String appIdOrName;
 
-  public LogSessionsCreateAction(String appIdOrName) {
+  public LogSessionCreateAction(String appIdOrName) {
     this.appIdOrName = appIdOrName;
   }
 
@@ -19,8 +19,12 @@ public final class LogSessionsCreateAction
     return "/apps/{app-id-or-name}/log-sessions".replace("{app-id-or-name}", appIdOrName);
   }
 
-  public int expectedStatus() {
-    return 201;
+  public Object requestEntity() {
+    return this;
+  }
+
+  public java.util.Collection<Integer> expectedStatuses() {
+    return java.util.Arrays.asList(201);
   }
 
   public Class<LogSession> responseClass() {

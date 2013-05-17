@@ -27,7 +27,7 @@ public class Domain {
   private java.util.Date updated_at;
 
   /**
-   * Construct empty Domains
+   * Construct empty Domain
    */
   public Domain() {
   }

@@ -1,17 +1,17 @@
 package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
-public final class FormationInfoAction
-    implements Action<Formation> {
+public final class DomainInfoAction
+    implements Action<Domain> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
   private String appIdOrName;
   @org.codehaus.jackson.annotate.JsonIgnore
-  private String formationIdOrType;
+  private String domainIdOrHostname;
 
-  public FormationInfoAction(String appIdOrName, String formationIdOrType) {
+  public DomainInfoAction(String appIdOrName, String domainIdOrHostname) {
     this.appIdOrName = appIdOrName;
-    this.formationIdOrType = formationIdOrType;
+    this.domainIdOrHostname = domainIdOrHostname;
   }
 
   public String httpMethod() {
@@ -19,7 +19,7 @@ public final class FormationInfoAction
   }
 
   public String path() {
-    return "/apps/{app-id-or-name}/formation/{formation-id-or-type}".replace("{app-id-or-name}", appIdOrName).replace("{formation-id-or-type}", formationIdOrType);
+    return "/apps/{app-id-or-name}/domains/{domain-id-or-hostname}".replace("{app-id-or-name}", appIdOrName).replace("{domain-id-or-hostname}", domainIdOrHostname);
   }
 
   public Object requestEntity() {
@@ -30,15 +30,15 @@ public final class FormationInfoAction
     return java.util.Arrays.asList(200);
   }
 
-  public Class<Formation> responseClass() {
-    return Formation.class;
+  public Class<Domain> responseClass() {
+    return Domain.class;
   }
 
   public String getAppIdOrName() {
     return this.appIdOrName;
   }
 
-  public String getFormationIdOrType() {
-    return this.formationIdOrType;
+  public String getDomainIdOrHostname() {
+    return this.domainIdOrHostname;
   }
 }

@@ -19,8 +19,12 @@ public final class FormationListAction
     return "/apps/{app-id-or-name}/formation".replace("{app-id-or-name}", appIdOrName);
   }
 
-  public int expectedStatus() {
-    return 200;
+  public Object requestEntity() {
+    return null;
+  }
+
+  public java.util.Collection<Integer> expectedStatuses() {
+    return java.util.Arrays.asList(200,206);
   }
 
   public Class<Formation> responseClass() {

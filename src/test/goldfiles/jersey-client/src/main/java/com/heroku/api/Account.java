@@ -3,10 +3,28 @@ package com.heroku.api;
 public class Account {
 
   /**
+   * Whether to utilize beta Heroku features
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private boolean beta;
+
+  /**
+   * When account was updated
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private java.util.Date updated_at;
+
+  /**
    * When account last authorized with Heroku
    */
   @org.codehaus.jackson.annotate.JsonProperty
   private java.util.Date last_login;
+
+  /**
+   * Email address of account
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private String email;
 
   /**
    * Whether email has been verified
@@ -21,34 +39,22 @@ public class Account {
   private boolean confirmed;
 
   /**
-   * Unique identifier of account
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private java.util.UUID id;
-
-  /**
-   * When account was updated
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private java.util.Date updated_at;
-
-  /**
-   * Email address of account
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private String email;
-
-  /**
    * Whether to allow web activity tracking with third-party services like Google Analytics
    */
   @org.codehaus.jackson.annotate.JsonProperty
   private boolean allow_tracking;
 
   /**
-   * Whether to utilize beta Heroku features
+   * Unique identifier of account
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private boolean beta;
+  private java.util.UUID id;
+
+  /**
+   * When account was created
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private java.util.Date created_at;
 
   /**
    * Construct empty Account
@@ -56,15 +62,30 @@ public class Account {
   public Account() {
   }
 
-  public Account(java.util.Date last_login, boolean verified, boolean confirmed, java.util.UUID id, java.util.Date updated_at, String email, boolean allow_tracking, boolean beta) {
+  public Account(boolean beta, java.util.Date updated_at, java.util.Date last_login, String email, boolean verified, boolean confirmed, boolean allow_tracking, java.util.UUID id, java.util.Date created_at) {
+    this.beta = beta;
+    this.updated_at = updated_at;
     this.last_login = last_login;
+    this.email = email;
     this.verified = verified;
     this.confirmed = confirmed;
-    this.id = id;
-    this.updated_at = updated_at;
-    this.email = email;
     this.allow_tracking = allow_tracking;
-    this.beta = beta;
+    this.id = id;
+    this.created_at = created_at;
+  }
+
+  /**
+   * Get whether to utilize beta Heroku features
+   */
+  public boolean getBeta() {
+    return this.beta;
+  }
+
+  /**
+   * Get when account was updated
+   */
+  public java.util.Date getUpdatedAt() {
+    return this.updated_at;
   }
 
   /**
@@ -72,6 +93,13 @@ public class Account {
    */
   public java.util.Date getLastLogin() {
     return this.last_login;
+  }
+
+  /**
+   * Get email address of account
+   */
+  public String getEmail() {
+    return this.email;
   }
 
   /**
@@ -89,27 +117,6 @@ public class Account {
   }
 
   /**
-   * Get unique identifier of account
-   */
-  public java.util.UUID getId() {
-    return this.id;
-  }
-
-  /**
-   * Get when account was updated
-   */
-  public java.util.Date getUpdatedAt() {
-    return this.updated_at;
-  }
-
-  /**
-   * Get email address of account
-   */
-  public String getEmail() {
-    return this.email;
-  }
-
-  /**
    * Get whether to allow web activity tracking with third-party services like Google Analytics
    */
   public boolean getAllowTracking() {
@@ -117,10 +124,17 @@ public class Account {
   }
 
   /**
-   * Get whether to utilize beta Heroku features
+   * Get unique identifier of account
    */
-  public boolean getBeta() {
-    return this.beta;
+  public java.util.UUID getId() {
+    return this.id;
+  }
+
+  /**
+   * Get when account was created
+   */
+  public java.util.Date getCreatedAt() {
+    return this.created_at;
   }
 
 }

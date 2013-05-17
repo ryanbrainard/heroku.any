@@ -9,6 +9,12 @@ public class LogSession {
   private java.util.Date created_at;
 
   /**
+   * Unique identifier of this log session
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private java.util.UUID id;
+
+  /**
    * Url for log streaming session
    */
   @org.codehaus.jackson.annotate.JsonProperty
@@ -21,13 +27,14 @@ public class LogSession {
   private java.util.Date updated_at;
 
   /**
-   * Construct empty Log Sessions
+   * Construct empty Log Session
    */
   public LogSession() {
   }
 
-  public LogSession(java.util.Date created_at, String logplex_url, java.util.Date updated_at) {
+  public LogSession(java.util.Date created_at, java.util.UUID id, String logplex_url, java.util.Date updated_at) {
     this.created_at = created_at;
+    this.id = id;
     this.logplex_url = logplex_url;
     this.updated_at = updated_at;
   }
@@ -37,6 +44,13 @@ public class LogSession {
    */
   public java.util.Date getCreatedAt() {
     return this.created_at;
+  }
+
+  /**
+   * Get unique identifier of this log session
+   */
+  public java.util.UUID getId() {
+    return this.id;
   }
 
   /**

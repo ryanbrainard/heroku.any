@@ -1,11 +1,11 @@
 package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
-public final class AppsListAction
+public final class AppListAction
     implements Action<App> {
 
 
-  public AppsListAction() {
+  public AppListAction() {
   }
 
   public String httpMethod() {
@@ -16,8 +16,12 @@ public final class AppsListAction
     return "/apps";
   }
 
-  public int expectedStatus() {
-    return 200;
+  public Object requestEntity() {
+    return null;
+  }
+
+  public java.util.Collection<Integer> expectedStatuses() {
+    return java.util.Arrays.asList(200,206);
   }
 
   public Class<App> responseClass() {

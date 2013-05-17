@@ -27,7 +27,7 @@ public class Collaborator {
   private java.util.Date updated_at;
 
   /**
-   * Construct empty Collaborators
+   * Construct empty Collaborator
    */
   public Collaborator() {
   }

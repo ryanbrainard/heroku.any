@@ -9,16 +9,10 @@ public class Release {
   private java.util.Date created_at;
 
   /**
-   * User
+   * Unique version assigned to the release
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private User user;
-
-  /**
-   * Unique name assigned to the release
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private String name;
+  private Number version;
 
   /**
    * When region was updated
@@ -27,10 +21,10 @@ public class Release {
   private java.util.Date updated_at;
 
   /**
-   * Description of changes in this release
+   * User
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private String description;
+  private User user;
 
   /**
    * Unique identifier of this release
@@ -39,18 +33,24 @@ public class Release {
   private java.util.UUID id;
 
   /**
-   * Construct empty Releases
+   * Description of changes in this release
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private String description;
+
+  /**
+   * Construct empty Release
    */
   public Release() {
   }
 
-  public Release(java.util.Date created_at, User user, String name, java.util.Date updated_at, String description, java.util.UUID id) {
+  public Release(java.util.Date created_at, Number version, java.util.Date updated_at, User user, java.util.UUID id, String description) {
     this.created_at = created_at;
-    this.user = user;
-    this.name = name;
+    this.version = version;
     this.updated_at = updated_at;
-    this.description = description;
+    this.user = user;
     this.id = id;
+    this.description = description;
   }
 
   /**
@@ -61,17 +61,10 @@ public class Release {
   }
 
   /**
-   * Get user
+   * Get unique version assigned to the release
    */
-  public User getUser() {
-    return this.user;
-  }
-
-  /**
-   * Get unique name assigned to the release
-   */
-  public String getName() {
-    return this.name;
+  public Number getVersion() {
+    return this.version;
   }
 
   /**
@@ -82,10 +75,10 @@ public class Release {
   }
 
   /**
-   * Get description of changes in this release
+   * Get user
    */
-  public String getDescription() {
-    return this.description;
+  public User getUser() {
+    return this.user;
   }
 
   /**
@@ -93,6 +86,13 @@ public class Release {
    */
   public java.util.UUID getId() {
     return this.id;
+  }
+
+  /**
+   * Get description of changes in this release
+   */
+  public String getDescription() {
+    return this.description;
   }
 
 }

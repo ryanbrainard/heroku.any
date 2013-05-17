@@ -1,26 +1,30 @@
 package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
-public final class KeysDeleteAction
+public final class KeyInfoAction
     implements Action<Key> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
   private String keyIdOrFingerprint;
 
-  public KeysDeleteAction(String keyIdOrFingerprint) {
+  public KeyInfoAction(String keyIdOrFingerprint) {
     this.keyIdOrFingerprint = keyIdOrFingerprint;
   }
 
   public String httpMethod() {
-    return "DELETE";
+    return "GET";
   }
 
   public String path() {
     return "/account/keys/{key-id-or-fingerprint}".replace("{key-id-or-fingerprint}", keyIdOrFingerprint);
   }
 
-  public int expectedStatus() {
-    return 200;
+  public Object requestEntity() {
+    return null;
+  }
+
+  public java.util.Collection<Integer> expectedStatuses() {
+    return java.util.Arrays.asList(200);
   }
 
   public Class<Key> responseClass() {

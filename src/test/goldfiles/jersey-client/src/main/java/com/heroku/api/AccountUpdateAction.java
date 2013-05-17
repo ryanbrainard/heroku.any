@@ -19,8 +19,12 @@ public final class AccountUpdateAction
     return "/account";
   }
 
-  public int expectedStatus() {
-    return 200;
+  public Object requestEntity() {
+    return this;
+  }
+
+  public java.util.Collection<Integer> expectedStatuses() {
+    return java.util.Arrays.asList(200);
   }
 
   public Class<Account> responseClass() {

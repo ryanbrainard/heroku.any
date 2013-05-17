@@ -3,52 +3,10 @@ package com.heroku.api;
 public class App {
 
   /**
-   * Unique identifier of app
+   * Description from buildpack of app
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private java.util.UUID id;
-
-  /**
-   * Owner
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private Owner owner;
-
-  /**
-   * Maintenance status of app
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private boolean maintenance;
-
-  /**
-   * When app was last released
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private java.util.Date released_at;
-
-  /**
-   * When app was created
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private java.util.Date created_at;
-
-  /**
-   * Tier level of account
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private String tier;
-
-  /**
-   * App slug size in bytes
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private Number slug_size;
-
-  /**
-   * App git repo size in bytes
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private Number repo_size;
+  private String buildpack_provided_description;
 
   /**
    * Unique name of app
@@ -57,22 +15,16 @@ public class App {
   private String name;
 
   /**
-   * Description from buildpack of app
+   * Region
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private String buildpack_provided_description;
+  private Region region;
 
   /**
-   * Web url of app
+   * Maintenance status of app
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private String web_url;
-
-  /**
-   * Legacy id of app
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private String legacy_id;
+  private boolean maintenance;
 
   /**
    * Git repo url of app
@@ -87,10 +39,40 @@ public class App {
   private String stack;
 
   /**
-   * Region
+   * Unique identifier of app
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private Region region;
+  private java.util.UUID id;
+
+  /**
+   * App git repo size in bytes
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private Number repo_size;
+
+  /**
+   * Owner
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private Owner owner;
+
+  /**
+   * Web url of app
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private String web_url;
+
+  /**
+   * App slug size in bytes
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private Number slug_size;
+
+  /**
+   * When app was created
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private java.util.Date created_at;
 
   /**
    * When app was updated
@@ -99,91 +81,32 @@ public class App {
   private java.util.Date updated_at;
 
   /**
-   * Construct empty Apps
+   * When app was last released
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private java.util.Date released_at;
+
+  /**
+   * Construct empty App
    */
   public App() {
   }
 
-  public App(java.util.UUID id, Owner owner, boolean maintenance, java.util.Date released_at, java.util.Date created_at, String tier, Number slug_size, Number repo_size, String name, String buildpack_provided_description, String web_url, String legacy_id, String git_url, String stack, Region region, java.util.Date updated_at) {
-    this.id = id;
-    this.owner = owner;
-    this.maintenance = maintenance;
-    this.released_at = released_at;
-    this.created_at = created_at;
-    this.tier = tier;
-    this.slug_size = slug_size;
-    this.repo_size = repo_size;
-    this.name = name;
+  public App(String buildpack_provided_description, String name, Region region, boolean maintenance, String git_url, String stack, java.util.UUID id, Number repo_size, Owner owner, String web_url, Number slug_size, java.util.Date created_at, java.util.Date updated_at, java.util.Date released_at) {
     this.buildpack_provided_description = buildpack_provided_description;
-    this.web_url = web_url;
-    this.legacy_id = legacy_id;
+    this.name = name;
+    this.region = region;
+    this.maintenance = maintenance;
     this.git_url = git_url;
     this.stack = stack;
-    this.region = region;
+    this.id = id;
+    this.repo_size = repo_size;
+    this.owner = owner;
+    this.web_url = web_url;
+    this.slug_size = slug_size;
+    this.created_at = created_at;
     this.updated_at = updated_at;
-  }
-
-  /**
-   * Get unique identifier of app
-   */
-  public java.util.UUID getId() {
-    return this.id;
-  }
-
-  /**
-   * Get owner
-   */
-  public Owner getOwner() {
-    return this.owner;
-  }
-
-  /**
-   * Get maintenance status of app
-   */
-  public boolean getMaintenance() {
-    return this.maintenance;
-  }
-
-  /**
-   * Get when app was last released
-   */
-  public java.util.Date getReleasedAt() {
-    return this.released_at;
-  }
-
-  /**
-   * Get when app was created
-   */
-  public java.util.Date getCreatedAt() {
-    return this.created_at;
-  }
-
-  /**
-   * Get tier level of account
-   */
-  public String getTier() {
-    return this.tier;
-  }
-
-  /**
-   * Get app slug size in bytes
-   */
-  public Number getSlugSize() {
-    return this.slug_size;
-  }
-
-  /**
-   * Get app git repo size in bytes
-   */
-  public Number getRepoSize() {
-    return this.repo_size;
-  }
-
-  /**
-   * Get unique name of app
-   */
-  public String getName() {
-    return this.name;
+    this.released_at = released_at;
   }
 
   /**
@@ -194,17 +117,24 @@ public class App {
   }
 
   /**
-   * Get web url of app
+   * Get unique name of app
    */
-  public String getWebUrl() {
-    return this.web_url;
+  public String getName() {
+    return this.name;
   }
 
   /**
-   * Get legacy id of app
+   * Get region
    */
-  public String getLegacyId() {
-    return this.legacy_id;
+  public Region getRegion() {
+    return this.region;
+  }
+
+  /**
+   * Get maintenance status of app
+   */
+  public boolean getMaintenance() {
+    return this.maintenance;
   }
 
   /**
@@ -222,10 +152,45 @@ public class App {
   }
 
   /**
-   * Get region
+   * Get unique identifier of app
    */
-  public Region getRegion() {
-    return this.region;
+  public java.util.UUID getId() {
+    return this.id;
+  }
+
+  /**
+   * Get app git repo size in bytes
+   */
+  public Number getRepoSize() {
+    return this.repo_size;
+  }
+
+  /**
+   * Get owner
+   */
+  public Owner getOwner() {
+    return this.owner;
+  }
+
+  /**
+   * Get web url of app
+   */
+  public String getWebUrl() {
+    return this.web_url;
+  }
+
+  /**
+   * Get app slug size in bytes
+   */
+  public Number getSlugSize() {
+    return this.slug_size;
+  }
+
+  /**
+   * Get when app was created
+   */
+  public java.util.Date getCreatedAt() {
+    return this.created_at;
   }
 
   /**
@@ -233,6 +198,13 @@ public class App {
    */
   public java.util.Date getUpdatedAt() {
     return this.updated_at;
+  }
+
+  /**
+   * Get when app was last released
+   */
+  public java.util.Date getReleasedAt() {
+    return this.released_at;
   }
 
 }

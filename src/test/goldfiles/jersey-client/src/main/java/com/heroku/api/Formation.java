@@ -3,34 +3,10 @@ package com.heroku.api;
 public class Formation {
 
   /**
-   * Dyno size (default: 1)
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private Number size;
-
-  /**
-   * When domain was created
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private java.util.Date created_at;
-
-  /**
    * When dyno type was updated
    */
   @org.codehaus.jackson.annotate.JsonProperty
   private java.util.Date updated_at;
-
-  /**
-   * Type of process to maintain
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private String type;
-
-  /**
-   * Command to use for process type
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private String command;
 
   /**
    * Number of processes to maintain
@@ -39,32 +15,49 @@ public class Formation {
   private Number quantity;
 
   /**
+   * Type of process to maintain
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private String type;
+
+  /**
+   * Unique identifier of this process type
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private java.util.UUID id;
+
+  /**
+   * When domain was created
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private java.util.Date created_at;
+
+  /**
+   * Command to use for process type
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private String command;
+
+  /**
+   * Dyno size (default: 1)
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private Number size;
+
+  /**
    * Construct empty Formation
    */
   public Formation() {
   }
 
-  public Formation(Number size, java.util.Date created_at, java.util.Date updated_at, String type, String command, Number quantity) {
-    this.size = size;
-    this.created_at = created_at;
+  public Formation(java.util.Date updated_at, Number quantity, String type, java.util.UUID id, java.util.Date created_at, String command, Number size) {
     this.updated_at = updated_at;
-    this.type = type;
-    this.command = command;
     this.quantity = quantity;
-  }
-
-  /**
-   * Get dyno size (default: 1)
-   */
-  public Number getSize() {
-    return this.size;
-  }
-
-  /**
-   * Get when domain was created
-   */
-  public java.util.Date getCreatedAt() {
-    return this.created_at;
+    this.type = type;
+    this.id = id;
+    this.created_at = created_at;
+    this.command = command;
+    this.size = size;
   }
 
   /**
@@ -75,10 +68,31 @@ public class Formation {
   }
 
   /**
+   * Get number of processes to maintain
+   */
+  public Number getQuantity() {
+    return this.quantity;
+  }
+
+  /**
    * Get type of process to maintain
    */
   public String getType() {
     return this.type;
+  }
+
+  /**
+   * Get unique identifier of this process type
+   */
+  public java.util.UUID getId() {
+    return this.id;
+  }
+
+  /**
+   * Get when domain was created
+   */
+  public java.util.Date getCreatedAt() {
+    return this.created_at;
   }
 
   /**
@@ -89,10 +103,10 @@ public class Formation {
   }
 
   /**
-   * Get number of processes to maintain
+   * Get dyno size (default: 1)
    */
-  public Number getQuantity() {
-    return this.quantity;
+  public Number getSize() {
+    return this.size;
   }
 
 }

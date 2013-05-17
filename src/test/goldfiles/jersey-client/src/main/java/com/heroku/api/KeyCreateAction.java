@@ -1,12 +1,12 @@
 package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
-public final class KeysCreateAction
+public final class KeyCreateAction
     implements Action<Key> {
 
   private String public_key;
 
-  public KeysCreateAction(String publicKey) {
+  public KeyCreateAction(String publicKey) {
     this.public_key = publicKey;
   }
 
@@ -18,8 +18,12 @@ public final class KeysCreateAction
     return "/account/keys";
   }
 
-  public int expectedStatus() {
-    return 201;
+  public Object requestEntity() {
+    return this;
+  }
+
+  public java.util.Collection<Integer> expectedStatuses() {
+    return java.util.Arrays.asList(201);
   }
 
   public Class<Key> responseClass() {

@@ -1,14 +1,14 @@
 package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
-public final class AppsCreateAction
+public final class AppCreateAction
     implements Action<App> {
 
   private String name;
   private Region region;
   private String stack;
 
-  public AppsCreateAction() {
+  public AppCreateAction() {
   }
 
   public String httpMethod() {
@@ -19,8 +19,12 @@ public final class AppsCreateAction
     return "/apps";
   }
 
-  public int expectedStatus() {
-    return 201;
+  public Object requestEntity() {
+    return this;
+  }
+
+  public java.util.Collection<Integer> expectedStatuses() {
+    return java.util.Arrays.asList(201);
   }
 
   public Class<App> responseClass() {
@@ -42,7 +46,7 @@ public final class AppsCreateAction
   /**
    * Set unique name of app
    */
-  public AppsCreateAction setName(String name) {
+  public AppCreateAction setName(String name) {
     this.name = name;
     return this;
   }
@@ -50,7 +54,7 @@ public final class AppsCreateAction
   /**
    * Set region
    */
-  public AppsCreateAction setRegion(Region region) {
+  public AppCreateAction setRegion(Region region) {
     this.region = region;
     return this;
   }
@@ -58,7 +62,7 @@ public final class AppsCreateAction
   /**
    * Set stack of app
    */
-  public AppsCreateAction setStack(String stack) {
+  public AppCreateAction setStack(String stack) {
     this.stack = stack;
     return this;
   }

@@ -1,7 +1,7 @@
 package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
-public final class AppsUpdateAction
+public final class AppUpdateAction
     implements Action<App> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
@@ -10,7 +10,7 @@ public final class AppsUpdateAction
   private boolean maintenance;
   private Owner owner;
 
-  public AppsUpdateAction(String appIdOrName) {
+  public AppUpdateAction(String appIdOrName) {
     this.appIdOrName = appIdOrName;
   }
 
@@ -22,8 +22,12 @@ public final class AppsUpdateAction
     return "/apps/{app-id-or-name}".replace("{app-id-or-name}", appIdOrName);
   }
 
-  public int expectedStatus() {
-    return 200;
+  public Object requestEntity() {
+    return this;
+  }
+
+  public java.util.Collection<Integer> expectedStatuses() {
+    return java.util.Arrays.asList(200);
   }
 
   public Class<App> responseClass() {
@@ -49,7 +53,7 @@ public final class AppsUpdateAction
   /**
    * Set unique name of app
    */
-  public AppsUpdateAction setName(String name) {
+  public AppUpdateAction setName(String name) {
     this.name = name;
     return this;
   }
@@ -57,7 +61,7 @@ public final class AppsUpdateAction
   /**
    * Set maintenance status of app
    */
-  public AppsUpdateAction setMaintenance(boolean maintenance) {
+  public AppUpdateAction setMaintenance(boolean maintenance) {
     this.maintenance = maintenance;
     return this;
   }
@@ -65,7 +69,7 @@ public final class AppsUpdateAction
   /**
    * Set owner
    */
-  public AppsUpdateAction setOwner(Owner owner) {
+  public AppUpdateAction setOwner(Owner owner) {
     this.owner = owner;
     return this;
   }

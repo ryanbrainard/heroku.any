@@ -7,12 +7,12 @@ public final class FormationUpdateAction
   @org.codehaus.jackson.annotate.JsonIgnore
   private String appIdOrName;
   @org.codehaus.jackson.annotate.JsonIgnore
-  private String formationIdOrProcessType;
+  private String formationIdOrType;
   private Number quantity;
 
-  public FormationUpdateAction(String appIdOrName, String formationIdOrProcessType, Number quantity) {
+  public FormationUpdateAction(String appIdOrName, String formationIdOrType, Number quantity) {
     this.appIdOrName = appIdOrName;
-    this.formationIdOrProcessType = formationIdOrProcessType;
+    this.formationIdOrType = formationIdOrType;
     this.quantity = quantity;
   }
 
@@ -21,11 +21,15 @@ public final class FormationUpdateAction
   }
 
   public String path() {
-    return "/apps/{app-id-or-name}/formation/{formation-id-or-process-type}".replace("{app-id-or-name}", appIdOrName).replace("{formation-id-or-process-type}", formationIdOrProcessType);
+    return "/apps/{app-id-or-name}/formation/{formation-id-or-type}".replace("{app-id-or-name}", appIdOrName).replace("{formation-id-or-type}", formationIdOrType);
   }
 
-  public int expectedStatus() {
-    return 200;
+  public Object requestEntity() {
+    return this;
+  }
+
+  public java.util.Collection<Integer> expectedStatuses() {
+    return java.util.Arrays.asList(200);
   }
 
   public Class<Formation> responseClass() {
@@ -36,8 +40,8 @@ public final class FormationUpdateAction
     return this.appIdOrName;
   }
 
-  public String getFormationIdOrProcessType() {
-    return this.formationIdOrProcessType;
+  public String getFormationIdOrType() {
+    return this.formationIdOrType;
   }
 
   public Number getQuantity() {

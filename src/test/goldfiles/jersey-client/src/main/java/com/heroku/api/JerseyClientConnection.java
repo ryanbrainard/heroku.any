@@ -10,6 +10,9 @@ import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.api.json.JSONConfiguration;
 
 import javax.ws.rs.core.MediaType;
+import java.lang.Boolean;
+import java.lang.Override;
+import java.lang.String;
 import java.util.Map;
 
 public class JerseyClientConnection implements Connection {
@@ -30,11 +33,11 @@ public class JerseyClientConnection implements Connection {
     public <R> R execute(Action<R> action) {
         final ClientResponse response = baseResource
                 .path(action.path())
-                .entity(action.httpMethod().equals("GET") ? null : action, MediaType.APPLICATION_JSON_TYPE)
+                .entity(action.requestEntity(), MediaType.APPLICATION_JSON_TYPE)
                 .accept("application/vnd.heroku+json; version=3")
                 .method(action.httpMethod(), ClientResponse.class);
 
-        if (response.getStatus() == action.expectedStatus()) {
+        if (action.expectedStatuses().contains(response.getStatus())) {
             return response.getEntity(action.responseClass());
         } else {
             final Map error = response.getEntity(Map.class);

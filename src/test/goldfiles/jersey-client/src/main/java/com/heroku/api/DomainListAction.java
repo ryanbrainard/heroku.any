@@ -1,13 +1,13 @@
 package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
-public final class DomainsListAction
+public final class DomainListAction
     implements Action<Domain> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
   private String appIdOrName;
 
-  public DomainsListAction(String appIdOrName) {
+  public DomainListAction(String appIdOrName) {
     this.appIdOrName = appIdOrName;
   }
 
@@ -19,8 +19,12 @@ public final class DomainsListAction
     return "/apps/{app-id-or-name}/domains".replace("{app-id-or-name}", appIdOrName);
   }
 
-  public int expectedStatus() {
-    return 200;
+  public Object requestEntity() {
+    return null;
+  }
+
+  public java.util.Collection<Integer> expectedStatuses() {
+    return java.util.Arrays.asList(200,206);
   }
 
   public Class<Domain> responseClass() {

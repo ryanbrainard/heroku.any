@@ -1,11 +1,11 @@
 package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
-public final class KeysListAction
+public final class KeyListAction
     implements Action<Key> {
 
 
-  public KeysListAction() {
+  public KeyListAction() {
   }
 
   public String httpMethod() {
@@ -16,8 +16,12 @@ public final class KeysListAction
     return "/account/keys";
   }
 
-  public int expectedStatus() {
-    return 200;
+  public Object requestEntity() {
+    return null;
+  }
+
+  public java.util.Collection<Integer> expectedStatuses() {
+    return java.util.Arrays.asList(200);
   }
 
   public Class<Key> responseClass() {

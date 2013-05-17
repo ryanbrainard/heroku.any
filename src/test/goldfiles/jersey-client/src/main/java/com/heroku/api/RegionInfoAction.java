@@ -1,13 +1,13 @@
 package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
-public final class RegionsInfoAction
+public final class RegionInfoAction
     implements Action<Region> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
   private String regionIdOrName;
 
-  public RegionsInfoAction(String regionIdOrName) {
+  public RegionInfoAction(String regionIdOrName) {
     this.regionIdOrName = regionIdOrName;
   }
 
@@ -19,8 +19,12 @@ public final class RegionsInfoAction
     return "/regions/{region-id-or-name}".replace("{region-id-or-name}", regionIdOrName);
   }
 
-  public int expectedStatus() {
-    return 200;
+  public Object requestEntity() {
+    return null;
+  }
+
+  public java.util.Collection<Integer> expectedStatuses() {
+    return java.util.Arrays.asList(200);
   }
 
   public Class<Region> responseClass() {
