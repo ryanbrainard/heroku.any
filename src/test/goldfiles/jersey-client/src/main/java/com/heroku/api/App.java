@@ -1,6 +1,9 @@
 package com.heroku.api;
 
-public class App {
+public class App
+    implements java.io.Serializable {
+
+  protected static final long serialVersionUID = -1561520212L;
 
   /**
    * Description from buildpack of app

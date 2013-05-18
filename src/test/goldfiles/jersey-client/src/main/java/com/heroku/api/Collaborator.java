@@ -1,6 +1,9 @@
 package com.heroku.api;
 
-public class Collaborator {
+public class Collaborator
+    implements java.io.Serializable {
+
+  protected static final long serialVersionUID = -169753450L;
 
   /**
    * User

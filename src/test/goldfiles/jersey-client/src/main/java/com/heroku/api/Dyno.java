@@ -1,6 +1,9 @@
 package com.heroku.api;
 
-public class Dyno {
+public class Dyno
+    implements java.io.Serializable {
+
+  protected static final long serialVersionUID = -1666376839L;
 
   /**
    * The name of this process on this app

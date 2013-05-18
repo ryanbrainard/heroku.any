@@ -1,6 +1,9 @@
 package com.heroku.api;
 
-public class Key {
+public class Key
+    implements java.io.Serializable {
+
+  protected static final long serialVersionUID = 821562460L;
 
   /**
    * Full public_key as uploaded

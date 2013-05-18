@@ -1,6 +1,9 @@
 package com.heroku.api;
 
-public class Formation {
+public class Formation
+    implements java.io.Serializable {
+
+  protected static final long serialVersionUID = -424093904L;
 
   /**
    * When dyno type was updated

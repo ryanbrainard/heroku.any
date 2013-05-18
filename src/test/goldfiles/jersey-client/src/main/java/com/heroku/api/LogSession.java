@@ -1,6 +1,9 @@
 package com.heroku.api;
 
-public class LogSession {
+public class LogSession
+    implements java.io.Serializable {
+
+  protected static final long serialVersionUID = -119495361L;
 
   /**
    * When log connection was created

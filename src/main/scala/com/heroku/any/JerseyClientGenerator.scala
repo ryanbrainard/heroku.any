@@ -138,7 +138,9 @@ class JerseyClientGenerator extends Generator {
     // header
     writer
       .emitPackage(packageName)
-      .beginType(packageName + "." + dataTypesForJava(resource.modelClassName), "class", PUBLIC)
+      .beginType(packageName + "." + dataTypesForJava(resource.modelClassName), "class", PUBLIC, null, "java.io.Serializable")
+      .emitEmptyLine()
+      .emitField("long", "serialVersionUID", PROTECTED | FINAL | STATIC, s"${resource.hashCode}L")
 
     // fields
     resource.serializableAttributes.foreach { attribute: Attribute =>
