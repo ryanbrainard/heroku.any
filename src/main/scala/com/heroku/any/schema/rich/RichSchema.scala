@@ -47,7 +47,7 @@ case class Attribute(name: String,
   } else {
     dictPattern.findFirstMatchIn(name).map { m =>
      val dictName = m.group(1) + dictPattern.findFirstMatchIn(example).map(_.group(1).capitalize).getOrElse("") + "Pairs"
-      Attribute(dictName, description, DataType("dictionary"), serialized, example)
+      Attribute(dictName, description, DataType(s"dictionary[string,string]"), serialized, example)
     }.getOrElse(this)
   }
 }
