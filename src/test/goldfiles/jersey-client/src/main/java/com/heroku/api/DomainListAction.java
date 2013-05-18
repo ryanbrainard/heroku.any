@@ -11,6 +11,14 @@ public final class DomainListAction
     this.appIdOrName = appIdOrName;
   }
 
+  public java.util.List<Domain> execute(Connection connection) {
+    return connection.execute(this);
+  }
+
+  public Iterable<Domain> executeList(Connection connection) {
+    return connection.executeList(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

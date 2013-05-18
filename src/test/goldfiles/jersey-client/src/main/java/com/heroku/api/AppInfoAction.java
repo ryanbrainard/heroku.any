@@ -11,6 +11,10 @@ public final class AppInfoAction
     this.appIdOrName = appIdOrName;
   }
 
+  public App execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

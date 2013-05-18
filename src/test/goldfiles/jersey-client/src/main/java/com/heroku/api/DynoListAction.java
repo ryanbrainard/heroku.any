@@ -11,6 +11,14 @@ public final class DynoListAction
     this.appIdOrName = appIdOrName;
   }
 
+  public java.util.List<Dyno> execute(Connection connection) {
+    return connection.execute(this);
+  }
+
+  public Iterable<Dyno> executeList(Connection connection) {
+    return connection.executeList(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

@@ -11,6 +11,10 @@ public final class ConfigVarInfoAction
     this.appIdOrName = appIdOrName;
   }
 
+  public java.util.Map<String,String> execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

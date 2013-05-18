@@ -8,6 +8,14 @@ public final class AppListAction
   public AppListAction() {
   }
 
+  public java.util.List<App> execute(Connection connection) {
+    return connection.execute(this);
+  }
+
+  public Iterable<App> executeList(Connection connection) {
+    return connection.executeList(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

@@ -13,6 +13,10 @@ public final class DomainCreateAction
     this.hostname = hostname;
   }
 
+  public Domain execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "POST";
   }

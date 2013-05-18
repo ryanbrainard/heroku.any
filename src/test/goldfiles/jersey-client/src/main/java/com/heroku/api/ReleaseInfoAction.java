@@ -14,6 +14,10 @@ public final class ReleaseInfoAction
     this.releaseIdOrName = releaseIdOrName;
   }
 
+  public Release execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

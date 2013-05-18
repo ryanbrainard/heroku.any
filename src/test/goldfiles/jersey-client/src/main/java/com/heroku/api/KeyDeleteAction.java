@@ -11,6 +11,10 @@ public final class KeyDeleteAction
     this.keyIdOrFingerprint = keyIdOrFingerprint;
   }
 
+  public Key execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "DELETE";
   }

@@ -11,6 +11,10 @@ public final class AccountUpdateAction
   public AccountUpdateAction() {
   }
 
+  public Account execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "PATCH";
   }

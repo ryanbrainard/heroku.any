@@ -8,6 +8,14 @@ public final class RegionListAction
   public RegionListAction() {
   }
 
+  public java.util.List<Region> execute(Connection connection) {
+    return connection.execute(this);
+  }
+
+  public Iterable<Region> executeList(Connection connection) {
+    return connection.executeList(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

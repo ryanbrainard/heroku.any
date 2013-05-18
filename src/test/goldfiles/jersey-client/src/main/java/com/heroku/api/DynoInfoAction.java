@@ -14,6 +14,10 @@ public final class DynoInfoAction
     this.dynoIdOrName = dynoIdOrName;
   }
 
+  public Dyno execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

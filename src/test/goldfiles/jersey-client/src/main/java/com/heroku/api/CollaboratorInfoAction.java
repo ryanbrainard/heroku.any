@@ -14,6 +14,10 @@ public final class CollaboratorInfoAction
     this.collaboratorIdOrEmail = collaboratorIdOrEmail;
   }
 
+  public Collaborator execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

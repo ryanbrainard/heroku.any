@@ -74,6 +74,20 @@ class JerseyClientGenerator extends Generator {
         .emitEmptyLine()
 
     writer
+      .beginMethod(dataTypesForJava(action.responseDataType(resource)), "execute", PUBLIC, "Connection", "connection")
+      .emitStatement("return connection.execute(this)")
+      .endMethod()
+      .emitEmptyLine()
+
+    if (action.name.equalsIgnoreCase("list")) {
+      writer
+        .beginMethod(s"Iterable<${dataTypesForJava(resource.modelClassName)}>", "executeList", PUBLIC, "Connection", "connection")
+        .emitStatement("return connection.executeList(this)")
+        .endMethod()
+        .emitEmptyLine()
+    }
+
+    writer
       .beginMethod("String", "httpMethod", PUBLIC)
       .emitStatement("return \"" + action.httpMethod + "\"")
       .endMethod()

@@ -11,6 +11,14 @@ public final class FormationListAction
     this.appIdOrName = appIdOrName;
   }
 
+  public java.util.List<Formation> execute(Connection connection) {
+    return connection.execute(this);
+  }
+
+  public Iterable<Formation> executeList(Connection connection) {
+    return connection.executeList(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

@@ -11,6 +11,10 @@ public final class LogSessionCreateAction
     this.appIdOrName = appIdOrName;
   }
 
+  public LogSession execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "POST";
   }

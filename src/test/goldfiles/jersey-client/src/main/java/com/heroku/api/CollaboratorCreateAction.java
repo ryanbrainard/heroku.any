@@ -12,6 +12,10 @@ public final class CollaboratorCreateAction
     this.appIdOrName = appIdOrName;
   }
 
+  public Collaborator execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "POST";
   }

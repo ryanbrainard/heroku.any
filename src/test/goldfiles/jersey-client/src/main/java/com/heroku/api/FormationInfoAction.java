@@ -14,6 +14,10 @@ public final class FormationInfoAction
     this.formationIdOrType = formationIdOrType;
   }
 
+  public Formation execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

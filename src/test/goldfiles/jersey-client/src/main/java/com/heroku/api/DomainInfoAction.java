@@ -14,6 +14,10 @@ public final class DomainInfoAction
     this.domainIdOrHostname = domainIdOrHostname;
   }
 
+  public Domain execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

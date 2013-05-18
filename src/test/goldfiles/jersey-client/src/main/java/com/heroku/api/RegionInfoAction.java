@@ -11,6 +11,10 @@ public final class RegionInfoAction
     this.regionIdOrName = regionIdOrName;
   }
 
+  public Region execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

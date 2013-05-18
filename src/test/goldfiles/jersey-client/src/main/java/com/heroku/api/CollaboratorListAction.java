@@ -11,6 +11,14 @@ public final class CollaboratorListAction
     this.appIdOrName = appIdOrName;
   }
 
+  public java.util.List<Collaborator> execute(Connection connection) {
+    return connection.execute(this);
+  }
+
+  public Iterable<Collaborator> executeList(Connection connection) {
+    return connection.executeList(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

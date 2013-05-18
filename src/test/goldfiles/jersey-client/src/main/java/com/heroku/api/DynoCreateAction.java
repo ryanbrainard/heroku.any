@@ -13,6 +13,10 @@ public final class DynoCreateAction
     this.command = command;
   }
 
+  public Dyno execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "POST";
   }

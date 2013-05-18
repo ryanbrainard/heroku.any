@@ -8,6 +8,10 @@ public final class AccountInfoAction
   public AccountInfoAction() {
   }
 
+  public Account execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }

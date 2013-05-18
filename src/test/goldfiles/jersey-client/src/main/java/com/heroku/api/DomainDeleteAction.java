@@ -14,6 +14,10 @@ public final class DomainDeleteAction
     this.domainIdOrHostname = domainIdOrHostname;
   }
 
+  public Domain execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "DELETE";
   }

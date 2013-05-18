@@ -10,6 +10,10 @@ public final class KeyCreateAction
     this.public_key = publicKey;
   }
 
+  public Key execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "POST";
   }

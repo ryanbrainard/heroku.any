@@ -16,6 +16,10 @@ public final class FormationUpdateAction
     this.quantity = quantity;
   }
 
+  public Formation execute(Connection connection) {
+    return connection.execute(this);
+  }
+
   public String httpMethod() {
     return "PATCH";
   }

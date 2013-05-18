@@ -8,6 +8,14 @@ public final class KeyListAction
   public KeyListAction() {
   }
 
+  public java.util.List<Key> execute(Connection connection) {
+    return connection.execute(this);
+  }
+
+  public Iterable<Key> executeList(Connection connection) {
+    return connection.executeList(this);
+  }
+
   public String httpMethod() {
     return "GET";
   }
