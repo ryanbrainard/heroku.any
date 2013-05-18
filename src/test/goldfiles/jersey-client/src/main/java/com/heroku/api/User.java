@@ -15,14 +15,9 @@ public class User {
   private java.util.UUID id;
 
   /**
-   * Construct empty User
+   * User is created in response to API calls
    */
-  public User() {
-  }
-
-  public User(String email, java.util.UUID id) {
-    this.email = email;
-    this.id = id;
+  protected User() {
   }
 
   /**
@@ -37,6 +32,23 @@ public class User {
    */
   public java.util.UUID getId() {
     return this.id;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+     if (o == null || getClass() != o.getClass()) return false;
+
+    User user = (User) o;
+
+    if (email != user.email) return false;
+    if (id != user.id) return false;
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
   }
 
   @Override

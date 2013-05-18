@@ -63,22 +63,9 @@ public class Dyno {
   private java.util.UUID id;
 
   /**
-   * Construct empty Dyno
+   * Dyno is created in response to API calls
    */
-  public Dyno() {
-  }
-
-  public Dyno(String name, String state, String type, java.util.Date created_at, String command, Release release, java.util.Date updated_at, Number size, String attach_url, java.util.UUID id) {
-    this.name = name;
-    this.state = state;
-    this.type = type;
-    this.created_at = created_at;
-    this.command = command;
-    this.release = release;
-    this.updated_at = updated_at;
-    this.size = size;
-    this.attach_url = attach_url;
-    this.id = id;
+  protected Dyno() {
   }
 
   /**
@@ -149,6 +136,31 @@ public class Dyno {
    */
   public java.util.UUID getId() {
     return this.id;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+     if (o == null || getClass() != o.getClass()) return false;
+
+    Dyno dyno = (Dyno) o;
+
+    if (name != dyno.name) return false;
+    if (state != dyno.state) return false;
+    if (type != dyno.type) return false;
+    if (created_at != dyno.created_at) return false;
+    if (command != dyno.command) return false;
+    if (release != null ? !release.equals(dyno.release) : dyno.release != null) return false;
+    if (updated_at != dyno.updated_at) return false;
+    if (size != dyno.size) return false;
+    if (attach_url != dyno.attach_url) return false;
+    if (id != dyno.id) return false;
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
   }
 
   @Override

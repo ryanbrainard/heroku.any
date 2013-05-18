@@ -45,19 +45,9 @@ public class Formation {
   private Number size;
 
   /**
-   * Construct empty Formation
+   * Formation is created in response to API calls
    */
-  public Formation() {
-  }
-
-  public Formation(java.util.Date updated_at, Number quantity, String type, java.util.UUID id, java.util.Date created_at, String command, Number size) {
-    this.updated_at = updated_at;
-    this.quantity = quantity;
-    this.type = type;
-    this.id = id;
-    this.created_at = created_at;
-    this.command = command;
-    this.size = size;
+  protected Formation() {
   }
 
   /**
@@ -107,6 +97,28 @@ public class Formation {
    */
   public Number getSize() {
     return this.size;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+     if (o == null || getClass() != o.getClass()) return false;
+
+    Formation formation = (Formation) o;
+
+    if (updated_at != formation.updated_at) return false;
+    if (quantity != formation.quantity) return false;
+    if (type != formation.type) return false;
+    if (id != formation.id) return false;
+    if (created_at != formation.created_at) return false;
+    if (command != formation.command) return false;
+    if (size != formation.size) return false;
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
   }
 
   @Override

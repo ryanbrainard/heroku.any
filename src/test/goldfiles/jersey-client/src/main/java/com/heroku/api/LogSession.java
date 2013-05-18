@@ -27,16 +27,9 @@ public class LogSession {
   private java.util.Date updated_at;
 
   /**
-   * Construct empty Log Session
+   * Log Session is created in response to API calls
    */
-  public LogSession() {
-  }
-
-  public LogSession(java.util.Date created_at, java.util.UUID id, String logplex_url, java.util.Date updated_at) {
-    this.created_at = created_at;
-    this.id = id;
-    this.logplex_url = logplex_url;
-    this.updated_at = updated_at;
+  protected LogSession() {
   }
 
   /**
@@ -65,6 +58,25 @@ public class LogSession {
    */
   public java.util.Date getUpdatedAt() {
     return this.updated_at;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+     if (o == null || getClass() != o.getClass()) return false;
+
+    LogSession logsession = (LogSession) o;
+
+    if (created_at != logsession.created_at) return false;
+    if (id != logsession.id) return false;
+    if (logplex_url != logsession.logplex_url) return false;
+    if (updated_at != logsession.updated_at) return false;
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
   }
 
   @Override

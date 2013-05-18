@@ -27,16 +27,9 @@ public class Collaborator {
   private java.util.Date updated_at;
 
   /**
-   * Construct empty Collaborator
+   * Collaborator is created in response to API calls
    */
-  public Collaborator() {
-  }
-
-  public Collaborator(User user, java.util.UUID id, java.util.Date created_at, java.util.Date updated_at) {
-    this.user = user;
-    this.id = id;
-    this.created_at = created_at;
-    this.updated_at = updated_at;
+  protected Collaborator() {
   }
 
   /**
@@ -65,6 +58,25 @@ public class Collaborator {
    */
   public java.util.Date getUpdatedAt() {
     return this.updated_at;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+     if (o == null || getClass() != o.getClass()) return false;
+
+    Collaborator collaborator = (Collaborator) o;
+
+    if (user != null ? !user.equals(collaborator.user) : collaborator.user != null) return false;
+    if (id != collaborator.id) return false;
+    if (created_at != collaborator.created_at) return false;
+    if (updated_at != collaborator.updated_at) return false;
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
   }
 
   @Override

@@ -99,28 +99,9 @@ public class App {
   private java.util.Date released_at;
 
   /**
-   * Construct empty App
+   * App is created in response to API calls
    */
-  public App() {
-  }
-
-  public App(String buildpack_provided_description, String legacy_id, String name, String tier, Region region, boolean maintenance, String git_url, String stack, java.util.UUID id, Number repo_size, Owner owner, String web_url, Number slug_size, java.util.Date created_at, java.util.Date updated_at, java.util.Date released_at) {
-    this.buildpack_provided_description = buildpack_provided_description;
-    this.legacy_id = legacy_id;
-    this.name = name;
-    this.tier = tier;
-    this.region = region;
-    this.maintenance = maintenance;
-    this.git_url = git_url;
-    this.stack = stack;
-    this.id = id;
-    this.repo_size = repo_size;
-    this.owner = owner;
-    this.web_url = web_url;
-    this.slug_size = slug_size;
-    this.created_at = created_at;
-    this.updated_at = updated_at;
-    this.released_at = released_at;
+  protected App() {
   }
 
   /**
@@ -233,6 +214,37 @@ public class App {
    */
   public java.util.Date getReleasedAt() {
     return this.released_at;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+     if (o == null || getClass() != o.getClass()) return false;
+
+    App app = (App) o;
+
+    if (buildpack_provided_description != app.buildpack_provided_description) return false;
+    if (legacy_id != app.legacy_id) return false;
+    if (name != app.name) return false;
+    if (tier != app.tier) return false;
+    if (region != null ? !region.equals(app.region) : app.region != null) return false;
+    if (maintenance != app.maintenance) return false;
+    if (git_url != app.git_url) return false;
+    if (stack != app.stack) return false;
+    if (id != app.id) return false;
+    if (repo_size != app.repo_size) return false;
+    if (owner != null ? !owner.equals(app.owner) : app.owner != null) return false;
+    if (web_url != app.web_url) return false;
+    if (slug_size != app.slug_size) return false;
+    if (created_at != app.created_at) return false;
+    if (updated_at != app.updated_at) return false;
+    if (released_at != app.released_at) return false;
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
   }
 
   @Override

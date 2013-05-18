@@ -39,18 +39,9 @@ public class Release {
   private String description;
 
   /**
-   * Construct empty Release
+   * Release is created in response to API calls
    */
-  public Release() {
-  }
-
-  public Release(java.util.Date created_at, Number version, java.util.Date updated_at, User user, java.util.UUID id, String description) {
-    this.created_at = created_at;
-    this.version = version;
-    this.updated_at = updated_at;
-    this.user = user;
-    this.id = id;
-    this.description = description;
+  protected Release() {
   }
 
   /**
@@ -93,6 +84,27 @@ public class Release {
    */
   public String getDescription() {
     return this.description;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+     if (o == null || getClass() != o.getClass()) return false;
+
+    Release release = (Release) o;
+
+    if (created_at != release.created_at) return false;
+    if (version != release.version) return false;
+    if (updated_at != release.updated_at) return false;
+    if (user != null ? !user.equals(release.user) : release.user != null) return false;
+    if (id != release.id) return false;
+    if (description != release.description) return false;
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
   }
 
   @Override

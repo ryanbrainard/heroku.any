@@ -57,21 +57,9 @@ public class Account {
   private java.util.Date created_at;
 
   /**
-   * Construct empty Account
+   * Account is created in response to API calls
    */
-  public Account() {
-  }
-
-  public Account(boolean beta, java.util.Date updated_at, java.util.Date last_login, String email, boolean verified, boolean confirmed, boolean allow_tracking, java.util.UUID id, java.util.Date created_at) {
-    this.beta = beta;
-    this.updated_at = updated_at;
-    this.last_login = last_login;
-    this.email = email;
-    this.verified = verified;
-    this.confirmed = confirmed;
-    this.allow_tracking = allow_tracking;
-    this.id = id;
-    this.created_at = created_at;
+  protected Account() {
   }
 
   /**
@@ -135,6 +123,30 @@ public class Account {
    */
   public java.util.Date getCreatedAt() {
     return this.created_at;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+     if (o == null || getClass() != o.getClass()) return false;
+
+    Account account = (Account) o;
+
+    if (beta != account.beta) return false;
+    if (updated_at != account.updated_at) return false;
+    if (last_login != account.last_login) return false;
+    if (email != account.email) return false;
+    if (verified != account.verified) return false;
+    if (confirmed != account.confirmed) return false;
+    if (allow_tracking != account.allow_tracking) return false;
+    if (id != account.id) return false;
+    if (created_at != account.created_at) return false;
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
   }
 
   @Override

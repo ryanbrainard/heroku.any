@@ -39,18 +39,9 @@ public class Key {
   private java.util.UUID id;
 
   /**
-   * Construct empty Key
+   * Key is created in response to API calls
    */
-  public Key() {
-  }
-
-  public Key(String public_key, java.util.Date created_at, java.util.Date updated_at, String email, String fingerprint, java.util.UUID id) {
-    this.public_key = public_key;
-    this.created_at = created_at;
-    this.updated_at = updated_at;
-    this.email = email;
-    this.fingerprint = fingerprint;
-    this.id = id;
+  protected Key() {
   }
 
   /**
@@ -93,6 +84,27 @@ public class Key {
    */
   public java.util.UUID getId() {
     return this.id;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+     if (o == null || getClass() != o.getClass()) return false;
+
+    Key key = (Key) o;
+
+    if (public_key != key.public_key) return false;
+    if (created_at != key.created_at) return false;
+    if (updated_at != key.updated_at) return false;
+    if (email != key.email) return false;
+    if (fingerprint != key.fingerprint) return false;
+    if (id != key.id) return false;
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
   }
 
   @Override

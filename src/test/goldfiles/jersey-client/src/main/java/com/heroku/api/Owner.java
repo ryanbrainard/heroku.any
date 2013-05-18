@@ -15,14 +15,9 @@ public class Owner {
   private String email;
 
   /**
-   * Construct empty Owner
+   * Owner is created in response to API calls
    */
-  public Owner() {
-  }
-
-  public Owner(java.util.UUID id, String email) {
-    this.id = id;
-    this.email = email;
+  protected Owner() {
   }
 
   /**
@@ -37,6 +32,23 @@ public class Owner {
    */
   public String getEmail() {
     return this.email;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+     if (o == null || getClass() != o.getClass()) return false;
+
+    Owner owner = (Owner) o;
+
+    if (id != owner.id) return false;
+    if (email != owner.email) return false;
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
   }
 
   @Override

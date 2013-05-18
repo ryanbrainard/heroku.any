@@ -27,16 +27,9 @@ public class Domain {
   private java.util.Date updated_at;
 
   /**
-   * Construct empty Domain
+   * Domain is created in response to API calls
    */
-  public Domain() {
-  }
-
-  public Domain(java.util.Date created_at, String hostname, java.util.UUID id, java.util.Date updated_at) {
-    this.created_at = created_at;
-    this.hostname = hostname;
-    this.id = id;
-    this.updated_at = updated_at;
+  protected Domain() {
   }
 
   /**
@@ -65,6 +58,25 @@ public class Domain {
    */
   public java.util.Date getUpdatedAt() {
     return this.updated_at;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+     if (o == null || getClass() != o.getClass()) return false;
+
+    Domain domain = (Domain) o;
+
+    if (created_at != domain.created_at) return false;
+    if (hostname != domain.hostname) return false;
+    if (id != domain.id) return false;
+    if (updated_at != domain.updated_at) return false;
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
   }
 
   @Override

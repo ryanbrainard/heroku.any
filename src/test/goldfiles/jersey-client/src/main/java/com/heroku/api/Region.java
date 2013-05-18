@@ -33,17 +33,9 @@ public class Region {
   private String description;
 
   /**
-   * Construct empty Region
+   * Region is created in response to API calls
    */
-  public Region() {
-  }
-
-  public Region(java.util.UUID id, java.util.Date created_at, java.util.Date updated_at, String name, String description) {
-    this.id = id;
-    this.created_at = created_at;
-    this.updated_at = updated_at;
-    this.name = name;
-    this.description = description;
+  protected Region() {
   }
 
   /**
@@ -79,6 +71,26 @@ public class Region {
    */
   public String getDescription() {
     return this.description;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+     if (o == null || getClass() != o.getClass()) return false;
+
+    Region region = (Region) o;
+
+    if (id != region.id) return false;
+    if (created_at != region.created_at) return false;
+    if (updated_at != region.updated_at) return false;
+    if (name != region.name) return false;
+    if (description != region.description) return false;
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
   }
 
   @Override

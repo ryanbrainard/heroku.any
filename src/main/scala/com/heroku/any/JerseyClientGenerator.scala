@@ -151,23 +151,12 @@ class JerseyClientGenerator extends Generator {
 
     writer.emitEmptyLine()
 
-    if (!resource.serializableAttributes.isEmpty) {
-      // empty constructor
-      writer
-        .emitJavadoc(s"Construct empty ${resource.name}")
-        .beginMethod(null, resource.modelClassName, PUBLIC)
-        .endMethod()
-        .emitEmptyLine()
-    }
-
-    // fully-qualified constructor
-    writer.beginMethod(null, resource.modelClassName, PUBLIC, resource.serializableAttributes.map { attribute: Attribute =>
-        Seq[String](attribute.dataType, attribute.fieldName)
-    }.flatten.toSeq:_*)
-    resource.serializableAttributes.foreach { attribute: Attribute =>
-      writer.emitStatement(s"this.${attribute.fieldName} = ${attribute.fieldName}")
-    }
-    writer.endMethod().emitEmptyLine()
+    // empty constructor
+    writer
+      .emitJavadoc(s"${resource.name} is created in response to API calls")
+      .beginMethod(null, resource.modelClassName, PROTECTED)
+      .endMethod()
+      .emitEmptyLine()
 
     // getters
     resource.serializableAttributes.foreach { attribute: Attribute =>
@@ -179,17 +168,48 @@ class JerseyClientGenerator extends Generator {
         .emitEmptyLine()
     }
 
+    // equals
+    val model = dataTypesForJava(resource.modelClassName).toLowerCase
+    writer
+      .emitAnnotation("Override")
+      .beginMethod("boolean", "equals", PUBLIC, "Object", "o")
+      .emitStatement("if (this == o) return true")
+      .emitStatement(" if (o == null || getClass() != o.getClass()) return false")
+      .emitEmptyLine()
+      .emitStatement(s"${dataTypesForJava(resource.modelClassName)} $model = (${dataTypesForJava(resource.modelClassName)}) o")
+      .emitEmptyLine()
+      resource.serializableAttributes.foreach { attribute =>
+        if (attribute.dataType.raw.head.isLower /* primitive */) {
+          writer.emitStatement(s"if (${attribute.fieldName} != $model.${attribute.fieldName}) return false")
+        } else {
+          writer.emitStatement(s"if (${attribute.fieldName} != null ? !${attribute.fieldName}.equals($model.${attribute.fieldName}) : $model.${attribute.fieldName} != null) return false")
+        }
+      }
+      writer
+        .emitStatement("return true")
+        .endMethod()
+        .emitEmptyLine()
+
+    // hashCode
+    writer
+      .emitAnnotation("Override")
+      .beginMethod("int", "hashCode", PUBLIC)
+      .emitStatement("return id != null ? id.hashCode() : 0")
+      .endMethod()
+      .emitEmptyLine()
+
     // toString
-    writer.emitAnnotation("Override")
+    writer
+      .emitAnnotation("Override")
       .beginMethod("String", "toString", PUBLIC)
       .emitStatement(resource.serializableAttributes.map { attribute: Attribute =>
-        (s""""${attribute.paramName}='" + ${attribute.fieldName} + '\\'' +""")
+      (s""""${attribute.paramName}='" + ${attribute.fieldName} + '\\'' +""")
       }.mkString(
         s"""return "${dataTypesForJava(resource.modelClassName)}{" + \n""",
         "\n\", \" + ",
         "\n'}'"))
-      .endMethod()
-      .emitEmptyLine()
+        .endMethod()
+        .emitEmptyLine()
 
     writer.endType()
     out.flush()
