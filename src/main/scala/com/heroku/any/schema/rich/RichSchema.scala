@@ -40,14 +40,15 @@ case class Attribute(name: String,
                      example: String) {
   def fieldName = name
   def paramName = TextUtils.camelCase(fieldName)
-  private val dictPattern = """^\{([a-z-]+)\}$""".r
+  private val dictPattern = """^\"?\{([a-z-]+)\}\"?$""".r
   def massaged = if (name.contains(":")) {
     val Array (obj,field) = name.split(":")
     Attribute(obj, obj, DataType(obj.capitalize), serialized, "")
   } else {
     dictPattern.findFirstMatchIn(name).map { m =>
      val dictName = m.group(1) + dictPattern.findFirstMatchIn(example).map(_.group(1).capitalize).getOrElse("") + "Pairs"
-      Attribute(dictName, description, DataType(s"dictionary[string,string]"), serialized, example)
+     val valueDataType = dictPattern.findFirstMatchIn(example).map(_ => dataType.raw).getOrElse("string")
+      Attribute(dictName, description, DataType(s"dictionary[string,$valueDataType]"), serialized, example)
     }.getOrElse(this)
   }
 }

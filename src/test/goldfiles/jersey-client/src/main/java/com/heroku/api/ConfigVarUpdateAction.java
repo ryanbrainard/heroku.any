@@ -6,11 +6,11 @@ public final class ConfigVarUpdateAction
 
   @org.codehaus.jackson.annotate.JsonIgnore
   private String appIdOrName;
-  private java.util.Map<String,String> keyPairs;
+  private java.util.Map<String,String> keyValuePairs;
 
-  public ConfigVarUpdateAction(String appIdOrName, java.util.Map<String,String> keyPairs) {
+  public ConfigVarUpdateAction(String appIdOrName, java.util.Map<String,String> keyValuePairs) {
     this.appIdOrName = appIdOrName;
-    this.keyPairs = keyPairs;
+    this.keyValuePairs = keyValuePairs;
   }
 
   public String httpMethod() {
@@ -22,7 +22,7 @@ public final class ConfigVarUpdateAction
   }
 
   public Object requestEntity() {
-    return keyPairs;
+    return keyValuePairs;
   }
 
   public java.util.Collection<Integer> expectedStatuses() {
@@ -37,7 +37,7 @@ public final class ConfigVarUpdateAction
     return this.appIdOrName;
   }
 
-  public java.util.Map<String,String> getKeyPairs() {
-    return this.keyPairs;
+  public java.util.Map<String,String> getKeyValuePairs() {
+    return this.keyValuePairs;
   }
 }
