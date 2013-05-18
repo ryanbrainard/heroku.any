@@ -81,4 +81,15 @@ public class Region {
     return this.description;
   }
 
+  @Override
+  public String toString() {
+    return "Region{" + 
+        "id='" + id + '\'' +
+        ", " + "createdAt='" + created_at + '\'' +
+        ", " + "updatedAt='" + updated_at + '\'' +
+        ", " + "name='" + name + '\'' +
+        ", " + "description='" + description + '\'' +
+        '}';
+  }
+
 }

@@ -67,4 +67,14 @@ public class Collaborator {
     return this.updated_at;
   }
 
+  @Override
+  public String toString() {
+    return "Collaborator{" + 
+        "user='" + user + '\'' +
+        ", " + "id='" + id + '\'' +
+        ", " + "createdAt='" + created_at + '\'' +
+        ", " + "updatedAt='" + updated_at + '\'' +
+        '}';
+  }
+
 }

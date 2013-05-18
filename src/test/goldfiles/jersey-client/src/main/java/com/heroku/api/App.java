@@ -235,4 +235,26 @@ public class App {
     return this.released_at;
   }
 
+  @Override
+  public String toString() {
+    return "App{" + 
+        "buildpackProvidedDescription='" + buildpack_provided_description + '\'' +
+        ", " + "legacyId='" + legacy_id + '\'' +
+        ", " + "name='" + name + '\'' +
+        ", " + "tier='" + tier + '\'' +
+        ", " + "region='" + region + '\'' +
+        ", " + "maintenance='" + maintenance + '\'' +
+        ", " + "gitUrl='" + git_url + '\'' +
+        ", " + "stack='" + stack + '\'' +
+        ", " + "id='" + id + '\'' +
+        ", " + "repoSize='" + repo_size + '\'' +
+        ", " + "owner='" + owner + '\'' +
+        ", " + "webUrl='" + web_url + '\'' +
+        ", " + "slugSize='" + slug_size + '\'' +
+        ", " + "createdAt='" + created_at + '\'' +
+        ", " + "updatedAt='" + updated_at + '\'' +
+        ", " + "releasedAt='" + released_at + '\'' +
+        '}';
+  }
+
 }

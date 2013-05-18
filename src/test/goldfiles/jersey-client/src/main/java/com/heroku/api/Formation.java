@@ -109,4 +109,17 @@ public class Formation {
     return this.size;
   }
 
+  @Override
+  public String toString() {
+    return "Formation{" + 
+        "updatedAt='" + updated_at + '\'' +
+        ", " + "quantity='" + quantity + '\'' +
+        ", " + "type='" + type + '\'' +
+        ", " + "id='" + id + '\'' +
+        ", " + "createdAt='" + created_at + '\'' +
+        ", " + "command='" + command + '\'' +
+        ", " + "size='" + size + '\'' +
+        '}';
+  }
+
 }

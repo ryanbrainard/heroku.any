@@ -67,4 +67,14 @@ public class Domain {
     return this.updated_at;
   }
 
+  @Override
+  public String toString() {
+    return "Domain{" + 
+        "createdAt='" + created_at + '\'' +
+        ", " + "hostname='" + hostname + '\'' +
+        ", " + "id='" + id + '\'' +
+        ", " + "updatedAt='" + updated_at + '\'' +
+        '}';
+  }
+
 }

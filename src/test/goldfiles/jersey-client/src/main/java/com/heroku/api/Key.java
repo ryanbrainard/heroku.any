@@ -95,4 +95,16 @@ public class Key {
     return this.id;
   }
 
+  @Override
+  public String toString() {
+    return "Key{" + 
+        "publicKey='" + public_key + '\'' +
+        ", " + "createdAt='" + created_at + '\'' +
+        ", " + "updatedAt='" + updated_at + '\'' +
+        ", " + "email='" + email + '\'' +
+        ", " + "fingerprint='" + fingerprint + '\'' +
+        ", " + "id='" + id + '\'' +
+        '}';
+  }
+
 }

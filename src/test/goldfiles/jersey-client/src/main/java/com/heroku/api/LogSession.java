@@ -67,4 +67,14 @@ public class LogSession {
     return this.updated_at;
   }
 
+  @Override
+  public String toString() {
+    return "LogSession{" + 
+        "createdAt='" + created_at + '\'' +
+        ", " + "id='" + id + '\'' +
+        ", " + "logplexUrl='" + logplex_url + '\'' +
+        ", " + "updatedAt='" + updated_at + '\'' +
+        '}';
+  }
+
 }

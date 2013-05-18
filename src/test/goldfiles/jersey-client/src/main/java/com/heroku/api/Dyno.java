@@ -151,4 +151,20 @@ public class Dyno {
     return this.id;
   }
 
+  @Override
+  public String toString() {
+    return "Dyno{" + 
+        "name='" + name + '\'' +
+        ", " + "state='" + state + '\'' +
+        ", " + "type='" + type + '\'' +
+        ", " + "createdAt='" + created_at + '\'' +
+        ", " + "command='" + command + '\'' +
+        ", " + "release='" + release + '\'' +
+        ", " + "updatedAt='" + updated_at + '\'' +
+        ", " + "size='" + size + '\'' +
+        ", " + "attachUrl='" + attach_url + '\'' +
+        ", " + "id='" + id + '\'' +
+        '}';
+  }
+
 }

@@ -169,7 +169,7 @@ class JerseyClientGenerator extends Generator {
     }
     writer.endMethod().emitEmptyLine()
 
-    // getters and setters
+    // getters
     resource.serializableAttributes.foreach { attribute: Attribute =>
       writer
         .emitJavadoc(s"Get ${attribute.description}")
@@ -178,6 +178,18 @@ class JerseyClientGenerator extends Generator {
         .endMethod()
         .emitEmptyLine()
     }
+
+    // toString
+    writer.emitAnnotation("Override")
+      .beginMethod("String", "toString", PUBLIC)
+      .emitStatement(resource.serializableAttributes.map { attribute: Attribute =>
+        (s""""${attribute.paramName}='" + ${attribute.fieldName} + '\\'' +""")
+      }.mkString(
+        s"""return "${dataTypesForJava(resource.modelClassName)}{" + \n""",
+        "\n\", \" + ",
+        "\n'}'"))
+      .endMethod()
+      .emitEmptyLine()
 
     writer.endType()
     out.flush()

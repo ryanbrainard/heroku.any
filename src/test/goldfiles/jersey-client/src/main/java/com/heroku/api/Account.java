@@ -137,4 +137,19 @@ public class Account {
     return this.created_at;
   }
 
+  @Override
+  public String toString() {
+    return "Account{" + 
+        "beta='" + beta + '\'' +
+        ", " + "updatedAt='" + updated_at + '\'' +
+        ", " + "lastLogin='" + last_login + '\'' +
+        ", " + "email='" + email + '\'' +
+        ", " + "verified='" + verified + '\'' +
+        ", " + "confirmed='" + confirmed + '\'' +
+        ", " + "allowTracking='" + allow_tracking + '\'' +
+        ", " + "id='" + id + '\'' +
+        ", " + "createdAt='" + created_at + '\'' +
+        '}';
+  }
+
 }

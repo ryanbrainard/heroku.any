@@ -39,4 +39,12 @@ public class Owner {
     return this.email;
   }
 
+  @Override
+  public String toString() {
+    return "Owner{" + 
+        "id='" + id + '\'' +
+        ", " + "email='" + email + '\'' +
+        '}';
+  }
+
 }

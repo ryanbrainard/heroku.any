@@ -95,4 +95,16 @@ public class Release {
     return this.description;
   }
 
+  @Override
+  public String toString() {
+    return "Release{" + 
+        "createdAt='" + created_at + '\'' +
+        ", " + "version='" + version + '\'' +
+        ", " + "updatedAt='" + updated_at + '\'' +
+        ", " + "user='" + user + '\'' +
+        ", " + "id='" + id + '\'' +
+        ", " + "description='" + description + '\'' +
+        '}';
+  }
+
 }
