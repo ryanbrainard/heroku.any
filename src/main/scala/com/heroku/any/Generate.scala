@@ -5,7 +5,6 @@ import spray.json._
 import java.io.File
 import org.rogach.scallop.ScallopConf
 import java.util.ServiceLoader
-import com.heroku.any.schema.json.{Schema, Attribute, Resource}
 
 object Generate {
 
