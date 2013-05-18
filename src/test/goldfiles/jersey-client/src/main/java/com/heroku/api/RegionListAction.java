@@ -2,7 +2,7 @@ package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
 public final class RegionListAction
-    implements Action<java.util.List> {
+    implements Action<java.util.List<Region>> {
 
 
   public RegionListAction() {
@@ -24,7 +24,7 @@ public final class RegionListAction
     return java.util.Arrays.asList(200,206);
   }
 
-  public com.sun.jersey.api.client.GenericType<java.util.List> responseType() {
-    return new com.sun.jersey.api.client.GenericType<java.util.List>(){};
+  public com.sun.jersey.api.client.GenericType<java.util.List<Region>> responseType() {
+    return new com.sun.jersey.api.client.GenericType<java.util.List<Region>>(){};
   }
 }

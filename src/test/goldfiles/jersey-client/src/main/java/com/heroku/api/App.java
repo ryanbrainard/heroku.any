@@ -9,10 +9,22 @@ public class App {
   private String buildpack_provided_description;
 
   /**
+   * Deprecated id format
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private String legacy_id;
+
+  /**
    * Unique name of app
    */
   @org.codehaus.jackson.annotate.JsonProperty
   private String name;
+
+  /**
+   * App tier
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private String tier;
 
   /**
    * Region
@@ -92,9 +104,11 @@ public class App {
   public App() {
   }
 
-  public App(String buildpack_provided_description, String name, Region region, boolean maintenance, String git_url, String stack, java.util.UUID id, Number repo_size, Owner owner, String web_url, Number slug_size, java.util.Date created_at, java.util.Date updated_at, java.util.Date released_at) {
+  public App(String buildpack_provided_description, String legacy_id, String name, String tier, Region region, boolean maintenance, String git_url, String stack, java.util.UUID id, Number repo_size, Owner owner, String web_url, Number slug_size, java.util.Date created_at, java.util.Date updated_at, java.util.Date released_at) {
     this.buildpack_provided_description = buildpack_provided_description;
+    this.legacy_id = legacy_id;
     this.name = name;
+    this.tier = tier;
     this.region = region;
     this.maintenance = maintenance;
     this.git_url = git_url;
@@ -117,10 +131,24 @@ public class App {
   }
 
   /**
+   * Get Deprecated id format
+   */
+  public String getLegacyId() {
+    return this.legacy_id;
+  }
+
+  /**
    * Get unique name of app
    */
   public String getName() {
     return this.name;
+  }
+
+  /**
+   * Get App tier
+   */
+  public String getTier() {
+    return this.tier;
   }
 
   /**

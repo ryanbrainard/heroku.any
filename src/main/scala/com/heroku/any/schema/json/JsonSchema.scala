@@ -1,13 +1,22 @@
 package com.heroku.any.schema.json
 
 import com.heroku.any.schema.rich.Richable
-import spray.json.JsValue
+import spray.json.{JsString, JsValue}
 
 case class Schema(resources: Map[String,Resource]) extends Richable[com.heroku.any.schema.rich.Schema] {
   def toRich(name: String) = new com.heroku.any.schema.rich.Schema(
     name,
     Richable.fromMap(resources)
   )
+
+  def addAttribute(toResource: String, name: String, description: String, dataType: String, serialized: Boolean, example: String): Schema = {
+    val attrib = name -> Attribute(description, dataType, serialized, JsString(example))
+    val attribs  = this.resources(toResource).attributes + attrib
+    val resource = this.resources(toResource).copy(attributes = attribs)
+    val resources = this.resources + (toResource -> resource)
+    val schema = this.copy(resources = resources)
+    schema
+  }
 }
 
 case class Resource(actions: Map[String, Action],

@@ -184,13 +184,17 @@ class JerseyClientGenerator extends Generator {
     out.close()
   }
 
-  private implicit def dataTypesForJava(dataType: DataType):String = dataType.raw match {
-    case "string"      => "String"
-    case "number"      => "Number"
-    case "datetime"    => "java.util.Date"
-    case "uuid"        => "java.util.UUID"
-    case "dictionary"  => "java.util.Map"
-    case list if list.matches("""list\[\w+\]""")  => "java.util.List"
-    case other         =>  other
+  private implicit def dataTypesForJava(dataType: DataType):String = {
+    val listPattern = """list\[(\w+)\]""".r
+
+    dataType.raw match {
+      case "string"         => "String"
+      case "number"         => "Number"
+      case "datetime"       => "java.util.Date"
+      case "uuid"           => "java.util.UUID"
+      case "dictionary"     => "java.util.Map"
+      case listPattern(dt)  => s"java.util.List<$dt>"
+      case other            =>  other
+    }
   }
 }

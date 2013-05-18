@@ -2,7 +2,7 @@ package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
 public final class FormationListAction
-    implements Action<java.util.List> {
+    implements Action<java.util.List<Formation>> {
 
   @org.codehaus.jackson.annotate.JsonIgnore
   private String appIdOrName;
@@ -27,8 +27,8 @@ public final class FormationListAction
     return java.util.Arrays.asList(200,206);
   }
 
-  public com.sun.jersey.api.client.GenericType<java.util.List> responseType() {
-    return new com.sun.jersey.api.client.GenericType<java.util.List>(){};
+  public com.sun.jersey.api.client.GenericType<java.util.List<Formation>> responseType() {
+    return new com.sun.jersey.api.client.GenericType<java.util.List<Formation>>(){};
   }
 
   public String getAppIdOrName() {

@@ -5,6 +5,7 @@ import spray.json._
 import java.io.File
 import org.rogach.scallop.ScallopConf
 import java.util.ServiceLoader
+import com.heroku.any.schema.json.{Schema, Attribute, Resource}
 
 object Generate {
 
@@ -48,7 +49,13 @@ object Generate {
     import com.heroku.any.HerokuApiProtocol._
 
     try {
-      Right(Source.fromFile(file).mkString.asJson.asJsObject.convertTo[Schema].toRich(file.toString))
+      Right(
+        Source.fromFile(file).mkString
+          .asJson.asJsObject.convertTo[Schema]
+          .addAttribute("App", "legacy_id", "Deprecated id format", "string", serialized = true, "app123@heroku.com")
+          .addAttribute("App", "tier", "App tier", "string", serialized = true, "Production")
+          .toRich(file.toString)
+      )
     } catch {
       case e: DeserializationException => Left(s"Problem parsing schema:${e.getMessage}")
     }
