@@ -2,7 +2,7 @@ package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
 public final class KeyListAction
-    implements Action<Key> {
+    implements Action<java.util.List> {
 
 
   public KeyListAction() {
@@ -24,7 +24,7 @@ public final class KeyListAction
     return java.util.Arrays.asList(200);
   }
 
-  public Class<Key> responseClass() {
-    return Key.class;
+  public com.sun.jersey.api.client.GenericType<java.util.List> responseType() {
+    return new com.sun.jersey.api.client.GenericType<java.util.List>(){};
   }
 }

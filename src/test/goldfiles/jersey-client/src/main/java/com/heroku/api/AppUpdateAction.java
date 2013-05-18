@@ -30,8 +30,8 @@ public final class AppUpdateAction
     return java.util.Arrays.asList(200);
   }
 
-  public Class<App> responseClass() {
-    return App.class;
+  public com.sun.jersey.api.client.GenericType<App> responseType() {
+    return new com.sun.jersey.api.client.GenericType<App>(){};
   }
 
   public String getAppIdOrName() {

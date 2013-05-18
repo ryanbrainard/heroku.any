@@ -5,5 +5,5 @@ public interface Action<R> {
     String path();
     Object requestEntity();
     java.util.Collection<Integer> expectedStatuses();
-    Class<R> responseClass();
+    com.sun.jersey.api.client.GenericType<R> responseType();
 }

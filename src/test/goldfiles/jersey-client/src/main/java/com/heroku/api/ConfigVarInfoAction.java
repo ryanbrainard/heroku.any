@@ -27,8 +27,8 @@ public final class ConfigVarInfoAction
     return java.util.Arrays.asList(200);
   }
 
-  public Class<java.util.Map> responseClass() {
-    return java.util.Map.class;
+  public com.sun.jersey.api.client.GenericType<java.util.Map> responseType() {
+    return new com.sun.jersey.api.client.GenericType<java.util.Map>(){};
   }
 
   public String getAppIdOrName() {

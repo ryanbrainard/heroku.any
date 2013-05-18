@@ -2,7 +2,7 @@ package com.heroku.api;
 
 @org.codehaus.jackson.map.annotate.JsonSerialize
 public final class AppListAction
-    implements Action<App> {
+    implements Action<java.util.List> {
 
 
   public AppListAction() {
@@ -24,7 +24,7 @@ public final class AppListAction
     return java.util.Arrays.asList(200,206);
   }
 
-  public Class<App> responseClass() {
-    return App.class;
+  public com.sun.jersey.api.client.GenericType<java.util.List> responseType() {
+    return new com.sun.jersey.api.client.GenericType<java.util.List>(){};
   }
 }

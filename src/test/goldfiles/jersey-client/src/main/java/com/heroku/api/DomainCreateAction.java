@@ -29,8 +29,8 @@ public final class DomainCreateAction
     return java.util.Arrays.asList(201);
   }
 
-  public Class<Domain> responseClass() {
-    return Domain.class;
+  public com.sun.jersey.api.client.GenericType<Domain> responseType() {
+    return new com.sun.jersey.api.client.GenericType<Domain>(){};
   }
 
   public String getAppIdOrName() {

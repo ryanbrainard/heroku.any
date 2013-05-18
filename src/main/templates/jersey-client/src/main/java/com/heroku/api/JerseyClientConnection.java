@@ -38,7 +38,7 @@ public class JerseyClientConnection implements Connection {
                 .method(action.httpMethod(), ClientResponse.class);
 
         if (action.expectedStatuses().contains(response.getStatus())) {
-            return response.getEntity(action.responseClass());
+            return response.getEntity(action.responseType());
         } else {
             final Map error = response.getEntity(Map.class);
             throw new HerokuApiException(String.valueOf(error.get("id")), String.valueOf(error.get("message")), response.getStatus());

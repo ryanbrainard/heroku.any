@@ -28,8 +28,8 @@ public final class CollaboratorCreateAction
     return java.util.Arrays.asList(201);
   }
 
-  public Class<Collaborator> responseClass() {
-    return Collaborator.class;
+  public com.sun.jersey.api.client.GenericType<Collaborator> responseType() {
+    return new com.sun.jersey.api.client.GenericType<Collaborator>(){};
   }
 
   public String getAppIdOrName() {

@@ -30,8 +30,8 @@ public final class FormationInfoAction
     return java.util.Arrays.asList(200);
   }
 
-  public Class<Formation> responseClass() {
-    return Formation.class;
+  public com.sun.jersey.api.client.GenericType<Formation> responseType() {
+    return new com.sun.jersey.api.client.GenericType<Formation>(){};
   }
 
   public String getAppIdOrName() {

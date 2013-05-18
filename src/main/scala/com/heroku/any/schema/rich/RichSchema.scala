@@ -76,6 +76,13 @@ case class Action(name: String,
           .map(AttributeRequestEntity(_)).getOrElse(ActionRequestEntity)
     }
   }
+  def responseDataType(resource: Resource) = {
+    if (name.equalsIgnoreCase("list")) {
+      DataType(s"list[${resource.modelClassName.raw}]")
+    } else {
+      resource.modelClassName
+    }
+  }
 }
 
 case class DataType(raw: String)

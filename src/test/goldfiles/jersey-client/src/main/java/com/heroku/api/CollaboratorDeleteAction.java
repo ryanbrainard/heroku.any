@@ -30,8 +30,8 @@ public final class CollaboratorDeleteAction
     return java.util.Arrays.asList(200);
   }
 
-  public Class<Collaborator> responseClass() {
-    return Collaborator.class;
+  public com.sun.jersey.api.client.GenericType<Collaborator> responseType() {
+    return new com.sun.jersey.api.client.GenericType<Collaborator>(){};
   }
 
   public String getAppIdOrName() {

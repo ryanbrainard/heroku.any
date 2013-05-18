@@ -27,8 +27,8 @@ public final class RegionInfoAction
     return java.util.Arrays.asList(200);
   }
 
-  public Class<Region> responseClass() {
-    return Region.class;
+  public com.sun.jersey.api.client.GenericType<Region> responseType() {
+    return new com.sun.jersey.api.client.GenericType<Region>(){};
   }
 
   public String getRegionIdOrName() {

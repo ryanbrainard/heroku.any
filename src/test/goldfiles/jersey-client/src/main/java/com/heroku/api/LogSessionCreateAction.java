@@ -27,8 +27,8 @@ public final class LogSessionCreateAction
     return java.util.Arrays.asList(201);
   }
 
-  public Class<LogSession> responseClass() {
-    return LogSession.class;
+  public com.sun.jersey.api.client.GenericType<LogSession> responseType() {
+    return new com.sun.jersey.api.client.GenericType<LogSession>(){};
   }
 
   public String getAppIdOrName() {

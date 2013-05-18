@@ -30,8 +30,8 @@ public final class DynoInfoAction
     return java.util.Arrays.asList(200);
   }
 
-  public Class<Dyno> responseClass() {
-    return Dyno.class;
+  public com.sun.jersey.api.client.GenericType<Dyno> responseType() {
+    return new com.sun.jersey.api.client.GenericType<Dyno>(){};
   }
 
   public String getAppIdOrName() {

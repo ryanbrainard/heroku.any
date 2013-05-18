@@ -27,8 +27,8 @@ public final class AccountUpdateAction
     return java.util.Arrays.asList(200);
   }
 
-  public Class<Account> responseClass() {
-    return Account.class;
+  public com.sun.jersey.api.client.GenericType<Account> responseType() {
+    return new com.sun.jersey.api.client.GenericType<Account>(){};
   }
 
   public String getEmail() {

@@ -57,7 +57,7 @@ class JerseyClientGenerator extends Generator {
     writer
       .emitPackage(packageName)
       .emitAnnotation(classOf[org.codehaus.jackson.map.annotate.JsonSerialize])
-      .beginType(packageName + "." + className, "class", PUBLIC | FINAL, null, s"Action<${dataTypesForJava(resource.modelClassName)}>")
+      .beginType(packageName + "." + className, "class", PUBLIC | FINAL, null, s"Action<${dataTypesForJava(action.responseDataType(resource))}>")
       .emitEmptyLine()
 
     topLevelAttributes.foreach { a =>
@@ -104,8 +104,8 @@ class JerseyClientGenerator extends Generator {
       .emitEmptyLine()
 
     writer
-      .beginMethod(s"Class<${dataTypesForJava(resource.modelClassName)}>", "responseClass", PUBLIC)
-      .emitStatement(s"return ${dataTypesForJava(resource.modelClassName)}.class")
+      .beginMethod(s"com.sun.jersey.api.client.GenericType<${dataTypesForJava(action.responseDataType(resource))}>", "responseType", PUBLIC)
+      .emitStatement(s"return new com.sun.jersey.api.client.GenericType<${dataTypesForJava(action.responseDataType(resource))}>(){}")
       .endMethod()
 
     topLevelAttributes.foreach { a =>
@@ -190,6 +190,7 @@ class JerseyClientGenerator extends Generator {
     case "datetime"    => "java.util.Date"
     case "uuid"        => "java.util.UUID"
     case "dictionary"  => "java.util.Map"
+    case list if list.matches("""list\[\w+\]""")  => "java.util.List"
     case other         =>  other
   }
 }

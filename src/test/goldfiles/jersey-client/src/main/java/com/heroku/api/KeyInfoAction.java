@@ -27,8 +27,8 @@ public final class KeyInfoAction
     return java.util.Arrays.asList(200);
   }
 
-  public Class<Key> responseClass() {
-    return Key.class;
+  public com.sun.jersey.api.client.GenericType<Key> responseType() {
+    return new com.sun.jersey.api.client.GenericType<Key>(){};
   }
 
   public String getKeyIdOrFingerprint() {

@@ -26,8 +26,8 @@ public final class KeyCreateAction
     return java.util.Arrays.asList(201);
   }
 
-  public Class<Key> responseClass() {
-    return Key.class;
+  public com.sun.jersey.api.client.GenericType<Key> responseType() {
+    return new com.sun.jersey.api.client.GenericType<Key>(){};
   }
 
   public String getPublicKey() {
