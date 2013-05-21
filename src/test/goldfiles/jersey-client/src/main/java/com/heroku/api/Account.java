@@ -3,7 +3,7 @@ package com.heroku.api;
 public class Account
     implements java.io.Serializable {
 
-  protected static final long serialVersionUID = 183964306L;
+  protected static final long serialVersionUID = 1L;
 
   /**
    * Whether to utilize beta Heroku features

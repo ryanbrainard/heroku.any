@@ -154,7 +154,8 @@ class JerseyClientGenerator extends Generator {
       .emitPackage(packageName)
       .beginType(packageName + "." + dataTypesForJava(resource.modelClassName), "class", PUBLIC, null, "java.io.Serializable")
       .emitEmptyLine()
-      .emitField("long", "serialVersionUID", PROTECTED | FINAL | STATIC, s"${resource.hashCode}L")
+      .emitField("long", "serialVersionUID", PROTECTED | FINAL | STATIC, s"1L") // TODO: Temp setting to 1L during major refactoring
+//      .emitField("long", "serialVersionUID", PROTECTED | FINAL | STATIC, s"${resource.hashCode}L")
 
     // fields
     resource.serializableAttributes.foreach { attribute: Attribute =>
