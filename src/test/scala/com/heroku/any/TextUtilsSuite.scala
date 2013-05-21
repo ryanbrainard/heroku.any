@@ -4,13 +4,6 @@ import org.scalatest.FunSuite
 
 class TextUtilsSuite extends FunSuite {
 
-  test("capitalization") {
-    assert(TextUtils.capitalize("cat") === "Cat")
-    assert(TextUtils.capitalize("c")   === "C")
-    assert(TextUtils.capitalize("")    === "")
-    assert(TextUtils.capitalize(null)  === null)
-  }
-
   test("camelCasing") {
     assert(TextUtils.camelCase("friedChickenAndWaffles")    === "friedChickenAndWaffles")
     assert(TextUtils.camelCase("Fried_chicken_and_waffles") === "friedChickenAndWaffles")

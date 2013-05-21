@@ -3,7 +3,7 @@ package com.heroku.api;
 public class User
     implements java.io.Serializable {
 
-  protected static final long serialVersionUID = 890717299L;
+  protected static final long serialVersionUID = 1670440516L;
 
   /**
    * Email

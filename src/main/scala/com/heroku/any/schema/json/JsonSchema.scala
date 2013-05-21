@@ -4,10 +4,13 @@ import com.heroku.any.schema.rich.Richable
 import spray.json.{JsString, JsValue}
 
 case class Schema(resources: Map[String,Resource]) extends Richable[com.heroku.any.schema.rich.Schema] {
-  def toRich(name: String) = new com.heroku.any.schema.rich.Schema(
-    name,
-    Richable.fromMap(resources)
-  )
+  def toRich(name: String) = {
+    val rich = new com.heroku.any.schema.rich.Schema(
+      name,
+      Richable.fromMap(resources)
+    )
+    rich.copy(resources = rich.resources.map(_.copy(schema = rich)))
+  }
 
   def addAttribute(toResource: String, name: String, description: String, dataType: String, serialized: Boolean, example: String): Schema = {
     val attrib = name -> Attribute(description, dataType, serialized, JsString(example))
@@ -22,12 +25,19 @@ case class Schema(resources: Map[String,Resource]) extends Richable[com.heroku.a
 case class Resource(actions: Map[String, Action],
                     attributes: Map[String, Attribute],
                     description: String) extends Richable[com.heroku.any.schema.rich.Resource] {
-  def toRich(name: String) = new com.heroku.any.schema.rich.Resource(
+  def toRich(name: String) = {
+    val rich = new com.heroku.any.schema.rich.Resource(
+      null,
       name,
       Richable.fromMap(actions),
       Richable.fromMap(attributes),
       description
-  )
+    )
+    rich.copy(
+      attributes = rich.attributes.map(_.copy(resource = rich)),
+      actions = rich.actions.map(_.copy(resource = rich))
+    )
+  }
 }
 
 case class Attribute(description: String,
@@ -35,6 +45,7 @@ case class Attribute(description: String,
                      serialized: Boolean,
                      example: JsValue) extends Richable[com.heroku.any.schema.rich.Attribute] {
   def toRich(name: String) = new com.heroku.any.schema.rich.Attribute(
+    null,
     name,
     description,
     new com.heroku.any.schema.rich.DataType(`type`),
@@ -48,6 +59,7 @@ case class Action(method: String,
                   statuses: Seq[Int],
                   attributes: Option[Requiredness]) extends Richable[com.heroku.any.schema.rich.Action] {
   def toRich(name: String) = new com.heroku.any.schema.rich.Action(
+    null,
     name,
     method,
     path,

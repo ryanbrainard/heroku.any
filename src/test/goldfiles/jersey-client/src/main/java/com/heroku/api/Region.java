@@ -3,13 +3,7 @@ package com.heroku.api;
 public class Region
     implements java.io.Serializable {
 
-  protected static final long serialVersionUID = 1880738993L;
-
-  /**
-   * Unique identifier of this region
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private java.util.UUID id;
+  protected static final long serialVersionUID = -90172572L;
 
   /**
    * When region was created
@@ -18,10 +12,16 @@ public class Region
   private java.util.Date created_at;
 
   /**
-   * When region was updated
+   * Description of the region
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private java.util.Date updated_at;
+  private String description;
+
+  /**
+   * Unique identifier of this region
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private java.util.UUID id;
 
   /**
    * Unique name of the region
@@ -30,22 +30,15 @@ public class Region
   private String name;
 
   /**
-   * Description of the region
+   * When region was updated
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private String description;
+  private java.util.Date updated_at;
 
   /**
    * Region is created in response to API calls
    */
   protected Region() {
-  }
-
-  /**
-   * Get unique identifier of this region
-   */
-  public java.util.UUID getId() {
-    return this.id;
   }
 
   /**
@@ -56,10 +49,17 @@ public class Region
   }
 
   /**
-   * Get when region was updated
+   * Get description of the region
    */
-  public java.util.Date getUpdatedAt() {
-    return this.updated_at;
+  public String getDescription() {
+    return this.description;
+  }
+
+  /**
+   * Get unique identifier of this region
+   */
+  public java.util.UUID getId() {
+    return this.id;
   }
 
   /**
@@ -70,10 +70,10 @@ public class Region
   }
 
   /**
-   * Get description of the region
+   * Get when region was updated
    */
-  public String getDescription() {
-    return this.description;
+  public java.util.Date getUpdatedAt() {
+    return this.updated_at;
   }
 
   @Override
@@ -83,11 +83,11 @@ public class Region
 
     Region region = (Region) o;
 
-    if (id != region.id) return false;
     if (created_at != region.created_at) return false;
-    if (updated_at != region.updated_at) return false;
-    if (name != region.name) return false;
     if (description != region.description) return false;
+    if (id != region.id) return false;
+    if (name != region.name) return false;
+    if (updated_at != region.updated_at) return false;
     return true;
   }
 
@@ -99,11 +99,11 @@ public class Region
   @Override
   public String toString() {
     return "Region{" + 
-        "id='" + id + '\'' +
-        ", " + "createdAt='" + created_at + '\'' +
-        ", " + "updatedAt='" + updated_at + '\'' +
-        ", " + "name='" + name + '\'' +
+        "createdAt='" + created_at + '\'' +
         ", " + "description='" + description + '\'' +
+        ", " + "id='" + id + '\'' +
+        ", " + "name='" + name + '\'' +
+        ", " + "updatedAt='" + updated_at + '\'' +
         '}';
   }
 
