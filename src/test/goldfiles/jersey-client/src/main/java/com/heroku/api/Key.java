@@ -3,7 +3,7 @@ package com.heroku.api;
 public class Key
     implements java.io.Serializable {
 
-  protected static final long serialVersionUID = 1L;
+  protected static final long serialVersionUID = -524462132L;
 
   /**
    * When key was created

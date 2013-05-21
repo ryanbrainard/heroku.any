@@ -3,7 +3,7 @@ package com.heroku.api;
 public class Collaborator
     implements java.io.Serializable {
 
-  protected static final long serialVersionUID = 1L;
+  protected static final long serialVersionUID = -395813254L;
 
   /**
    * When collaborator was created

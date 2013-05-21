@@ -3,7 +3,7 @@ package com.heroku.api;
 public class Account
     implements java.io.Serializable {
 
-  protected static final long serialVersionUID = 1L;
+  protected static final long serialVersionUID = -824415265L;
 
   /**
    * Whether to allow web activity tracking with third-party services like Google Analytics

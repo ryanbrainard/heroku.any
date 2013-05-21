@@ -3,7 +3,7 @@ package com.heroku.api;
 public class Formation
     implements java.io.Serializable {
 
-  protected static final long serialVersionUID = 1L;
+  protected static final long serialVersionUID = -969217626L;
 
   /**
    * Command to use for process type

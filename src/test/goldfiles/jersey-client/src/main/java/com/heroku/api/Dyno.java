@@ -3,7 +3,7 @@ package com.heroku.api;
 public class Dyno
     implements java.io.Serializable {
 
-  protected static final long serialVersionUID = 1L;
+  protected static final long serialVersionUID = 270322495L;
 
   /**
    * A url to stream output from for attached processes or null for non-attached processes
