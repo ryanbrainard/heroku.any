@@ -4,6 +4,7 @@ import com.heroku.any.schema.rich._
 import java.io.{File, FileOutputStream, PrintWriter}
 import com.squareup.java.JavaWriter
 import java.lang.reflect.Modifier._
+import scala.language.implicitConversions
 
 class JerseyClientGenerator extends Generator {
 
