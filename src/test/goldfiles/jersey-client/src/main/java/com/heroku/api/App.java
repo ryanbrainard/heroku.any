@@ -12,34 +12,10 @@ public class App
   private String buildpack_provided_description;
 
   /**
-   * Deprecated id format
+   * When app was created
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private String legacy_id;
-
-  /**
-   * Unique name of app
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private String name;
-
-  /**
-   * App tier
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private String tier;
-
-  /**
-   * Region
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private Region region;
-
-  /**
-   * Maintenance status of app
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private boolean maintenance;
+  private java.util.Date created_at;
 
   /**
    * Git repo url of app
@@ -48,22 +24,28 @@ public class App
   private String git_url;
 
   /**
-   * Stack of app
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private String stack;
-
-  /**
    * Unique identifier of app
    */
   @org.codehaus.jackson.annotate.JsonProperty
   private java.util.UUID id;
 
   /**
-   * App git repo size in bytes
+   * Deprecated id format
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private Number repo_size;
+  private String legacy_id;
+
+  /**
+   * Maintenance status of app
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private boolean maintenance;
+
+  /**
+   * Unique name of app
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private String name;
 
   /**
    * Owner
@@ -72,10 +54,22 @@ public class App
   private Owner owner;
 
   /**
-   * Web url of app
+   * Region
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private String web_url;
+  private Region region;
+
+  /**
+   * When app was last released
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private java.util.Date released_at;
+
+  /**
+   * App git repo size in bytes
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private Number repo_size;
 
   /**
    * App slug size in bytes
@@ -84,10 +78,16 @@ public class App
   private Number slug_size;
 
   /**
-   * When app was created
+   * Stack of app
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private java.util.Date created_at;
+  private String stack;
+
+  /**
+   * App tier
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private String tier;
 
   /**
    * When app was updated
@@ -96,10 +96,10 @@ public class App
   private java.util.Date updated_at;
 
   /**
-   * When app was last released
+   * Web url of app
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private java.util.Date released_at;
+  private String web_url;
 
   /**
    * App is created in response to API calls
@@ -115,38 +115,10 @@ public class App
   }
 
   /**
-   * Get Deprecated id format
+   * Get when app was created
    */
-  public String getLegacyId() {
-    return this.legacy_id;
-  }
-
-  /**
-   * Get unique name of app
-   */
-  public String getName() {
-    return this.name;
-  }
-
-  /**
-   * Get App tier
-   */
-  public String getTier() {
-    return this.tier;
-  }
-
-  /**
-   * Get region
-   */
-  public Region getRegion() {
-    return this.region;
-  }
-
-  /**
-   * Get maintenance status of app
-   */
-  public boolean getMaintenance() {
-    return this.maintenance;
+  public java.util.Date getCreatedAt() {
+    return this.created_at;
   }
 
   /**
@@ -157,13 +129,6 @@ public class App
   }
 
   /**
-   * Get stack of app
-   */
-  public String getStack() {
-    return this.stack;
-  }
-
-  /**
    * Get unique identifier of app
    */
   public java.util.UUID getId() {
@@ -171,10 +136,24 @@ public class App
   }
 
   /**
-   * Get app git repo size in bytes
+   * Get Deprecated id format
    */
-  public Number getRepoSize() {
-    return this.repo_size;
+  public String getLegacyId() {
+    return this.legacy_id;
+  }
+
+  /**
+   * Get maintenance status of app
+   */
+  public boolean getMaintenance() {
+    return this.maintenance;
+  }
+
+  /**
+   * Get unique name of app
+   */
+  public String getName() {
+    return this.name;
   }
 
   /**
@@ -185,10 +164,24 @@ public class App
   }
 
   /**
-   * Get web url of app
+   * Get region
    */
-  public String getWebUrl() {
-    return this.web_url;
+  public Region getRegion() {
+    return this.region;
+  }
+
+  /**
+   * Get when app was last released
+   */
+  public java.util.Date getReleasedAt() {
+    return this.released_at;
+  }
+
+  /**
+   * Get app git repo size in bytes
+   */
+  public Number getRepoSize() {
+    return this.repo_size;
   }
 
   /**
@@ -199,10 +192,17 @@ public class App
   }
 
   /**
-   * Get when app was created
+   * Get stack of app
    */
-  public java.util.Date getCreatedAt() {
-    return this.created_at;
+  public String getStack() {
+    return this.stack;
+  }
+
+  /**
+   * Get App tier
+   */
+  public String getTier() {
+    return this.tier;
   }
 
   /**
@@ -213,10 +213,10 @@ public class App
   }
 
   /**
-   * Get when app was last released
+   * Get web url of app
    */
-  public java.util.Date getReleasedAt() {
-    return this.released_at;
+  public String getWebUrl() {
+    return this.web_url;
   }
 
   @Override
@@ -227,21 +227,21 @@ public class App
     App app = (App) o;
 
     if (buildpack_provided_description != app.buildpack_provided_description) return false;
-    if (legacy_id != app.legacy_id) return false;
-    if (name != app.name) return false;
-    if (tier != app.tier) return false;
-    if (region != null ? !region.equals(app.region) : app.region != null) return false;
-    if (maintenance != app.maintenance) return false;
-    if (git_url != app.git_url) return false;
-    if (stack != app.stack) return false;
-    if (id != app.id) return false;
-    if (repo_size != app.repo_size) return false;
-    if (owner != null ? !owner.equals(app.owner) : app.owner != null) return false;
-    if (web_url != app.web_url) return false;
-    if (slug_size != app.slug_size) return false;
     if (created_at != app.created_at) return false;
-    if (updated_at != app.updated_at) return false;
+    if (git_url != app.git_url) return false;
+    if (id != app.id) return false;
+    if (legacy_id != app.legacy_id) return false;
+    if (maintenance != app.maintenance) return false;
+    if (name != app.name) return false;
+    if (owner != null ? !owner.equals(app.owner) : app.owner != null) return false;
+    if (region != null ? !region.equals(app.region) : app.region != null) return false;
     if (released_at != app.released_at) return false;
+    if (repo_size != app.repo_size) return false;
+    if (slug_size != app.slug_size) return false;
+    if (stack != app.stack) return false;
+    if (tier != app.tier) return false;
+    if (updated_at != app.updated_at) return false;
+    if (web_url != app.web_url) return false;
     return true;
   }
 
@@ -254,21 +254,21 @@ public class App
   public String toString() {
     return "App{" + 
         "buildpackProvidedDescription='" + buildpack_provided_description + '\'' +
-        ", " + "legacyId='" + legacy_id + '\'' +
-        ", " + "name='" + name + '\'' +
-        ", " + "tier='" + tier + '\'' +
-        ", " + "region='" + region + '\'' +
-        ", " + "maintenance='" + maintenance + '\'' +
-        ", " + "gitUrl='" + git_url + '\'' +
-        ", " + "stack='" + stack + '\'' +
-        ", " + "id='" + id + '\'' +
-        ", " + "repoSize='" + repo_size + '\'' +
-        ", " + "owner='" + owner + '\'' +
-        ", " + "webUrl='" + web_url + '\'' +
-        ", " + "slugSize='" + slug_size + '\'' +
         ", " + "createdAt='" + created_at + '\'' +
-        ", " + "updatedAt='" + updated_at + '\'' +
+        ", " + "gitUrl='" + git_url + '\'' +
+        ", " + "id='" + id + '\'' +
+        ", " + "legacyId='" + legacy_id + '\'' +
+        ", " + "maintenance='" + maintenance + '\'' +
+        ", " + "name='" + name + '\'' +
+        ", " + "owner='" + owner + '\'' +
+        ", " + "region='" + region + '\'' +
         ", " + "releasedAt='" + released_at + '\'' +
+        ", " + "repoSize='" + repo_size + '\'' +
+        ", " + "slugSize='" + slug_size + '\'' +
+        ", " + "stack='" + stack + '\'' +
+        ", " + "tier='" + tier + '\'' +
+        ", " + "updatedAt='" + updated_at + '\'' +
+        ", " + "webUrl='" + web_url + '\'' +
         '}';
   }
 

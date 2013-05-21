@@ -6,28 +6,10 @@ public class Formation
   protected static final long serialVersionUID = 1L;
 
   /**
-   * When dyno type was updated
+   * Command to use for process type
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private java.util.Date updated_at;
-
-  /**
-   * Number of processes to maintain
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private Number quantity;
-
-  /**
-   * Type of process to maintain
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private String type;
-
-  /**
-   * Unique identifier of this process type
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private java.util.UUID id;
+  private String command;
 
   /**
    * When domain was created
@@ -36,10 +18,16 @@ public class Formation
   private java.util.Date created_at;
 
   /**
-   * Command to use for process type
+   * Unique identifier of this process type
    */
   @org.codehaus.jackson.annotate.JsonProperty
-  private String command;
+  private java.util.UUID id;
+
+  /**
+   * Number of processes to maintain
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private Number quantity;
 
   /**
    * Dyno size (default: 1)
@@ -48,44 +36,21 @@ public class Formation
   private Number size;
 
   /**
+   * Type of process to maintain
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private String type;
+
+  /**
+   * When dyno type was updated
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private java.util.Date updated_at;
+
+  /**
    * Formation is created in response to API calls
    */
   protected Formation() {
-  }
-
-  /**
-   * Get when dyno type was updated
-   */
-  public java.util.Date getUpdatedAt() {
-    return this.updated_at;
-  }
-
-  /**
-   * Get number of processes to maintain
-   */
-  public Number getQuantity() {
-    return this.quantity;
-  }
-
-  /**
-   * Get type of process to maintain
-   */
-  public String getType() {
-    return this.type;
-  }
-
-  /**
-   * Get unique identifier of this process type
-   */
-  public java.util.UUID getId() {
-    return this.id;
-  }
-
-  /**
-   * Get when domain was created
-   */
-  public java.util.Date getCreatedAt() {
-    return this.created_at;
   }
 
   /**
@@ -96,10 +61,45 @@ public class Formation
   }
 
   /**
+   * Get when domain was created
+   */
+  public java.util.Date getCreatedAt() {
+    return this.created_at;
+  }
+
+  /**
+   * Get unique identifier of this process type
+   */
+  public java.util.UUID getId() {
+    return this.id;
+  }
+
+  /**
+   * Get number of processes to maintain
+   */
+  public Number getQuantity() {
+    return this.quantity;
+  }
+
+  /**
    * Get dyno size (default: 1)
    */
   public Number getSize() {
     return this.size;
+  }
+
+  /**
+   * Get type of process to maintain
+   */
+  public String getType() {
+    return this.type;
+  }
+
+  /**
+   * Get when dyno type was updated
+   */
+  public java.util.Date getUpdatedAt() {
+    return this.updated_at;
   }
 
   @Override
@@ -109,13 +109,13 @@ public class Formation
 
     Formation formation = (Formation) o;
 
-    if (updated_at != formation.updated_at) return false;
-    if (quantity != formation.quantity) return false;
-    if (type != formation.type) return false;
-    if (id != formation.id) return false;
-    if (created_at != formation.created_at) return false;
     if (command != formation.command) return false;
+    if (created_at != formation.created_at) return false;
+    if (id != formation.id) return false;
+    if (quantity != formation.quantity) return false;
     if (size != formation.size) return false;
+    if (type != formation.type) return false;
+    if (updated_at != formation.updated_at) return false;
     return true;
   }
 
@@ -127,13 +127,13 @@ public class Formation
   @Override
   public String toString() {
     return "Formation{" + 
-        "updatedAt='" + updated_at + '\'' +
-        ", " + "quantity='" + quantity + '\'' +
-        ", " + "type='" + type + '\'' +
-        ", " + "id='" + id + '\'' +
+        "command='" + command + '\'' +
         ", " + "createdAt='" + created_at + '\'' +
-        ", " + "command='" + command + '\'' +
+        ", " + "id='" + id + '\'' +
+        ", " + "quantity='" + quantity + '\'' +
         ", " + "size='" + size + '\'' +
+        ", " + "type='" + type + '\'' +
+        ", " + "updatedAt='" + updated_at + '\'' +
         '}';
   }
 

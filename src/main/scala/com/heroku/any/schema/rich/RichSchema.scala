@@ -29,7 +29,7 @@ case class Resource(name: String,
     a.serialized
   }.map { a =>
     a.massaged
-  }.toSet.toSeq
+  }.toSet.toSeq.sortBy((a: Attribute) => a.name)
   def isModel = !attributes.headOption.exists(_.massaged.dataType.raw.startsWith("dictionary")) // TODO: de-dupe
 }
 

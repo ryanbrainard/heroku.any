@@ -6,28 +6,21 @@ public class Owner
   protected static final long serialVersionUID = 1L;
 
   /**
-   * Id
-   */
-  @org.codehaus.jackson.annotate.JsonProperty
-  private java.util.UUID id;
-
-  /**
    * Email
    */
   @org.codehaus.jackson.annotate.JsonProperty
   private String email;
 
   /**
+   * Id
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private java.util.UUID id;
+
+  /**
    * Owner is created in response to API calls
    */
   protected Owner() {
-  }
-
-  /**
-   * Get id
-   */
-  public java.util.UUID getId() {
-    return this.id;
   }
 
   /**
@@ -37,6 +30,13 @@ public class Owner
     return this.email;
   }
 
+  /**
+   * Get id
+   */
+  public java.util.UUID getId() {
+    return this.id;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -44,8 +44,8 @@ public class Owner
 
     Owner owner = (Owner) o;
 
-    if (id != owner.id) return false;
     if (email != owner.email) return false;
+    if (id != owner.id) return false;
     return true;
   }
 
@@ -57,8 +57,8 @@ public class Owner
   @Override
   public String toString() {
     return "Owner{" + 
-        "id='" + id + '\'' +
-        ", " + "email='" + email + '\'' +
+        "email='" + email + '\'' +
+        ", " + "id='" + id + '\'' +
         '}';
   }
 
