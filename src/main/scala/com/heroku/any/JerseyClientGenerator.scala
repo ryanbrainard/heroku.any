@@ -46,11 +46,11 @@ class JerseyClientGenerator extends Generator {
   }
 
   private def generateResourceActionClass(resource: Resource, action: Action, srcRoot: File) {
-    val requestAttributes =  action.requestEntity(resource) match { case AttributeRequestEntity(attribute: Attribute) => Seq(attribute); case _ => Seq() }
+    val requestAttributes =  action.requestEntity match { case AttributeRequestEntity(attribute: Attribute) => Seq(attribute); case _ => Seq() }
     val requiredAttributes = action.pathAttributes.toSeq ++ resource.attributes.filter(a => action.requiredAttributes.contains(a.name)) ++ requestAttributes
     val optionalAttributes = resource.attributes.filter(a => action.optionalAttributes.contains(a.name))
     val topLevelAttributes = (requiredAttributes ++ optionalAttributes).map(_.massaged).toSet
-    val className = action.actionClassName(resource)
+    val className = action.actionClassName
     val out = new PrintWriter(new FileOutputStream(s"$srcRoot/$className.java"))
     val writer = new JavaWriter(out)
 
@@ -58,7 +58,7 @@ class JerseyClientGenerator extends Generator {
     writer
       .emitPackage(packageName)
       .emitAnnotation(classOf[org.codehaus.jackson.map.annotate.JsonSerialize])
-      .beginType(packageName + "." + className, "class", PUBLIC | FINAL, null, s"Action<${dataTypesForJava(action.responseDataType(resource))}>")
+      .beginType(packageName + "." + className, "class", PUBLIC | FINAL, null, s"Action<${dataTypesForJava(action.responseDataType)}>")
       .emitEmptyLine()
 
     topLevelAttributes.foreach { a =>
@@ -75,7 +75,7 @@ class JerseyClientGenerator extends Generator {
         .emitEmptyLine()
 
     writer
-      .beginMethod(dataTypesForJava(action.responseDataType(resource)), "execute", PUBLIC, "Connection", "connection")
+      .beginMethod(dataTypesForJava(action.responseDataType), "execute", PUBLIC, "Connection", "connection")
       .emitStatement("return connection.execute(this)")
       .endMethod()
       .emitEmptyLine()
@@ -100,7 +100,7 @@ class JerseyClientGenerator extends Generator {
       .endMethod()
       .emitEmptyLine()
 
-    val requestEntity = action.requestEntity(resource) match {
+    val requestEntity = action.requestEntity match {
       case NullRequestEntity => "null"
       case ActionRequestEntity => "this"
       case AttributeRequestEntity(attribute: Attribute) => attribute.fieldName
@@ -119,8 +119,8 @@ class JerseyClientGenerator extends Generator {
       .emitEmptyLine()
 
     writer
-      .beginMethod(s"com.sun.jersey.api.client.GenericType<${dataTypesForJava(action.responseDataType(resource))}>", "responseType", PUBLIC)
-      .emitStatement(s"return new com.sun.jersey.api.client.GenericType<${dataTypesForJava(action.responseDataType(resource))}>(){}")
+      .beginMethod(s"com.sun.jersey.api.client.GenericType<${dataTypesForJava(action.responseDataType)}>", "responseType", PUBLIC)
+      .emitStatement(s"return new com.sun.jersey.api.client.GenericType<${dataTypesForJava(action.responseDataType)}>(){}")
       .endMethod()
 
     topLevelAttributes.foreach { a =>

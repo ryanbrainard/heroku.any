@@ -64,7 +64,7 @@ case class Action(resource: Resource,
                   requiredAttributes: Seq[String],
                   optionalAttributes: Seq[String]) {
   def methodName = TextUtils.camelCase(name)
-  def actionClassName(resource: Resource) =
+  def actionClassName =
     TextUtils.capitalize(TextUtils.camelCase(resource.name)) + TextUtils.capitalize(methodName) + "Action"
   private val pathVarPattern = """\{([a-z-]+)\}""".r
   def pathAttributes = {
@@ -72,7 +72,7 @@ case class Action(resource: Resource,
       Attribute(resource, TextUtils.camelCase(m.group(1)), m.group(0), DataType("string"), serialized = false, "")
     }
   }
-  def requestEntity(resource: Resource) = {
+  def requestEntity = {
     httpMethod match {
       case "GET" | "DELETE" => NullRequestEntity
       case _ =>
@@ -81,7 +81,7 @@ case class Action(resource: Resource,
           .map(AttributeRequestEntity(_)).getOrElse(ActionRequestEntity)
     }
   }
-  def responseDataType(resource: Resource) = {
+  def responseDataType = {
     if (name.equalsIgnoreCase("list")) {
       DataType(s"list[${resource.modelClassName.raw}]")
     } else {
