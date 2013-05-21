@@ -21,13 +21,17 @@ public class JerseyClientConnection implements Connection {
 
     private static final NullWebResourceBuilderHandler NULL_WEB_RESOURCE_BUILDER_HANDLER = new NullWebResourceBuilderHandler();
     private static final RangeWarningClientResponseHandler RANGE_WARNING_CLIENT_RESPONSE_HANDLER = new RangeWarningClientResponseHandler();
-    private final Client client; // TODO: lazy static??
-    private final WebResource baseResource;
+    private static final Client client;
 
-    public JerseyClientConnection(String apiKey) {
+    static {
         ClientConfig clientConfig = new DefaultClientConfig();
         clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
         client = Client.create(clientConfig);
+    }
+
+    private final WebResource baseResource;
+
+    public JerseyClientConnection(String apiKey) {
         baseResource = client.resource("https://api.heroku.com");
         baseResource.addFilter(new HTTPBasicAuthFilter("", apiKey));
         baseResource.addFilter(new LoggingFilter());
