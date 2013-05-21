@@ -81,11 +81,12 @@ public class JerseyClientConnection implements Connection {
     private <R> R execute(Action<R> action, WebResourceBuilderHandler webResourceBuilderHandler,ClientResponseHandler clientResponseHandler) {
         final WebResource.Builder builder = baseResource.path(action.path())
                 .entity(action.requestEntity(), MediaType.APPLICATION_JSON_TYPE)
+                .header("X-Http-Method-Override", action.httpMethod())
                 .accept("application/vnd.heroku+json; version=3");
 
         webResourceBuilderHandler.handle(builder, action);
 
-        final ClientResponse response = builder.method(action.httpMethod(), ClientResponse.class);
+        final ClientResponse response = builder.method(action.httpMethod().equals("PATCH") ? "POST" : action.httpMethod(), ClientResponse.class);
 
         clientResponseHandler.handle(response, action);
 
