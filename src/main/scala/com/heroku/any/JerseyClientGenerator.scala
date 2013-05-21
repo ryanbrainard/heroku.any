@@ -46,15 +46,14 @@ class JerseyClientGenerator extends Generator {
   }
 
   private def generateResourceActionClass(action: Action, srcRoot: File) {
-    val className = action.actionClassName
-    val out = new PrintWriter(new FileOutputStream(s"$srcRoot/$className.java"))
+    val out = new PrintWriter(new FileOutputStream(s"$srcRoot/${action.className}.java"))
     val writer = new JavaWriter(out)
 
     // header
     writer
       .emitPackage(packageName)
       .emitAnnotation(classOf[org.codehaus.jackson.map.annotate.JsonSerialize])
-      .beginType(packageName + "." + className, "class", PUBLIC | FINAL, null, s"Action<${dataTypesForJava(action.responseDataType)}>")
+      .beginType(packageName + "." + action.className, "class", PUBLIC | FINAL, null, s"Action<${dataTypesForJava(action.responseDataType)}>")
       .emitEmptyLine()
 
     action.topLevelAttributes.foreach { a =>
@@ -64,7 +63,7 @@ class JerseyClientGenerator extends Generator {
 
     writer
       .emitEmptyLine()
-      .beginMethod(null, className, PUBLIC, action.requiredAttributes.flatMap(a => Seq[String](a.dataType, a.paramName)):_*)
+      .beginMethod(null, action.className, PUBLIC, action.requiredAttributes.flatMap(a => Seq[String](a.dataType, a.paramName)):_*)
       action.requiredAttributes.foreach(a => writer.emitStatement(s"this.${a.fieldName} = ${a.paramName}"))
       writer
         .endMethod()
@@ -122,7 +121,7 @@ class JerseyClientGenerator extends Generator {
     action.topLevelAttributes.foreach { a =>
       writer
         .emitEmptyLine()
-        .beginMethod(a.dataType, s"get${TextUtils.capitalize(a.paramName)}", PUBLIC)
+        .beginMethod(a.dataType, s"get${a.paramName.capitalize}", PUBLIC)
         .emitStatement(s"return this.${a.fieldName}")
         .endMethod()
     }
@@ -131,7 +130,7 @@ class JerseyClientGenerator extends Generator {
       writer
         .emitEmptyLine()
         .emitJavadoc(s"Set ${a.description}")
-        .beginMethod(className, s"set${TextUtils.capitalize(a.paramName)}", PUBLIC, a.dataType, a.paramName)
+        .beginMethod(action.className, s"set${a.paramName.capitalize}", PUBLIC, a.dataType, a.paramName)
         .emitStatement(s"this.${a.fieldName} = ${a.paramName}")
         .emitStatement("return this")
         .endMethod()
@@ -158,7 +157,7 @@ class JerseyClientGenerator extends Generator {
     resource.serializableAttributes.foreach { attribute: Attribute =>
       writer
         .emitEmptyLine()
-        .emitJavadoc(TextUtils.capitalize(attribute.description))
+        .emitJavadoc(attribute.description.capitalize)
         .emitAnnotation(classOf[org.codehaus.jackson.annotate.JsonProperty])
         .emitField(attribute.dataType, attribute.fieldName, PRIVATE)
     }
@@ -176,7 +175,7 @@ class JerseyClientGenerator extends Generator {
     resource.serializableAttributes.foreach { attribute: Attribute =>
       writer
         .emitJavadoc(s"Get ${attribute.description}")
-        .beginMethod(attribute.dataType, s"get${TextUtils.capitalize(attribute.paramName)}", PUBLIC)
+        .beginMethod(attribute.dataType, s"get${attribute.paramName.capitalize}", PUBLIC)
         .emitStatement(s"return this.${attribute.fieldName}")
         .endMethod()
         .emitEmptyLine()

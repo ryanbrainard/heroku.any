@@ -1,18 +1,12 @@
 package com.heroku.any
 
 object TextUtils {
-  def capitalize(s: String): String = {
-    if (s == null || s.isEmpty) s
-    else if (s.length == 1) s.toUpperCase
-    else s.charAt(0).toUpper + s.substring(1)
-  }
-
   def camelCase(s: String): String = {
     if (s == null) s
     else {
       val split = s.split(Array('_', '-', ' ', ':'))
       if (split.length == 1) s
-      else split.head.toLowerCase + split.tail.map(capitalize).mkString
+      else split.head.toLowerCase + split.tail.map(_.capitalize).mkString
     }
   }
 

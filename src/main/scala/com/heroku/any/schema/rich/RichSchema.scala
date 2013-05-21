@@ -22,7 +22,7 @@ case class Resource(schema: Schema,
                     actions: Seq[Action],
                     attributes: Seq[Attribute],
                     description: String) {
-  val resourceClassName = TextUtils.capitalize(TextUtils.camelCase(name))
+  val resourceClassName = TextUtils.camelCase(name).capitalize
   val modelClassName = attributes.headOption.map(_.massaged)
     .filter(_.dataType.raw.startsWith("dictionary"))
     .map(_.dataType).getOrElse(DataType(TextUtils.singularize(resourceClassName)))
@@ -64,16 +64,8 @@ case class Action(resource: Resource,
                   _requiredAttributes: Seq[String],
                   _optionalAttributes: Seq[String]) {
   val methodName = TextUtils.camelCase(name)
-  lazy val actionClassName =
-    TextUtils.capitalize(TextUtils.camelCase(resource.name)) + TextUtils.capitalize(methodName) + "Action"
+  lazy val className = TextUtils.camelCase(resource.name).capitalize + methodName.capitalize + "Action"
   private val pathVarPattern = """\{([a-z-]+)\}""".r
-
-  // TODO: why this is not working as lazy val
-  def pathAttributes = {
-    pathVarPattern.findAllIn(path).matchData.map { m =>
-      Attribute(resource, TextUtils.camelCase(m.group(1)), m.group(0), DataType("string"), serialized = false, "")
-    }
-  }
   lazy val requestEntity = {
     httpMethod match {
       case "GET" | "DELETE" => NullRequestEntity
@@ -94,6 +86,12 @@ case class Action(resource: Resource,
   lazy val requiredAttributes = this.pathAttributes.toSeq ++ resource.attributes.filter(a => this._requiredAttributes.contains(a.name)) ++ requestAttributes
   lazy val optionalAttributes = resource.attributes.filter(a => this._optionalAttributes.contains(a.name))
   lazy val topLevelAttributes = (requiredAttributes ++ optionalAttributes).map(_.massaged).toSet
+  // TODO: why this is not working as lazy val
+  def pathAttributes = {
+    pathVarPattern.findAllIn(path).matchData.map { m =>
+      Attribute(resource, TextUtils.camelCase(m.group(1)), m.group(0), DataType("string"), serialized = false, "")
+    }
+  }
 }
 
 case class DataType(raw: String)
