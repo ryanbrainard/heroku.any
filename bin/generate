@@ -1,1 +1,7 @@
+#!/usr/bin/env sh 
+
+if [ ! -x target/start ]; then
+  bin/install
+fi
+
 target/start $@

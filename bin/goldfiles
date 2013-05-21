@@ -1,3 +1,5 @@
-sbt stage
+#!/usr/bin/env sh
+
+bin/install
 rm -rf src/test/goldfiles/jersey-client
 bin/generate -f src/test/goldfiles/doc.json -o src/test/goldfiles/jersey-client
