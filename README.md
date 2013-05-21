@@ -14,14 +14,14 @@ To view generation options, run:
     
       Heroku.ANY 0.1 Super Alpha
         -f, --file       <arg>   File (doc.json) describing the API
-        -g, --generator  <arg>   Generators name. Available generators: jersey-client
+        -g, --generator  <arg>   Generator name. Available generators: jersey-client
         -o, --output     <arg>   Output directory of generated files (default = target/generated)
             --help               Show help message
             --version            Show version of this program
 
 Example generation:
 
-    $ bin/generate -f src/test/goldfiles/doc.json -g jersey-client -o sample-generation
+    $ bin/generate -f path/to/doc.json -g jersey-client -o path/to/output
       OK: jersey-client
 
 Re-installation
