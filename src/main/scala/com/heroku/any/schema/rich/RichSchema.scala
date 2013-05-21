@@ -61,8 +61,8 @@ case class Action(resource: Resource,
                   httpMethod: String,
                   path: String,
                   statuses: Seq[Int],
-                  requiredAttributes: Seq[String],
-                  optionalAttributes: Seq[String]) {
+                  _requiredAttributes: Seq[String],
+                  _optionalAttributes: Seq[String]) {
   val methodName = TextUtils.camelCase(name)
   lazy val actionClassName =
     TextUtils.capitalize(TextUtils.camelCase(resource.name)) + TextUtils.capitalize(methodName) + "Action"
@@ -90,6 +90,10 @@ case class Action(resource: Resource,
       resource.modelClassName
     }
   }
+  lazy val requestAttributes =  this.requestEntity match { case AttributeRequestEntity(attribute: Attribute) => Seq(attribute); case _ => Seq() }
+  lazy val requiredAttributes = this.pathAttributes.toSeq ++ resource.attributes.filter(a => this._requiredAttributes.contains(a.name)) ++ requestAttributes
+  lazy val optionalAttributes = resource.attributes.filter(a => this._optionalAttributes.contains(a.name))
+  lazy val topLevelAttributes = (requiredAttributes ++ optionalAttributes).map(_.massaged).toSet
 }
 
 case class DataType(raw: String)
