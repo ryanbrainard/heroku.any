@@ -4,7 +4,7 @@ import com.heroku.any.TextUtils
 
 case class Schema(filename: String,
                   resources: Seq[Resource]) {
-  def resourcesSecondClass = resources.flatMap { resource =>
+  val resourcesSecondClass = resources.flatMap { resource =>
     resource.attributes.filter(_.name.contains(":")).map { attribute =>
       val Array (obj,field) = attribute.name.split(":")
       (obj.capitalize, Attribute(null, field, field, attribute.dataType, attribute.serialized, ""))
@@ -22,17 +22,17 @@ case class Resource(schema: Schema,
                     actions: Seq[Action],
                     attributes: Seq[Attribute],
                     description: String) {
-  def resourceClassName = TextUtils.capitalize(TextUtils.camelCase(name))
-  def modelClassName = attributes.headOption.map(_.massaged)
+  val resourceClassName = TextUtils.capitalize(TextUtils.camelCase(name))
+  val modelClassName = attributes.headOption.map(_.massaged)
     .filter(_.dataType.raw.startsWith("dictionary"))
     .map(_.dataType).getOrElse(DataType(TextUtils.singularize(resourceClassName)))
-  def actionsClassName = resourceClassName + "Actions"
-  def serializableAttributes = attributes.filter { a =>
+  val actionsClassName = resourceClassName + "Actions"
+  val serializableAttributes = attributes.filter { a =>
     a.serialized
   }.map { a =>
     a.massaged
   }.toSet.toSeq.sortBy((a: Attribute) => a.name)
-  def isModel = !attributes.headOption.exists(_.massaged.dataType.raw.startsWith("dictionary")) // TODO: de-dupe
+  val isModel = !attributes.headOption.exists(_.massaged.dataType.raw.startsWith("dictionary")) // TODO: de-dupe
 }
 
 case class Attribute(resource: Resource,
@@ -41,10 +41,10 @@ case class Attribute(resource: Resource,
                      dataType: DataType,
                      serialized: Boolean,
                      example: String) {
-  def fieldName = name
-  def paramName = TextUtils.camelCase(fieldName)
+  val fieldName = name
+  val paramName = TextUtils.camelCase(fieldName)
   private val dictPattern = """^\"?\{([a-z-]+)\}\"?$""".r
-  def massaged = if (name.contains(":")) {
+  val massaged = if (name.contains(":")) {
     val Array (obj,field) = name.split(":")
     Attribute(resource, obj, obj, DataType(obj.capitalize), serialized, "")
   } else {
@@ -63,16 +63,18 @@ case class Action(resource: Resource,
                   statuses: Seq[Int],
                   requiredAttributes: Seq[String],
                   optionalAttributes: Seq[String]) {
-  def methodName = TextUtils.camelCase(name)
-  def actionClassName =
+  val methodName = TextUtils.camelCase(name)
+  lazy val actionClassName =
     TextUtils.capitalize(TextUtils.camelCase(resource.name)) + TextUtils.capitalize(methodName) + "Action"
   private val pathVarPattern = """\{([a-z-]+)\}""".r
+
+  // TODO: why this is not working as lazy val
   def pathAttributes = {
     pathVarPattern.findAllIn(path).matchData.map { m =>
       Attribute(resource, TextUtils.camelCase(m.group(1)), m.group(0), DataType("string"), serialized = false, "")
     }
   }
-  def requestEntity = {
+  lazy val requestEntity = {
     httpMethod match {
       case "GET" | "DELETE" => NullRequestEntity
       case _ =>
@@ -81,7 +83,7 @@ case class Action(resource: Resource,
           .map(AttributeRequestEntity(_)).getOrElse(ActionRequestEntity)
     }
   }
-  def responseDataType = {
+  lazy val responseDataType = {
     if (name.equalsIgnoreCase("list")) {
       DataType(s"list[${resource.modelClassName.raw}]")
     } else {
