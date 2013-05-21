@@ -20,7 +20,7 @@ class JerseyClientGenerator extends Generator {
     (schema.resources ++ schema.resourcesSecondClass).foreach { resource: Resource =>
       if (resource.isModel) generateModel(resource, srcRoot)
       resource.actions.foreach { action =>
-        generateResourceActionClass(resource, action, srcRoot)
+        generateResourceActionClass(action, srcRoot)
       }
     }
   }
@@ -45,7 +45,7 @@ class JerseyClientGenerator extends Generator {
     new FileOutputStream(dest).getChannel.transferFrom(new FileInputStream(src).getChannel, 0, Long.MaxValue)
   }
 
-  private def generateResourceActionClass(resource: Resource, action: Action, srcRoot: File) {
+  private def generateResourceActionClass(action: Action, srcRoot: File) {
     val className = action.actionClassName
     val out = new PrintWriter(new FileOutputStream(s"$srcRoot/$className.java"))
     val writer = new JavaWriter(out)
@@ -78,7 +78,7 @@ class JerseyClientGenerator extends Generator {
 
     if (action.name.equalsIgnoreCase("list")) {
       writer
-        .beginMethod(s"Iterable<${dataTypesForJava(resource.modelClassName)}>", "executeList", PUBLIC, "Connection", "connection")
+        .beginMethod(s"Iterable<${dataTypesForJava(action.resource.modelClassName)}>", "executeList", PUBLIC, "Connection", "connection")
         .emitStatement("return connection.executeList(this)")
         .endMethod()
         .emitEmptyLine()
