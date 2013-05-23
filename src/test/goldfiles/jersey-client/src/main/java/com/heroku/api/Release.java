@@ -96,12 +96,12 @@ public class Release
 
     Release release = (Release) o;
 
-    if (created_at != release.created_at) return false;
-    if (description != release.description) return false;
-    if (id != release.id) return false;
-    if (updated_at != release.updated_at) return false;
+    if (created_at != null ? !created_at.equals(release.created_at) : release.created_at != null) return false;
+    if (description != null ? !description.equals(release.description) : release.description != null) return false;
+    if (id != null ? !id.equals(release.id) : release.id != null) return false;
+    if (updated_at != null ? !updated_at.equals(release.updated_at) : release.updated_at != null) return false;
     if (user != null ? !user.equals(release.user) : release.user != null) return false;
-    if (version != release.version) return false;
+    if (version != null ? !version.equals(release.version) : release.version != null) return false;
     return true;
   }
 

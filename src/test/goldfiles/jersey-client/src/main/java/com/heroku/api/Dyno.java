@@ -148,16 +148,16 @@ public class Dyno
 
     Dyno dyno = (Dyno) o;
 
-    if (attach_url != dyno.attach_url) return false;
-    if (command != dyno.command) return false;
-    if (created_at != dyno.created_at) return false;
-    if (id != dyno.id) return false;
-    if (name != dyno.name) return false;
+    if (attach_url != null ? !attach_url.equals(dyno.attach_url) : dyno.attach_url != null) return false;
+    if (command != null ? !command.equals(dyno.command) : dyno.command != null) return false;
+    if (created_at != null ? !created_at.equals(dyno.created_at) : dyno.created_at != null) return false;
+    if (id != null ? !id.equals(dyno.id) : dyno.id != null) return false;
+    if (name != null ? !name.equals(dyno.name) : dyno.name != null) return false;
     if (release != null ? !release.equals(dyno.release) : dyno.release != null) return false;
-    if (size != dyno.size) return false;
-    if (state != dyno.state) return false;
-    if (type != dyno.type) return false;
-    if (updated_at != dyno.updated_at) return false;
+    if (size != null ? !size.equals(dyno.size) : dyno.size != null) return false;
+    if (state != null ? !state.equals(dyno.state) : dyno.state != null) return false;
+    if (type != null ? !type.equals(dyno.type) : dyno.type != null) return false;
+    if (updated_at != null ? !updated_at.equals(dyno.updated_at) : dyno.updated_at != null) return false;
     return true;
   }
 

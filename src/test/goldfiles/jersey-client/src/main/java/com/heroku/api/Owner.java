@@ -44,8 +44,8 @@ public class Owner
 
     Owner owner = (Owner) o;
 
-    if (email != owner.email) return false;
-    if (id != owner.id) return false;
+    if (email != null ? !email.equals(owner.email) : owner.email != null) return false;
+    if (id != null ? !id.equals(owner.id) : owner.id != null) return false;
     return true;
   }
 

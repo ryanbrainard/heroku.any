@@ -109,13 +109,13 @@ public class Formation
 
     Formation formation = (Formation) o;
 
-    if (command != formation.command) return false;
-    if (created_at != formation.created_at) return false;
-    if (id != formation.id) return false;
-    if (quantity != formation.quantity) return false;
-    if (size != formation.size) return false;
-    if (type != formation.type) return false;
-    if (updated_at != formation.updated_at) return false;
+    if (command != null ? !command.equals(formation.command) : formation.command != null) return false;
+    if (created_at != null ? !created_at.equals(formation.created_at) : formation.created_at != null) return false;
+    if (id != null ? !id.equals(formation.id) : formation.id != null) return false;
+    if (quantity != null ? !quantity.equals(formation.quantity) : formation.quantity != null) return false;
+    if (size != null ? !size.equals(formation.size) : formation.size != null) return false;
+    if (type != null ? !type.equals(formation.type) : formation.type != null) return false;
+    if (updated_at != null ? !updated_at.equals(formation.updated_at) : formation.updated_at != null) return false;
     return true;
   }
 

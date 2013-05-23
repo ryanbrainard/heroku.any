@@ -226,22 +226,22 @@ public class App
 
     App app = (App) o;
 
-    if (buildpack_provided_description != app.buildpack_provided_description) return false;
-    if (created_at != app.created_at) return false;
-    if (git_url != app.git_url) return false;
-    if (id != app.id) return false;
-    if (legacy_id != app.legacy_id) return false;
+    if (buildpack_provided_description != null ? !buildpack_provided_description.equals(app.buildpack_provided_description) : app.buildpack_provided_description != null) return false;
+    if (created_at != null ? !created_at.equals(app.created_at) : app.created_at != null) return false;
+    if (git_url != null ? !git_url.equals(app.git_url) : app.git_url != null) return false;
+    if (id != null ? !id.equals(app.id) : app.id != null) return false;
+    if (legacy_id != null ? !legacy_id.equals(app.legacy_id) : app.legacy_id != null) return false;
     if (maintenance != app.maintenance) return false;
-    if (name != app.name) return false;
+    if (name != null ? !name.equals(app.name) : app.name != null) return false;
     if (owner != null ? !owner.equals(app.owner) : app.owner != null) return false;
     if (region != null ? !region.equals(app.region) : app.region != null) return false;
-    if (released_at != app.released_at) return false;
-    if (repo_size != app.repo_size) return false;
-    if (slug_size != app.slug_size) return false;
-    if (stack != app.stack) return false;
-    if (tier != app.tier) return false;
-    if (updated_at != app.updated_at) return false;
-    if (web_url != app.web_url) return false;
+    if (released_at != null ? !released_at.equals(app.released_at) : app.released_at != null) return false;
+    if (repo_size != null ? !repo_size.equals(app.repo_size) : app.repo_size != null) return false;
+    if (slug_size != null ? !slug_size.equals(app.slug_size) : app.slug_size != null) return false;
+    if (stack != null ? !stack.equals(app.stack) : app.stack != null) return false;
+    if (tier != null ? !tier.equals(app.tier) : app.tier != null) return false;
+    if (updated_at != null ? !updated_at.equals(app.updated_at) : app.updated_at != null) return false;
+    if (web_url != null ? !web_url.equals(app.web_url) : app.web_url != null) return false;
     return true;
   }
 

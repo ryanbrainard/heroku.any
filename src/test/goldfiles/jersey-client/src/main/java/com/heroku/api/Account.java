@@ -138,11 +138,11 @@ public class Account
     if (allow_tracking != account.allow_tracking) return false;
     if (beta != account.beta) return false;
     if (confirmed != account.confirmed) return false;
-    if (created_at != account.created_at) return false;
-    if (email != account.email) return false;
-    if (id != account.id) return false;
-    if (last_login != account.last_login) return false;
-    if (updated_at != account.updated_at) return false;
+    if (created_at != null ? !created_at.equals(account.created_at) : account.created_at != null) return false;
+    if (email != null ? !email.equals(account.email) : account.email != null) return false;
+    if (id != null ? !id.equals(account.id) : account.id != null) return false;
+    if (last_login != null ? !last_login.equals(account.last_login) : account.last_login != null) return false;
+    if (updated_at != null ? !updated_at.equals(account.updated_at) : account.updated_at != null) return false;
     if (verified != account.verified) return false;
     return true;
   }

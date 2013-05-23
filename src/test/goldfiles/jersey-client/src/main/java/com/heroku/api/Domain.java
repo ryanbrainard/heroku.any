@@ -70,10 +70,10 @@ public class Domain
 
     Domain domain = (Domain) o;
 
-    if (created_at != domain.created_at) return false;
-    if (hostname != domain.hostname) return false;
-    if (id != domain.id) return false;
-    if (updated_at != domain.updated_at) return false;
+    if (created_at != null ? !created_at.equals(domain.created_at) : domain.created_at != null) return false;
+    if (hostname != null ? !hostname.equals(domain.hostname) : domain.hostname != null) return false;
+    if (id != null ? !id.equals(domain.id) : domain.id != null) return false;
+    if (updated_at != null ? !updated_at.equals(domain.updated_at) : domain.updated_at != null) return false;
     return true;
   }
 

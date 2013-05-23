@@ -70,10 +70,10 @@ public class LogSession
 
     LogSession logsession = (LogSession) o;
 
-    if (created_at != logsession.created_at) return false;
-    if (id != logsession.id) return false;
-    if (logplex_url != logsession.logplex_url) return false;
-    if (updated_at != logsession.updated_at) return false;
+    if (created_at != null ? !created_at.equals(logsession.created_at) : logsession.created_at != null) return false;
+    if (id != null ? !id.equals(logsession.id) : logsession.id != null) return false;
+    if (logplex_url != null ? !logplex_url.equals(logsession.logplex_url) : logsession.logplex_url != null) return false;
+    if (updated_at != null ? !updated_at.equals(logsession.updated_at) : logsession.updated_at != null) return false;
     return true;
   }
 

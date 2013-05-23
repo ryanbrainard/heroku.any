@@ -83,11 +83,11 @@ public class Region
 
     Region region = (Region) o;
 
-    if (created_at != region.created_at) return false;
-    if (description != region.description) return false;
-    if (id != region.id) return false;
-    if (name != region.name) return false;
-    if (updated_at != region.updated_at) return false;
+    if (created_at != null ? !created_at.equals(region.created_at) : region.created_at != null) return false;
+    if (description != null ? !description.equals(region.description) : region.description != null) return false;
+    if (id != null ? !id.equals(region.id) : region.id != null) return false;
+    if (name != null ? !name.equals(region.name) : region.name != null) return false;
+    if (updated_at != null ? !updated_at.equals(region.updated_at) : region.updated_at != null) return false;
     return true;
   }
 

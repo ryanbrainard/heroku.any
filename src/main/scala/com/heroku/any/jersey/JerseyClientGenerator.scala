@@ -171,7 +171,7 @@ class JerseyClientGenerator extends Generator with Templating {
       .emitStatement(s"${dataTypesForJava(resource.modelClassName)} $model = (${dataTypesForJava(resource.modelClassName)}) o")
       .emitEmptyLine()
       resource.serializableAttributes.foreach { attribute =>
-        if (attribute.dataType.raw.head.isLower /* primitive */) {
+        if (dataTypesForJava(attribute.dataType).forall(_.isLower) /* primitive */) {
           writer.emitStatement(s"if (${attribute.fieldName} != $model.${attribute.fieldName}) return false")
         } else {
           writer.emitStatement(s"if (${attribute.fieldName} != null ? !${attribute.fieldName}.equals($model.${attribute.fieldName}) : $model.${attribute.fieldName} != null) return false")

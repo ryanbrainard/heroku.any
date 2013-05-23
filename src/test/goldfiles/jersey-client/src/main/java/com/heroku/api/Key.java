@@ -96,12 +96,12 @@ public class Key
 
     Key key = (Key) o;
 
-    if (created_at != key.created_at) return false;
-    if (email != key.email) return false;
-    if (fingerprint != key.fingerprint) return false;
-    if (id != key.id) return false;
-    if (public_key != key.public_key) return false;
-    if (updated_at != key.updated_at) return false;
+    if (created_at != null ? !created_at.equals(key.created_at) : key.created_at != null) return false;
+    if (email != null ? !email.equals(key.email) : key.email != null) return false;
+    if (fingerprint != null ? !fingerprint.equals(key.fingerprint) : key.fingerprint != null) return false;
+    if (id != null ? !id.equals(key.id) : key.id != null) return false;
+    if (public_key != null ? !public_key.equals(key.public_key) : key.public_key != null) return false;
+    if (updated_at != null ? !updated_at.equals(key.updated_at) : key.updated_at != null) return false;
     return true;
   }
 

@@ -44,8 +44,8 @@ public class User
 
     User user = (User) o;
 
-    if (email != user.email) return false;
-    if (id != user.id) return false;
+    if (email != null ? !email.equals(user.email) : user.email != null) return false;
+    if (id != null ? !id.equals(user.id) : user.id != null) return false;
     return true;
   }
 

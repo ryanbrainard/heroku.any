@@ -70,9 +70,9 @@ public class Collaborator
 
     Collaborator collaborator = (Collaborator) o;
 
-    if (created_at != collaborator.created_at) return false;
-    if (id != collaborator.id) return false;
-    if (updated_at != collaborator.updated_at) return false;
+    if (created_at != null ? !created_at.equals(collaborator.created_at) : collaborator.created_at != null) return false;
+    if (id != null ? !id.equals(collaborator.id) : collaborator.id != null) return false;
+    if (updated_at != null ? !updated_at.equals(collaborator.updated_at) : collaborator.updated_at != null) return false;
     if (user != null ? !user.equals(collaborator.user) : collaborator.user != null) return false;
     return true;
   }
