@@ -6,7 +6,7 @@ import com.squareup.java.JavaWriter
 import java.lang.reflect.Modifier._
 import scala.language.implicitConversions
 
-class JerseyClientGenerator extends Generator {
+class JerseyClientGenerator extends Generator with Templating {
 
   val packagePath = "/com/heroku/api"
   val packageName = "com.heroku.api"
@@ -15,34 +15,13 @@ class JerseyClientGenerator extends Generator {
 
   def generate(schema: Schema, root: File) {
     val srcRoot = new File(root, s"/src/main/java/$packagePath")
-    srcRoot.mkdirs()
-    copyStaticFiles(root)
+    copyTemplates(root)
     (schema.resources ++ schema.resourcesSecondClass).foreach { resource: Resource =>
       if (resource.isModel) generateModel(resource, srcRoot)
       resource.actions.foreach { action =>
         generateResourceActionClass(action, srcRoot)
       }
     }
-  }
-
-  private def copyStaticFiles(root: File) {
-    copyDir(new File(s"src/main/templates/$name"), root)
-  }
-
-  private def copyDir(src: File, dest: File, rel: String = "") {
-    if (src.isDirectory) {
-      src.list().foreach { child =>
-        copyDir(new File(src, child), dest, s"$rel${File.separator}$child")
-      }
-    } else {
-      copyFile(src, new File(dest, rel))
-    }
-  }
-
-  private def copyFile(src: File, dest: File) {
-    dest.getParentFile.mkdirs()
-    import java.io.{FileInputStream,FileOutputStream}
-    new FileOutputStream(dest).getChannel.transferFrom(new FileInputStream(src).getChannel, 0, Long.MaxValue)
   }
 
   private def generateResourceActionClass(action: Action, srcRoot: File) {

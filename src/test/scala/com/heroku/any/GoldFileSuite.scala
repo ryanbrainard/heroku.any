@@ -7,13 +7,17 @@ import scala.sys.process.{ProcessLogger, Process}
 class GoldFileSuite extends FunSuite {
 
   test("jersey-client") {
+    assertGenerationMatchesGoldfiles("jersey-client")
+  }
+
+  def assertGenerationMatchesGoldfiles(generatorName: String) {
     val docJson = "src/test/goldfiles/doc.json"
-    val expectedOutputDir = "src/test/goldfiles/jersey-client"
-    val actualOutputDir = File.createTempFile("heroku-any-goldfile-test-jersey-client", "")
+    val expectedOutputDir = s"src/test/goldfiles/$generatorName"
+    val actualOutputDir = File.createTempFile(s"heroku-any-goldfile-test-$generatorName", "")
     actualOutputDir.delete()
     actualOutputDir.mkdir()
 
-    Generate.main(s"-f $docJson -o ${actualOutputDir.getAbsolutePath} -g jersey-client".split(" "))
+    Generate.main(s"-f $docJson -o ${actualOutputDir.getAbsolutePath} -g $generatorName".split(" "))
 
     val log = StringBuilder.newBuilder
     val logger = ProcessLogger(
