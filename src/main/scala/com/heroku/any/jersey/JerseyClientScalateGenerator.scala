@@ -9,10 +9,9 @@ class JerseyClientScalateGenerator extends Generator with JerseyClientFacet with
   def name = "jersey-client-scalate"
 
   def generate(schema: Schema, root: File) {
+    copyStaticTemplates(staticTemplates, root)
+
     val dest = new File(root, s"/src/main/java/$packagePath")
-
-    copyStaticTemplates(staticTemplates, dest)
-
     val models = schema.resources.map { r =>
       val file = new File(dest, s"${r.name}.java")
 
