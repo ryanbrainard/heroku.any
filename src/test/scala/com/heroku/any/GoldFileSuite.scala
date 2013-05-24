@@ -30,7 +30,7 @@ class GoldFileSuite extends FunSuite {
       (e: String) => log ++= e + "\n"
     )
 
-    val diff = Process(s"diff --recursive $expectedOutputDir $actualOutputDir").run(logger).exitValue()
+    val diff = Process(s"diff --side-by-side --recursive $expectedOutputDir $actualOutputDir").run(logger).exitValue()
     val cleanUp = Process(s"rm -r $actualOutputDir").run(logger).exitValue()
 
     if (diff != 0 || cleanUp != 0) {
