@@ -4,10 +4,9 @@ import com.heroku.any.schema.rich._
 import java.io.{File, FileOutputStream, PrintWriter}
 import com.squareup.java.JavaWriter
 import java.lang.reflect.Modifier._
-import scala.language.implicitConversions
-import com.heroku.any.{StaticTemplating, Generator}
+import com.heroku.any.Generator
 
-class JerseyClientJavaWriterGenerator extends Generator with JerseyClientProject {
+class JerseyClientJavaWriterGenerator extends Generator with JerseyClientFacet {
 
   val name = "jersey-client-java-writer"
 
@@ -30,7 +29,7 @@ class JerseyClientJavaWriterGenerator extends Generator with JerseyClientProject
     writer
       .emitPackage(packageName)
       .emitAnnotation(classOf[org.codehaus.jackson.map.annotate.JsonSerialize])
-      .beginType(packageName + "." + action.className, "class", PUBLIC | FINAL, null, s"Action<${dataTypesForJava(action.responseDataType)}>")
+      .beginType(packageName + "." + action.className, "class", PUBLIC | FINAL, null, s"Action<${dataTypeToString(action.responseDataType)}>")
       .emitEmptyLine()
 
     action.topLevelAttributes.foreach { a =>
@@ -47,14 +46,14 @@ class JerseyClientJavaWriterGenerator extends Generator with JerseyClientProject
         .emitEmptyLine()
 
     writer
-      .beginMethod(dataTypesForJava(action.responseDataType), "execute", PUBLIC, "Connection", "connection")
+      .beginMethod(dataTypeToString(action.responseDataType), "execute", PUBLIC, "Connection", "connection")
       .emitStatement("return connection.execute(this)")
       .endMethod()
       .emitEmptyLine()
 
     if (action.name.equalsIgnoreCase("list")) {
       writer
-        .beginMethod(s"Iterable<${dataTypesForJava(action.resource.modelClassName)}>", "executeList", PUBLIC, "Connection", "connection")
+        .beginMethod(s"Iterable<${dataTypeToString(action.resource.modelClassName)}>", "executeList", PUBLIC, "Connection", "connection")
         .emitStatement("return connection.executeList(this)")
         .endMethod()
         .emitEmptyLine()
@@ -91,8 +90,8 @@ class JerseyClientJavaWriterGenerator extends Generator with JerseyClientProject
       .emitEmptyLine()
 
     writer
-      .beginMethod(s"com.sun.jersey.api.client.GenericType<${dataTypesForJava(action.responseDataType)}>", "responseType", PUBLIC)
-      .emitStatement(s"return new com.sun.jersey.api.client.GenericType<${dataTypesForJava(action.responseDataType)}>(){}")
+      .beginMethod(s"com.sun.jersey.api.client.GenericType<${dataTypeToString(action.responseDataType)}>", "responseType", PUBLIC)
+      .emitStatement(s"return new com.sun.jersey.api.client.GenericType<${dataTypeToString(action.responseDataType)}>(){}")
       .endMethod()
 
     action.topLevelAttributes.foreach { a =>
@@ -119,13 +118,13 @@ class JerseyClientJavaWriterGenerator extends Generator with JerseyClientProject
   }
 
   private def generateModel(resource: Resource, srcRoot: File) {
-    val out = new PrintWriter(new FileOutputStream(s"$srcRoot/${dataTypesForJava(resource.modelClassName)}.java"))
+    val out = new PrintWriter(new FileOutputStream(s"$srcRoot/${dataTypeToString(resource.modelClassName)}.java"))
     val writer = new JavaWriter(out)
 
     // header
     writer
       .emitPackage(packageName)
-      .beginType(packageName + "." + dataTypesForJava(resource.modelClassName), "class", PUBLIC, null, "java.io.Serializable")
+      .beginType(packageName + "." + dataTypeToString(resource.modelClassName), "class", PUBLIC, null, "java.io.Serializable")
       .emitEmptyLine()
       .emitField("long", "serialVersionUID", PROTECTED | FINAL | STATIC, s"${resource.hashCode}L")
 
@@ -158,17 +157,17 @@ class JerseyClientJavaWriterGenerator extends Generator with JerseyClientProject
     }
 
     // equals
-    val model = dataTypesForJava(resource.modelClassName).toLowerCase
+    val model = dataTypeToString(resource.modelClassName).toLowerCase
     writer
       .emitAnnotation("Override")
       .beginMethod("boolean", "equals", PUBLIC, "Object", "o")
       .emitStatement("if (this == o) return true")
       .emitStatement(" if (o == null || getClass() != o.getClass()) return false")
       .emitEmptyLine()
-      .emitStatement(s"${dataTypesForJava(resource.modelClassName)} $model = (${dataTypesForJava(resource.modelClassName)}) o")
+      .emitStatement(s"${dataTypeToString(resource.modelClassName)} $model = (${dataTypeToString(resource.modelClassName)}) o")
       .emitEmptyLine()
       resource.serializableAttributes.foreach { attribute =>
-        if (dataTypesForJava(attribute.dataType).forall(_.isLower) /* primitive */) {
+        if (dataTypeToString(attribute.dataType).forall(_.isLower) /* primitive */) {
           writer.emitStatement(s"if (${attribute.fieldName} != $model.${attribute.fieldName}) return false")
         } else {
           writer.emitStatement(s"if (${attribute.fieldName} != null ? !${attribute.fieldName}.equals($model.${attribute.fieldName}) : $model.${attribute.fieldName} != null) return false")
@@ -194,7 +193,7 @@ class JerseyClientJavaWriterGenerator extends Generator with JerseyClientProject
       .emitStatement(resource.serializableAttributes.map { attribute: Attribute =>
       (s""""${attribute.paramName}='" + ${attribute.fieldName} + '\\'' +""")
       }.mkString(
-        s"""return "${dataTypesForJava(resource.modelClassName)}{" + \n""",
+        s"""return "${dataTypeToString(resource.modelClassName)}{" + \n""",
         "\n\", \" + ",
         "\n'}'"))
         .endMethod()
@@ -203,20 +202,5 @@ class JerseyClientJavaWriterGenerator extends Generator with JerseyClientProject
     writer.endType()
     out.flush()
     out.close()
-  }
-
-  private implicit def dataTypesForJava(dataType: DataType):String = {
-    val listPattern = """list\[(\w+)\]""".r
-    val dictPattern = """dictionary\[(\w+),(\w+)\]""".r
-
-    dataType.raw match {
-      case "string"         => "String"
-      case "number"         => "Number"
-      case "datetime"       => "java.util.Date"
-      case "uuid"           => "java.util.UUID"
-      case dictPattern(k,v) => s"java.util.Map<${dataTypesForJava(DataType(k))},${dataTypesForJava(DataType(v))}>"
-      case listPattern(e)   => s"java.util.List<${dataTypesForJava(DataType(e))}>"
-      case other            =>  other
-    }
   }
 }

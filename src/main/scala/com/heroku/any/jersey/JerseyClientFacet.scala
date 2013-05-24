@@ -1,9 +1,9 @@
 package com.heroku.any.jersey
 
 import java.io.File
-import com.heroku.any.{StaticTemplating, Generator}
+import com.heroku.any.{JavaFacet, StaticTemplating, Generator}
 
-trait JerseyClientProject extends StaticTemplating {
+trait JerseyClientFacet extends JavaFacet with StaticTemplating {
   self: Generator =>
 
   val packagePath = "/com/heroku/api"

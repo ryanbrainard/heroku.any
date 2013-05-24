@@ -1,10 +1,10 @@
 package com.heroku.any.jersey
 
-import com.heroku.any.{TextUtils, ScalateTemplating, StaticTemplating, Generator}
-import com.heroku.any.schema.rich.{DataType, Schema}
+import com.heroku.any.{TextUtils, ScalateTemplating, Generator}
+import com.heroku.any.schema.rich.Schema
 import java.io.File
 
-class JerseyClientScalateGenerator extends Generator with JerseyClientProject with ScalateTemplating {
+class JerseyClientScalateGenerator extends Generator with JerseyClientFacet with ScalateTemplating {
 
   def name = "jersey-client-scalate"
 
@@ -21,8 +21,8 @@ class JerseyClientScalateGenerator extends Generator with JerseyClientProject wi
           a.name,
           TextUtils.camelCase(a.name),
           TextUtils.camelCase(a.name).capitalize,
-          dataTypesForJava(a.dataType),
-          dataTypesForJava(a.dataType).forall(_.isLower),
+          dataTypeToString(a.dataType),
+          dataTypeToString(a.dataType).forall(_.isLower),
           a.description)
       }
 
@@ -46,20 +46,6 @@ class JerseyClientScalateGenerator extends Generator with JerseyClientProject wi
     renderTemplates("model.ssp", models)
   }
 
-  private def dataTypesForJava(dataType: DataType):String = {
-    val listPattern = """list\[(\w+)\]""".r
-    val dictPattern = """dictionary\[(\w+),(\w+)\]""".r
-
-    dataType.raw match {
-      case "string"         => "String"
-      case "number"         => "Number"
-      case "datetime"       => "java.util.Date"
-      case "uuid"           => "java.util.UUID"
-      case dictPattern(k,v) => s"java.util.Map<${dataTypesForJava(DataType(k))},${dataTypesForJava(DataType(v))}>"
-      case listPattern(e)   => s"java.util.List<${dataTypesForJava(DataType(e))}>"
-      case other            =>  other
-    }
-  }
 }
 
 case class Model(
