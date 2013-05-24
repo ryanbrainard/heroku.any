@@ -5,9 +5,9 @@ import java.io.{File, FileOutputStream, PrintWriter}
 import com.squareup.java.JavaWriter
 import java.lang.reflect.Modifier._
 import scala.language.implicitConversions
-import com.heroku.any.{Templating, Generator}
+import com.heroku.any.{StaticTemplating, Generator}
 
-class JerseyClientGenerator extends Generator with Templating {
+class JerseyClientGenerator extends Generator with StaticTemplating {
 
   val packagePath = "/com/heroku/api"
   val packageName = "com.heroku.api"

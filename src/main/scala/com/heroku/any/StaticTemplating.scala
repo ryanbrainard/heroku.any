@@ -2,11 +2,15 @@ package com.heroku.any
 
 import java.io.File
 
-trait Templating {
+trait StaticTemplating {
   self: Generator =>
 
-  def copyTemplates(root: File) {
-    copyDir(new File(s"src/main/templates/$name"), root)
+  def copyTemplates(dest: File) {
+    copyTemplates(new File(s"src/main/templates/$name"), dest)
+  }
+
+  def copyTemplates(src: File, dest: File) {
+    copyDir(src, dest)
   }
 
   private def copyDir(src: File, dest: File, rel: String = "") {

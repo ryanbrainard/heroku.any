@@ -1,0 +1,60 @@
+package com.heroku.api;
+
+public class ${name}
+    implements java.io.Serializable {
+
+  protected static final long serialVersionUID = ${serialVersionUID}L;
+
+#for (f <- fields)
+  /**
+   * ${f.doc.capitalize}
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private ${f.dataType} ${f.name};
+
+#end
+
+  protected ${name}() {
+  }
+
+#for (f <- fields)
+  /**
+   * Get ${f.doc}
+   */
+  public ${f.dataType} get${f.camelCaps}() {
+    return this.${f.name};
+  }
+
+#end
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+     if (o == null || getClass() != o.getClass()) return false;
+
+    ${name} ${asField.camelCase} = (${name}) o;
+
+#for (f <- fields)
+  #if (f.primitive)
+    if (${f.name} != ${asField.camelCase}.${f.name}) return false;
+  #else
+    if (${f.name} != null ? !${f.name}.equals(${asField.camelCase}.${f.name}) : ${asField.camelCase}.${f.name} != null) return false;
+  #end
+#end
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
+  }
+
+  @Override
+  public String toString() {
+    return "${name}{" +
+           <%= fields.map(f => s""""${f.camelCase}='" + ${f.name} + '\\'' +""").mkString("\n           \", \" + ") %>
+        '}';
+  }
+
+}

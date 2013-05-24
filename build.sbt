@@ -15,6 +15,7 @@ resolvers += "spray" at "http://repo.spray.io/"
 libraryDependencies ++= Seq(
   "org.rogach" %% "scallop" % "0.9.1",
   "com.squareup" % "javawriter" % "1.0.5",
+  "org.fusesource.scalate" % "scalate-core_2.10" % "1.6.1",
   "io.spray" %%  "spray-json" % "1.2.3",
   "com.sun.jersey" % "jersey-client" % "1.17.1",
   "com.sun.jersey" % "jersey-json" % "1.17.1",

@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+set -e
+
+GEN=${1?ERROR: Provide generator name}
+
 bin/install
-rm -rf src/test/goldfiles/jersey-client
-bin/generate -f src/test/goldfiles/doc.json -o src/test/goldfiles/jersey-client
+rm -rf src/test/goldfiles/$GEN
+bin/generate -f src/test/goldfiles/doc.json -g $GEN -o src/test/goldfiles/$GEN

@@ -10,9 +10,14 @@ class GoldFileSuite extends FunSuite {
     assertGenerationMatchesGoldfiles("jersey-client")
   }
 
-  def assertGenerationMatchesGoldfiles(generatorName: String) {
+  test("jersey-client-scalate") {
+    assertGenerationMatchesGoldfiles("jersey-client-scalate")
+  }
+
+  def assertGenerationMatchesGoldfiles(generatorName: String, goldfiles: Option[String] = None) {
     val docJson = "src/test/goldfiles/doc.json"
-    val expectedOutputDir = s"src/test/goldfiles/$generatorName"
+    val expectedOutputDir = s"src/test/goldfiles/${goldfiles.getOrElse(generatorName)}"
+    assume(new File(expectedOutputDir).exists)
     val actualOutputDir = File.createTempFile(s"heroku-any-goldfile-test-$generatorName", "")
     actualOutputDir.delete()
     actualOutputDir.mkdir()
@@ -25,7 +30,7 @@ class GoldFileSuite extends FunSuite {
       (e: String) => log ++= e + "\n"
     )
 
-    val diff = Process(s"diff -r $expectedOutputDir $actualOutputDir").run(logger).exitValue()
+    val diff = Process(s"diff --recursive $expectedOutputDir $actualOutputDir").run(logger).exitValue()
     val cleanUp = Process(s"rm -r $actualOutputDir").run(logger).exitValue()
 
     if (diff != 0 || cleanUp != 0) {
