@@ -4,19 +4,14 @@ import com.heroku.any.{TextUtils, ScalateTemplating, StaticTemplating, Generator
 import com.heroku.any.schema.rich.{DataType, Schema}
 import java.io.File
 
-class JerseyClientScalateGenerator extends Generator with StaticTemplating with ScalateTemplating {
-
-  val packagePath = "/com/heroku/api"
-  val packageName = "com.heroku.api"
+class JerseyClientScalateGenerator extends Generator with JerseyClientProject with ScalateTemplating {
 
   def name = "jersey-client-scalate"
 
   def generate(schema: Schema, root: File) {
-    val staticSrc = new File("src/main/templates/jersey-client") // TODO: special-cased for now while both jersey-client and jersey-client-scalate
-
     val dest = new File(root, s"/src/main/java/$packagePath")
 
-    copyTemplates(staticSrc, dest)
+    copyStaticTemplates(staticTemplates, dest)
 
     val models = schema.resources.map { r =>
       val file = new File(dest, s"${r.name}.java")

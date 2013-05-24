@@ -6,10 +6,10 @@ trait StaticTemplating {
   self: Generator =>
 
   def copyTemplates(dest: File) {
-    copyTemplates(new File(s"src/main/templates/$name"), dest)
+    copyStaticTemplates(new File(s"src/main/templates/$name"), dest)
   }
 
-  def copyTemplates(src: File, dest: File) {
+  def copyStaticTemplates(src: File, dest: File) {
     copyDir(src, dest)
   }
 
