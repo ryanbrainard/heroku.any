@@ -9,6 +9,7 @@ trait ScalateTemplating {
 
   def renderTemplates[M](template: String, renditions: Map[File,M])(implicit m: ClassTag[M]) {
     val engine = new TemplateEngine
+    engine.workingDirectory = new File("target/scalate")
     engine.escapeMarkup = false
     engine.bindings = m.runtimeClass.getDeclaredFields.map(f => Binding(f.getName, f.getGenericType.toString.replace("<", "[").replace(">", "]").replace("class ", ""))).toList
 
