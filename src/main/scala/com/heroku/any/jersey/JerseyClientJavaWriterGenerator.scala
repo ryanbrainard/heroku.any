@@ -7,16 +7,17 @@ import java.lang.reflect.Modifier._
 import scala.language.implicitConversions
 import com.heroku.any.{StaticTemplating, Generator}
 
-class JerseyClientGenerator extends Generator with StaticTemplating {
+class JerseyClientJavaWriterGenerator extends Generator with StaticTemplating {
 
   val packagePath = "/com/heroku/api"
   val packageName = "com.heroku.api"
 
-  val name = "jersey-client"
+  val name = "jersey-client-java-writer"
 
   def generate(schema: Schema, root: File) {
+    val staticSrc = new File("src/main/templates/jersey-client") // TODO: special-cased for now while both jersey-client and jersey-client-scalate
     val srcRoot = new File(root, s"/src/main/java/$packagePath")
-    copyTemplates(root)
+    copyTemplates(staticSrc, root)
     (schema.resources ++ schema.resourcesSecondClass).foreach { resource: Resource =>
       if (resource.isModel) generateModel(resource, srcRoot)
       resource.actions.foreach { action =>

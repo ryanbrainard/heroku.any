@@ -6,11 +6,11 @@ import scala.sys.process.{ProcessLogger, Process}
 
 class GoldFileSuite extends FunSuite {
 
-  test("jersey-client") {
-    assertGenerationMatchesGoldfiles("jersey-client")
+  test("diff jersey-client-java-writer") {
+    assertGenerationMatchesGoldfiles("jersey-client-java-writer")
   }
 
-  test("jersey-client-scalate") {
+  test("diff jersey-client-scalate") {
     assertGenerationMatchesGoldfiles("jersey-client-scalate")
   }
 

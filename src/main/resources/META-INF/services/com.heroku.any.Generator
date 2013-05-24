@@ -1,2 +1,2 @@
-com.heroku.any.jersey.JerseyClientGenerator
+com.heroku.any.jersey.JerseyClientJavaWriterGenerator
 com.heroku.any.jersey.JerseyClientScalateGenerator
