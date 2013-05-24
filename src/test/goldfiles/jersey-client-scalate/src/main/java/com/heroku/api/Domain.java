@@ -3,7 +3,7 @@ package com.heroku.api;
 public class Domain
     implements java.io.Serializable {
 
-  protected static final long serialVersionUID = 1597518425L;
+  protected static final long serialVersionUID = -1451623652L;
 
   /**
    * When domain was created

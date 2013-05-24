@@ -3,7 +3,7 @@ package com.heroku.api;
 public class Release
     implements java.io.Serializable {
 
-  protected static final long serialVersionUID = -1532930571L;
+  protected static final long serialVersionUID = 924209167L;
 
   /**
    * When release was created

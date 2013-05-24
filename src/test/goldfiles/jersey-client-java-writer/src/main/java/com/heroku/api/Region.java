@@ -3,7 +3,7 @@ package com.heroku.api;
 public class Region
     implements java.io.Serializable {
 
-  protected static final long serialVersionUID = -90172572L;
+  protected static final long serialVersionUID = -523555444L;
 
   /**
    * When region was created

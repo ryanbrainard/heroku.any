@@ -53,6 +53,8 @@ object Generate {
           .asJson.asJsObject.convertTo[Schema]
           .addAttribute("App", "legacy_id", "Deprecated id format", "string", serialized = true, "app123@heroku.com")
           .addAttribute("App", "tier", "App tier", "string", serialized = true, "Production")
+          .addAttribute("Account", "legacy_id", "Deprecated id format", "string", serialized = true, "account123@heroku.com")
+          .addAttribute("Account", "api_key", "API Key", "string", serialized = true, "ABC1234")
           .toRich(file.toString)
       )
     } catch {

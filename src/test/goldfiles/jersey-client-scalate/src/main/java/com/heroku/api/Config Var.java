@@ -3,7 +3,7 @@ package com.heroku.api;
 public class Config Var
     implements java.io.Serializable {
 
-  protected static final long serialVersionUID = 80129139L;
+  protected static final long serialVersionUID = -1576080114L;
 
   /**
    * Key/value pair for dyno env

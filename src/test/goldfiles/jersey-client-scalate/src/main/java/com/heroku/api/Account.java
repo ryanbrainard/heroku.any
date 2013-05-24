@@ -3,13 +3,19 @@ package com.heroku.api;
 public class Account
     implements java.io.Serializable {
 
-  protected static final long serialVersionUID = -824415265L;
+  protected static final long serialVersionUID = -571692263L;
 
   /**
    * Whether to allow web activity tracking with third-party services like Google Analytics
    */
   @org.codehaus.jackson.annotate.JsonProperty
   private boolean allow_tracking;
+
+  /**
+   * API Key
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private String api_key;
 
   /**
    * Whether to utilize beta Heroku features
@@ -48,6 +54,12 @@ public class Account
   private java.util.Date last_login;
 
   /**
+   * Deprecated id format
+   */
+  @org.codehaus.jackson.annotate.JsonProperty
+  private String legacy_id;
+
+  /**
    * When account was updated
    */
   @org.codehaus.jackson.annotate.JsonProperty
@@ -68,6 +80,13 @@ public class Account
    */
   public boolean getAllowTracking() {
     return this.allow_tracking;
+  }
+
+  /**
+   * Get API Key
+   */
+  public String getApiKey() {
+    return this.api_key;
   }
 
   /**
@@ -113,6 +132,13 @@ public class Account
   }
 
   /**
+   * Get Deprecated id format
+   */
+  public String getLegacyId() {
+    return this.legacy_id;
+  }
+
+  /**
    * Get when account was updated
    */
   public java.util.Date getUpdatedAt() {
@@ -137,6 +163,8 @@ public class Account
   
     if (allow_tracking != account.allow_tracking) return false;
     
+    if (api_key != null ? !api_key.equals(account.api_key) : account.api_key != null) return false;
+    
     if (beta != account.beta) return false;
     
     if (confirmed != account.confirmed) return false;
@@ -148,6 +176,8 @@ public class Account
     if (id != null ? !id.equals(account.id) : account.id != null) return false;
     
     if (last_login != null ? !last_login.equals(account.last_login) : account.last_login != null) return false;
+    
+    if (legacy_id != null ? !legacy_id.equals(account.legacy_id) : account.legacy_id != null) return false;
     
     if (updated_at != null ? !updated_at.equals(account.updated_at) : account.updated_at != null) return false;
     
@@ -165,12 +195,14 @@ public class Account
   public String toString() {
     return "Account{" +
            "allowTracking='" + allow_tracking + '\'' +
+           ", " + "apiKey='" + api_key + '\'' +
            ", " + "beta='" + beta + '\'' +
            ", " + "confirmed='" + confirmed + '\'' +
            ", " + "createdAt='" + created_at + '\'' +
            ", " + "email='" + email + '\'' +
            ", " + "id='" + id + '\'' +
            ", " + "lastLogin='" + last_login + '\'' +
+           ", " + "legacyId='" + legacy_id + '\'' +
            ", " + "updatedAt='" + updated_at + '\'' +
            ", " + "verified='" + verified + '\'' +
         '}';
